@@ -10,7 +10,7 @@ gcloud auth activate-service-account 452091732215@developer.gserviceaccount.com 
 mkdir -p manifests
 gsutil cp gs://install-versions.risevision.com/display-modules-*.json manifests
 
-find manifests -name "*.json" -exec node ./node_modules/common-display-module/update-component-version.js '{}' $COMPONENT_NAME $VERSION 0 \;
+find manifests -name "*.json" -exec node ./node_modules/common-display-module/update-module-version.js '{}' $COMPONENT_NAME $VERSION 0 "component" \;
 gsutil cp manifests/*.json gs://install-versions.risevision.com/staging/components/$COMPONENT_NAME/$VERSION
 gsutil setmeta -h "Cache-Control:private, max-age=0" gs://install-versions.risevision.com/staging/components/$COMPONENT_NAME/$VERSION/*
 gsutil setmeta -h "Content-Disposition:attachment" gs://install-versions.risevision.com/staging/components/$COMPONENT_NAME/$VERSION/*.sh
