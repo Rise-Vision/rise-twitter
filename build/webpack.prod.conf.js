@@ -23,6 +23,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     chunkFilename: `${config.build.projectName}.js`
   },
   plugins: [
+    new webpack.IgnorePlugin(/vertx/),
     new webpack.DefinePlugin({
       'process.env': env
     }),

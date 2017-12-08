@@ -11,10 +11,13 @@ module.exports = {
   },
   // https://github.com/standard/standard/blob/master/docs/RULES-en.md
   extends: 'standard',
-  // required to lint *.vue files
+  // required to lint template files
   plugins: [
     'html'
   ],
+  settings: {
+        "html/html-extensions": [".html"],  // consider .html files as HTML
+  },
   // add your custom rules here
   rules: {
     // allow async-await
