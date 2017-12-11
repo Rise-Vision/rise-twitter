@@ -6,8 +6,11 @@
     <title>Rise Twitter Widget</title>
   </head>
   <body>
-    <rise-twitter></rise-twitter>
+    <rise-playlist-item>
+      <rise-twitter></rise-twitter>
+    </rise-playlist-item>
     <script src="<%= htmlWebpackPlugin.files.chunks['vendor'].entry %>"></script>
+    <script src="https://storage.googleapis.com/install-versions.risevision.com/staging/components/rise-playlist-item/2017.12.11.15.06/rise-playlist-item.js"></script>
     <script src="<%= htmlWebpackPlugin.files.chunks['component'].entry %>"></script>
   </body>
 </html>
