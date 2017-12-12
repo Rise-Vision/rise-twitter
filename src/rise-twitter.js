@@ -6,5 +6,8 @@ import { WebComponent } from 'web-component';
 })
 
 export default class RiseTwitter extends HTMLElement {
-
+  constructor() {
+    super();
+    console.log('RiseTwitter');
+  }
 }

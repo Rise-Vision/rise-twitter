@@ -38,6 +38,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: "vendor",
+      children: true,
       filename: "[name].js",
       minChunks: Infinity
     }),
