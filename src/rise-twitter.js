@@ -33,6 +33,8 @@ export default class RiseTwitter extends HTMLElement {
       risePlaylistItem.addEventListener("stop", () => {
         this._stop();
       });
+    } else {
+      console.log("rise-playlist-item not found");
     }
   }
 
