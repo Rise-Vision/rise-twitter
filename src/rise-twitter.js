@@ -14,27 +14,26 @@ export default class RiseTwitter extends HTMLElement {
   }
 
   _createListenersForRisePlaylistItemEvents() {
-    const risePlaylistItem = document.getElementsByTagName("rise-playlist-item")[0];
+    const risePlaylistItem = document.getElementsByTagName('rise-playlist-item')[0];
 
     if (risePlaylistItem) {
-
-      risePlaylistItem.addEventListener("configure", event => {
+      risePlaylistItem.addEventListener('configure', event => {
         this.screenName = event.detail.screenName;
       });
 
-      risePlaylistItem.addEventListener("play", () => {
+      risePlaylistItem.addEventListener('play', () => {
         this._play();
       });
 
-      risePlaylistItem.addEventListener("pause", () => {
+      risePlaylistItem.addEventListener('pause', () => {
         this._pause();
       });
 
-      risePlaylistItem.addEventListener("stop", () => {
+      risePlaylistItem.addEventListener('stop', () => {
         this._stop();
       });
     } else {
-      console.log("rise-playlist-item not found");
+      console.log('rise-playlist-item not found');
     }
   }
 
