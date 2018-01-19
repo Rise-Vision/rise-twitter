@@ -55,7 +55,6 @@
     "ora": "^1.2.0",
     "portfinder": "^1.0.13",
     "rimraf": "^2.6.0",
-    "selenium-server": "^3.0.1",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "unzipsfx-webpack-plugin": "git+https://github.com/Rise-Vision/unzipsfx-webpack-plugin.git",
     "url-loader": "^0.5.8",
