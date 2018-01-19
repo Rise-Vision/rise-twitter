@@ -55,12 +55,12 @@ describe("Twitter Component - Unit", () => {
   it("should call pause listener when pause event is dispached", (done) => {
     jest.useFakeTimers();
 
-    const event = new CustomEvent("play");
+    const event = new CustomEvent("pause");
 
     risePlaylistItem.dispatchEvent(event);
 
     setTimeout(()=>{
-      expect(component._play).toHaveBeenCalled();
+      expect(component._pause).toHaveBeenCalled();
       done();
     }, 1000);
 
@@ -70,12 +70,12 @@ describe("Twitter Component - Unit", () => {
   it("should call stop listener when stop event is dispached", (done) => {
     jest.useFakeTimers();
 
-    const event = new CustomEvent("play");
+    const event = new CustomEvent("stop");
 
     risePlaylistItem.dispatchEvent(event);
 
     setTimeout(()=>{
-      expect(component._play).toHaveBeenCalled();
+      expect(component._stop).toHaveBeenCalled();
       done();
     }, 1000);
 
