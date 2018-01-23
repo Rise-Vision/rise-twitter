@@ -11,7 +11,7 @@ export default class Messaging {
 
   _handleMessage(data) {
     console.log('Received a new message from LMS', data);
-    if (data.topic === 'TWITTER_UPDATE') {
+    if (data.topic === 'twitter-update') {
       this.tweet.update(data.message);
     }
   }
@@ -30,7 +30,7 @@ export default class Messaging {
   }
 
   _sendDiconnectionMessage() {
-    this._sendMessage({topic: 'TWITTER_DISCONECT'});
+    this._sendMessage({topic: 'twitter-disconnect'});
   }
 
   connectToLMS() {
@@ -53,6 +53,6 @@ export default class Messaging {
 
   // eslint-disable-next-line
   sendComponentSettings(component_id, screen_name, hashtag) {
-    this._sendMessage({topic: 'TWITTER_WATCH', data: {component_id, screen_name, hashtag}});
+    this._sendMessage({topic: 'twitter-watch', data: {component_id, screen_name, hashtag}});
   }
 }
