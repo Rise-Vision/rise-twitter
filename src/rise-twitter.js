@@ -21,6 +21,10 @@ export default class RiseTwitter extends HTMLElement {
     console.log('RiseTwitter', this.id);
   }
 
+  getMessaging() {
+    return this.messaging;
+  }
+
   _generateComponentId() {
     return `rise-twitter-` + Math.random().toString().substring(2);
   }
@@ -66,14 +70,16 @@ export default class RiseTwitter extends HTMLElement {
   }
 
   _play() {
-    this.messaging.connectToLMS();
-    this.messaging.sendComponentSettings(this.id, this.screenName, this.hashtag);
+    if (!this.messaging.isConnected) {
+      this.messaging.connectToLMS();
+      this.messaging.sendComponentSettings(this.screenName, this.hashtag);
+    }
   }
 
   _pause() {
   }
 
   _stop() {
-    this.pause();
+    this._pause();
   }
 }
