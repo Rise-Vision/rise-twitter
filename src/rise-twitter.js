@@ -71,7 +71,6 @@ export default class RiseTwitter extends HTMLElement {
   }
 
   _pause() {
-    this.messaging.disconnectFromLMS(this.id);
   }
 
   _stop() {

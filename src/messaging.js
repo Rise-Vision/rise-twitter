@@ -29,10 +29,6 @@ export default class Messaging {
     this.primus.write(message);
   }
 
-  _sendDiconnectionMessage(component_id) {
-    this._sendMessage({topic: 'twitter-disconnect', data: {component_id}});
-  }
-
   connectToLMS() {
     // eslint-disable-next-line
     this.primus = Primus.connect(lmsAddress);
@@ -47,7 +43,6 @@ export default class Messaging {
   }
 
   disconnectFromLMS(component_id) {
-    this._sendDiconnectionMessage(component_id);
     this.primus.end();
   }
 
