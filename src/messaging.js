@@ -1,7 +1,10 @@
 import {lmsAddress} from './config';
+import Primus from './primus';
 
 export default class Messaging {
   constructor(tweet, componentId) {
+    console.log('Messaging', componentId);
+
     this.tweet = tweet;
     this.componentId = componentId;
     this.isConnected = false;
@@ -14,7 +17,8 @@ export default class Messaging {
 
   _handleMessage(message) {
     console.log('Received a new message from LMS', message);
-    if (message.topic === 'twitter-update' && message.data.component_id === this.componentId) {
+
+    if (message && message.topic === 'twitter-update' && message.data && message.data.component_id === this.componentId) {
       this.tweet.update(JSON.parse(message.data.tweets));
     }
   }
@@ -34,16 +38,15 @@ export default class Messaging {
   }
 
   connectToLMS() {
-    // eslint-disable-next-line
     this.primus = Primus.connect(lmsAddress);
 
-    this.primus.on('open', this._handleConnection);
+    this.primus.on('open', () => { this._handleOpenConnection(); });
 
-    this.primus.on('data', this._handleMessage);
+    this.primus.on('data', message => { this._handleMessage(message); });
 
-    this.primus.on('error', this._handleMessage);
+    this.primus.on('error', error => { this._handleError(error); });
 
-    this.primus.on('end', this._handleEnd);
+    this.primus.on('end', () => { this._handleEnd(); });
   }
 
   disconnectFromLMS() {
@@ -52,6 +55,6 @@ export default class Messaging {
 
   // eslint-disable-next-line
   sendComponentSettings(screen_name = "", hashtag = "") {
-    this._sendMessage({topic: 'twitter-watch', data: {component_id: this.componentId, screen_name, hashtag}});
+    this._sendMessage({from: 'ws-client', topic: 'twitter-watch', data: {component_id: this.componentId, screen_name, hashtag}});
   }
 }

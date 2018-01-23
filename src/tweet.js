@@ -6,7 +6,8 @@ export default class Tweet {
 
   update(tweet) {
     const p = document.createElement('p');
-    p.textContent = tweet;
+    p.textContent = tweet.text;
+    p.className = 'tweet';
     this.shadowRoot.querySelector('#twitter-component-template').appendChild(p);
   }
 }

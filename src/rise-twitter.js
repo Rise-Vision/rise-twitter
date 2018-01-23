@@ -12,13 +12,15 @@ export default class RiseTwitter extends HTMLElement {
     super();
 
     this.id = this.id || this._generateComponentId();
+    console.log('RiseTwitter', this.id);
+  }
 
+  connectedCallback() {
+    console.log('RiseTwitter', this.shadowRoot);
     this.tweet = new Tweet(this.shadowRoot);
-    this.messaging = new Messaging(this.tweet);
+    this.messaging = new Messaging(this.tweet, this.id);
 
     this._createListenersForRisePlaylistItemEvents();
-
-    console.log('RiseTwitter', this.id);
   }
 
   getMessaging() {

@@ -6,8 +6,18 @@
     <title>rise-twitter</title>
   </head>
   <body>
-    <rise-twitter screen-name="demo" hashtag="demo"></rise-twitter>
+    <rise-playlist-item>
+      <rise-twitter id="demoComponent" screen-name="demo" hashtag="demo"></rise-twitter>
+    </rise-playlist-item>
     <script src="<%= htmlWebpackPlugin.files.chunks['vendor'].entry %>"></script>
     <script src="<%= htmlWebpackPlugin.files.chunks['component'].entry %>"></script>
+
+    <script>
+      const risePlaylistItem = document.getElementsByTagName("rise-playlist-item")[0];
+
+      const event = new CustomEvent("play");
+
+      risePlaylistItem.dispatchEvent(event);
+    </script>
   </body>
 </html>
