@@ -21,6 +21,7 @@ module.exports = {
   coverageDirectory: '<rootDir>/test/unit/coverage',
   collectCoverageFrom: [
     'src/**/*.{js}',
-    '!**/node_modules/**'
+    '!**/node_modules/**',
+    '!src/primus.js'
   ]
 }
