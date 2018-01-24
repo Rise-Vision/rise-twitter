@@ -66,6 +66,7 @@ describe("Twitter Component Messaging - Unit", () => {
 
   it("should call send message with twitter-watch topic and component settings", () => {
     const message = {
+      "from": "ws-client",
       "topic": "twitter-watch",
       "data": {
         "component_id": "componentIdTest",
@@ -81,6 +82,7 @@ describe("Twitter Component Messaging - Unit", () => {
 
   it("should call send message with twitter-watch topic and component settings with only hashtag", () => {
     const message = {
+      "from": "ws-client",
       "topic": "twitter-watch",
       "data": {
         "component_id": "componentIdTest",
@@ -96,6 +98,7 @@ describe("Twitter Component Messaging - Unit", () => {
 
   it("should call send message with twitter-watch topic and component settings with only screen name", () => {
     const message = {
+      "from": "ws-client",
       "topic": "twitter-watch",
       "data": {
         "component_id": "componentIdTest",

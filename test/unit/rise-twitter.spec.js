@@ -13,6 +13,9 @@ describe("Twitter Component - Unit", () => {
       risePlaylistItem = document.createElement("rise-playlist-item");
       document.getElementsByTagName("body")[0].appendChild(risePlaylistItem);
       component = new RiseTwitter();
+      component.shadowRoot = {};
+      component.shadowRoot.appendChild = jest.genMockFn();
+      component.connectedCallback();
 
       component._play = jest.genMockFn();
       component._pause = jest.genMockFn();
@@ -95,6 +98,10 @@ describe("Twitter Component - Unit", () => {
       risePlaylistItem = document.createElement("rise-playlist-item");
       document.getElementsByTagName("body")[0].appendChild(risePlaylistItem);
       component = new RiseTwitter();
+      component.shadowRoot = {};
+      component.shadowRoot.appendChild = jest.genMockFn();
+      component.connectedCallback();
+
       component.id = "componentIdTest";
       component.screenName = "screenNameTest";
       component.hashtag = "hashtagTest";
@@ -129,6 +136,9 @@ describe("Twitter Component - Unit", () => {
       risePlaylistItem = document.createElement("rise-playlist-item");
       document.getElementsByTagName("body")[0].appendChild(risePlaylistItem);
       component = new RiseTwitter();
+      component.shadowRoot = {};
+      component.shadowRoot.appendChild = jest.genMockFn();
+      component.connectedCallback();
 
       component._pause = jest.genMockFn();
     })
