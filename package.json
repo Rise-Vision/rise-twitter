@@ -13,7 +13,10 @@
     "lint": "eslint --ext .js,.html src test/unit/specs test/e2e/specs",
     "build": "node build/build.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "common-component": "git+https://github.com/Rise-Vision/common-component.git#1.0.0"
+  },
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "^1.0.20",
     "autoprefixer": "^7.1.2",
@@ -52,11 +55,14 @@
     "html-webpack-plugin": "^2.30.1",
     "jest": "^21.2.0",
     "local-messaging-module": "git+https://github.com/Rise-Vision/local-messaging-module.git",
+    "map-stream": "^0.0.7",
     "node-ipc": "^9.1.1",
     "node-notifier": "^5.1.2",
+    "node-sass": "^4.7.2",
     "ora": "^1.2.0",
     "portfinder": "^1.0.13",
     "rimraf": "^2.6.0",
+    "sass-loader": "^6.0.6",
     "simple-mock": "^0.8.0",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "unzipsfx-webpack-plugin": "git+https://github.com/Rise-Vision/unzipsfx-webpack-plugin.git",

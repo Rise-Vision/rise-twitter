@@ -1,0 +1,26 @@
+.tweet-container .body.image-layout {
+	margin: 2% 0 0% 0;
+	.tweet-image-container {
+		display: block;
+	}
+	.tweet-data-container {
+		float: right;
+		width: 63%;
+		.tweet-text-container {
+			font-size: $m-text-16x9;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			span.tweet-text {
+				margin: 0% 0 2% 0;
+			}
+			.tweet-stats {
+				img.icon {
+					width: 6%;
+				}
+			}
+		}
+		.tweet-text-container.long-tweet {
+				font-size: $s-text-16x9;
+		}
+	}
+}

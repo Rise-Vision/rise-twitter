@@ -1,0 +1,99 @@
+@media (max-aspect-ratio: 11/16) {
+	.tweet {
+		padding: 177.78% 0 0 0;
+		margin-bottom: 3vh;
+    .tweet-container {
+      padding: 4%;
+      width: 96%;
+      height: 96%;
+    }
+	}
+
+	.tweet-container .header {
+		.twitter-logo {
+			width: 15%;
+		}
+		.meta {
+			.profile-image {
+				width: 15%;
+			}
+			.user-details {
+				width: 79%;
+        margin-right: 5%;
+				span {
+					font-size: $s-text-9x16;
+				}
+			}
+		}
+	}
+	.tweet-container .body {
+    padding: 5% 0 0 0;
+		.tweet-image-container {
+			.tweet-image {
+				width: 43%;
+				margin-right: 4%;
+			}
+		}
+		.tweet-data-container {
+			.tweet-text-container {
+				font-size: $xl-text-9x16;
+				margin-bottom: 9%;
+			}
+			.tweet-text-container.long-tweet {
+				font-size: $m-text-9x16;
+				margin-bottom: 9%;
+			}
+			span.tweet-time {
+				font-size: $s-text-9x16;
+			}
+			.tweet-stats {
+				margin-top: 9%;
+				span {
+					font-size: $s-text-9x16;
+				}
+				img.icon {
+					width: 9%;
+					margin-top: -1%;
+					margin-right: 2%;
+				}
+			}
+		}
+	}
+	.tweet-container .body.image-layout {
+    .tweet-image-container {
+      max-height: 50vw;
+      overflow: hidden;
+      margin-bottom: 5%;
+      img.tweet-image {
+        width: 100%;
+      }
+    }
+		.tweet-data-container {
+			width: 100%;
+			.tweet-text-container {
+				font-size: $l-text-9x16;
+				margin-bottom: 10%;
+        width: 100%;
+			}
+			.tweet-text-container.long-tweet {
+				font-size: $s-text-9x16;
+				margin-bottom: 7%;
+        width: 100%;
+			}
+			span.tweet-time {
+				font-size: $s-text-9x16;
+			}
+			.tweet-stats {
+				margin-top: 10%;
+				span {
+					font-size: $s-text-9x16;
+				}
+				img.icon {
+					width: 10%;
+					margin-top: -1%;
+					margin-right: 2%;
+				}
+			}
+		}
+	}
+}

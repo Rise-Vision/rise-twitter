@@ -1,0 +1,11 @@
+:host {
+	display: flex;
+	flex-direction: column;
+}
+
+.hidden {
+	display: none;
+}
+.light-template {
+	color: $light-base1;
+}

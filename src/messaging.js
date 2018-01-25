@@ -25,6 +25,7 @@ export default class Messaging {
 
   _handleError(error) {
     console.error('An error happen with connection to LMS', error.stack);
+    this.tweet.handleError();
   }
 
   _handleEnd() {
