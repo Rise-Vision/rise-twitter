@@ -1,6 +1,5 @@
 import RiseTwitter from "../../src/rise-twitter";
 import Tweet from "../../src/tweet";
-import Messaging from "../../src/messaging";
 
 let component = null;
 let risePlaylistItem = null;
@@ -9,6 +8,13 @@ let tweet = null;
 describe("Twitter Component - Unit", () => {
   describe("Test event listeners", () => {
     beforeAll(() => {
+      top.RiseVision = {};
+      top.RiseVision.Viewer = {};
+      top.RiseVision.Viewer.LocalMessaging = {
+        write: (message) => {},
+        receiveMessages: (handler) => {},
+        canConnect: () => {return true;}
+      };
 
       risePlaylistItem = document.createElement("rise-playlist-item");
       document.getElementsByTagName("body")[0].appendChild(risePlaylistItem);
@@ -94,7 +100,7 @@ describe("Twitter Component - Unit", () => {
   })
 
   describe("Test play", () => {
-    beforeAll(() => {
+    beforeEach(() => {
       risePlaylistItem = document.createElement("rise-playlist-item");
       document.getElementsByTagName("body")[0].appendChild(risePlaylistItem);
       component = new RiseTwitter();
@@ -108,25 +114,29 @@ describe("Twitter Component - Unit", () => {
 
       messaging = component.getMessaging();
 
-      messaging.connectToLMS = jest.genMockFn();
       messaging.sendComponentSettings = jest.genMockFn();
     })
 
     it("should call component connect and send component settings if connection is closed when play is called", () => {
-
       component._play();
 
-      expect(messaging.connectToLMS).toHaveBeenCalled();
       expect(messaging.sendComponentSettings).toHaveBeenCalledWith("screenNameTest", "hashtagTest");
 
     });
 
-    it("should not call component connect and send component settings if connection is open when play is called", () => {
-      messaging.isConnected = true;
+    it("should not send component settings if connection is not open when play is called", () => {
+      top.RiseVision = {};
+      top.RiseVision.Viewer = {};
+      top.RiseVision.Viewer.LocalMessaging = {
+        write: (message) => {},
+        receiveMessages: (handler) => {},
+        canConnect: () => {return false;}
+      };
+      component = new RiseTwitter();
+      component._play = jest.genMockFn();
       component._play();
 
-      expect(messaging.connectToLMS).toHaveBeenCalled();
-      expect(messaging.sendComponentSettings).toHaveBeenCalledWith("screenNameTest", "hashtagTest");
+      expect(messaging.sendComponentSettings).not.toHaveBeenCalled();
 
     });
   });
@@ -144,7 +154,6 @@ describe("Twitter Component - Unit", () => {
     })
 
     it("should call pause when stop is called", () => {
-
       component._stop();
 
       expect(component._pause).toHaveBeenCalled();
