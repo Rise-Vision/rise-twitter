@@ -14,7 +14,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "common-component": "git+https://github.com/Rise-Vision/common-component.git#1.0.0"
+    "common-component": "git+https://github.com/Rise-Vision/common-component.git#1.0.0",
+    "gulp": "^3.9.1"
   },
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "^1.0.20",
