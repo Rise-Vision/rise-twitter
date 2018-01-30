@@ -1,5 +1,5 @@
 /* fonts */
-$font-stack: "helvetica neue";
+$font-stack: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 /* theme-light */
 $light-base1: #000;
@@ -22,15 +22,15 @@ $m-text-16x9: 3.5vw;
 $s-text-16x9: 2.5vw;
 
 /* font-size for layout-4x3 */
-$xl-text-4x3: 5.5vw; /* (80/1440)*100 */
-$l-text-4x3: 5vw; /* (72/1440)*100 */
-$m-text-4x3: 4vw; /* (72/1440)*100 */
-$s-text-4x3: 3.75vw; /* (54/1440)*100 */
-$xs-text-4x3: 3vw; /* (54/1440)*100 */
+$xl-text-4x3: 5.5vw;
+$l-text-4x3: 5vw;
+$m-text-4x3: 4vw;
+$s-text-4x3: 3.75vw;
+$xs-text-4x3: 3vw;
 
 /* font-size for layout-9x16 */
-$xl-text-9x16: 10vw; /* (110/1030)*100 */
-$l-text-9x16: 7.5vw; /* (80/1030)*100 */
-$m-text-9x16: 6.5vw; /* (72/1030)*100 */
-$s-text-9x16: 5vw; /* (54/1030)*100 */
-$xs-text-9x16: 3vw; /* (54/1440)*100 */
+$xl-text-9x16: 10vw;
+$l-text-9x16: 7.5vw;
+$m-text-9x16: 6.5vw;
+$s-text-9x16: 5vw;
+$xs-text-9x16: 3vw;

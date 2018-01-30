@@ -21,7 +21,7 @@ const createLintingRule = () => ({
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    component: ['./src/rise-twitter.js'],
+    component: ['./src/rise-twitter.js', './src/static/css/main.scss'],
     vendor: [
       "@webcomponents/webcomponentsjs/custom-elements-es5-adapter",
       "@webcomponents/webcomponentsjs/webcomponents-lite",
@@ -60,6 +60,30 @@ module.exports = {
           }
         ]
       },
+      {
+					test: /\.scss$/,
+					use: [
+						{
+							loader: 'file-loader',
+							options: {
+								name: '[name].css',
+								outputPath: 'static/css/'
+							}
+						},
+						{
+							loader: 'extract-loader'
+						},
+						{
+							loader: 'css-loader'
+						},
+						{
+							loader: 'postcss-loader'
+						},
+						{
+							loader: 'sass-loader'
+						}
+					]
+				},
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',

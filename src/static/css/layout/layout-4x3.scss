@@ -14,6 +14,7 @@
 			}
 			.user-details {
 				width: 84%;
+				margin-top: 2%;
 				span {
 					font-size: $l-text-4x3;
 				}
@@ -43,6 +44,10 @@
 				margin-top: 4%;
 				span {
 					font-size: $s-text-4x3;
+					margin-right: 3%;
+					position: relative;
+					top: -1vw;
+					left: 0%;
 				}
 				img.icon {
 					width: 5%;
@@ -65,11 +70,15 @@
 			}
 			span.tweet-time {
 				font-size: $s-text-4x3;
-			}
+        }
 			.tweet-stats {
 				margin-top: 10%;
 				span {
 					font-size: $s-text-4x3;
+					margin-right: 3%;
+					position: relative;
+					top: -1vw;
+					left: 0%;
 				}
 				img.icon {
 					width: 10%;

@@ -78,6 +78,7 @@ export default class RiseTwitter extends HTMLElement {
       this.messaging.sendComponentSettings(this.screenName, this.hashtag);
     } else {
       console.log('Error: componnent is not connected to LM');
+      this.tweet.handleError();
     }
   }
 

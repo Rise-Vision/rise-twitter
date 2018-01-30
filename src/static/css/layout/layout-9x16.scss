@@ -12,13 +12,17 @@
 	.tweet-container .header {
 		.twitter-logo {
 			width: 15%;
+			position: absolute;
+			top: 2%;
+			right: 10%;
 		}
 		.meta {
 			.profile-image {
 				width: 15%;
 			}
 			.user-details {
-				width: 79%;
+				width: 77%;
+				margin-top: 2%;
         margin-right: 5%;
 				span {
 					font-size: $s-text-9x16;
@@ -50,6 +54,10 @@
 				margin-top: 9%;
 				span {
 					font-size: $s-text-9x16;
+					margin-right: 3%;
+    position: relative;
+    top: -2.2vw;
+    left: 0%;
 				}
 				img.icon {
 					width: 9%;
@@ -87,6 +95,10 @@
 				margin-top: 10%;
 				span {
 					font-size: $s-text-9x16;
+					margin-right: 3%;
+    position: relative;
+    top: -2.2vw;
+    left: 0%;
 				}
 				img.icon {
 					width: 10%;

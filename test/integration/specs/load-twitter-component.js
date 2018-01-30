@@ -6,150 +6,157 @@ const simple = require("simple-mock");
 const mock = simple.mock;
 const ipc = require("node-ipc");
 let localMessagingModule = require('local-messaging-module');
+let testTweets = null;
 
 describe('Twitter Component - Integration', () => {
-    before(()=>{
-      return localMessagingModule.start(ipc, "ls-test-did", "ls-test-mid");
+  before(()=>{
+    return localMessagingModule.start(ipc, "ls-test-did", "ls-test-mid");
+  });
+  beforeEach(()=>{
+    testTweets = [ { created_at: 'Fri Jan 26 03:54:15 +0000 2018',
+              id: 956737018452697100,
+              text: 'let\'s see what happens when we include multiple links https://t.co/mkd9UQImGK https://t.co/APnwHc7cR4',
+              entities: { hashtags: [], symbols: [], user_mentions: [],
+                urls:
+                  [{"url":"https://t.co/mkd9UQImGK",
+                  "expanded_url":"http://www.google.com",
+                  "display_url":"google.com",
+                  "indices":[54,77]},
+                  {"url":"https://t.co/APnwHc7cR4",
+                  "expanded_url":"http://www.instagram.com",
+                  "display_url":"instagram.com",
+                  "indices":[78,101]}]},
+              source: '<a href="http://twitter.com" rel="nofollow">Twitter Web Client</a>',
+              user:
+               { id: 954121472225759200,
+                 name: 'Rise Vision',
+                 screen_name: 'RiseVisionUniversity',
+                 profile_image_url: 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png'
+               },
+              retweet_count: 30,
+              favorite_count: 15
+              } ];
+
+    mock(console, "log");
+    mock(commonConfig, "getDisplaySettingsSync").returnWith({
+      displayid: "ls-test-id", displayId: "ls-test-id"
     });
-    beforeEach(()=>{
-      mock(console, "log");
-      mock(commonConfig, "getDisplaySettingsSync").returnWith({
-        displayid: "ls-test-id", displayId: "ls-test-id"
+  });
+
+  after(() => {
+    localMessagingModule.stop();
+    simple.restore();
+  });
+
+  afterEach(() => {
+    commonConfig.disconnect();
+  });
+
+  it('should load component but not load invalid tweet => display filler tweets', () => {
+      browser.url('/');
+      const invalidTestTweets = [{id: 1234, text: 'blabla'}];
+
+      commonConfig.broadcastMessage({
+        from: 'twitter-module',
+        topic: 'twitter-update',
+        status: 'CURRENT',
+        through: 'ws',
+        data: {
+          'component_id': 'demoComponent',
+          'tweets': JSON.stringify(invalidTestTweets)
+        }
       });
-    });
 
-    after(() => {
-      localMessagingModule.stop();
-      simple.restore();
-    });
+      const screenNameSelector = 'rise-twitter .screen-name';
 
-    afterEach(() => {
-      commonConfig.disconnect();
-    });
+      browser.waitForText(screenNameSelector);
+      const results = $$(screenNameSelector).filter(function (link) {
+          return link;
+      });
+      expect(results.length).to.be.equal(25);
 
-    it('should load component but not load invalid tweet', () => {
-        browser.url('/');
-        const tweets = [{id: 1234, text: 'blabla'}, {id: 4568, text: 'blabla2'}];
+      const specificTweetScreenNameSelector = 'rise-twitter .tweet-957983587294326800 .screen-name';
+      browser.waitForText(specificTweetScreenNameSelector);
+      browser.getText(specificTweetScreenNameSelector).should.be.equal('@RiseVision');
+  });
 
-        commonConfig.broadcastMessage({
-          from: 'twitter-module',
-          topic: 'twitter-update',
-          status: 'CURRENT',
-          through: 'ws',
-          data: {
-            'component_id': 'demoComponent',
-            'tweets': JSON.stringify(tweets)
-          }
-        });
+  it('should load component and tweets', () => {
+      browser.url('/');
 
-        const selector = 'rise-twitter .twitter-component-template';
-        browser.waitForExist(selector);
+      commonConfig.broadcastMessage({
+        from: 'twitter-module',
+        topic: 'twitter-update',
+        status: 'CURRENT',
+        through: 'ws',
+        data: {
+          'component_id': 'demoComponent',
+          'tweets': JSON.stringify(testTweets)
+        }
+      });
 
-        browser.elements(selector, (err, results)=>{
-          browser.elementIdText(results.value[0].ELEMENT).should.be.equal('');
-        });
-    });
+      const nameSelector = 'rise-twitter .display-name';
+      browser.waitForText(nameSelector);
+      browser.getText(nameSelector).should.be.equal(testTweets[0].user.name);
 
-    it('should load component and tweets', () => {
-        browser.url('/');
+      const screenNameSelector = 'rise-twitter .screen-name';
+      browser.waitForText(screenNameSelector);
+      browser.getText(screenNameSelector).should.be.equal('@' + testTweets[0].user.screen_name);
 
-        const tweets = [ { created_at: 'Fri Jan 26 03:54:15 +0000 2018',
-          id: 956737018452697100,
-          id_str: '956737018452697089',
-          text: 'let\'s see what happens when we include multiple links https://t.co/mkd9UQImGK https://t.co/APnwHc7cR4',
-          truncated: false,
-          entities: { hashtags: [], symbols: [], user_mentions: [],
-            urls:
-              [{"url":"https://t.co/mkd9UQImGK",
-              "expanded_url":"http://www.google.com",
-              "display_url":"google.com",
-              "indices":[54,77]},
-              {"url":"https://t.co/APnwHc7cR4",
-              "expanded_url":"http://www.instagram.com",
-              "display_url":"instagram.com",
-              "indices":[78,101]}]},
-          source: '<a href="http://twitter.com" rel="nofollow">Twitter Web Client</a>',
-          in_reply_to_status_id: null,
-          in_reply_to_status_id_str: null,
-          in_reply_to_user_id: null,
-          in_reply_to_user_id_str: null,
-          in_reply_to_screen_name: null,
-          user:
-           { id: 954121472225759200,
-             id_str: '954121472225759232',
-             name: 'Rise Vision',
-             screen_name: 'RiseVisionUniversity',
-             location: '',
-             description: '',
-             url: null,
-             entities: [Object],
-             protected: false,
-             followers_count: 0,
-             friends_count: 0,
-             listed_count: 0,
-             created_at: 'Thu Jan 15 22:41:00 +0000 2018',
-             favourites_count: 0,
-             utc_offset: null,
-             time_zone: null,
-             geo_enabled: false,
-             verified: false,
-             statuses_count: 5,
-             lang: 'en',
-             contributors_enabled: false,
-             is_translator: false,
-             is_translation_enabled: false,
-             profile_background_color: 'F5F8FA',
-             profile_background_image_url: null,
-             profile_background_image_url_https: null,
-             profile_background_tile: false,
-             profile_image_url: 'http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png',
-             profile_image_url_https: 'https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png',
-             profile_link_color: '1DA1F2',
-             profile_sidebar_border_color: 'C0DEED',
-             profile_sidebar_fill_color: 'DDEEF6',
-             profile_text_color: '333333',
-             profile_use_background_image: true,
-             has_extended_profile: false,
-             default_profile: true,
-             default_profile_image: true,
-             following: false,
-             follow_request_sent: false,
-             notifications: false,
-             translator_type: 'none' },
-          geo: null,
-          coordinates: null,
-          place: null,
-          contributors: null,
-          is_quote_status: false,
-          retweet_count: 0,
-          favorite_count: 0,
-          favorited: false,
-          retweeted: false,
-          possibly_sensitive: false,
-          lang: 'en' } ];
+      const textSelector = 'rise-twitter .tweet-text';
+      browser.waitForText(textSelector);
+      const testText = browser.getText(textSelector);
+      (testTweets[0].text).should.contain(testText);
 
-        commonConfig.broadcastMessage({
-          from: 'twitter-module',
-          topic: 'twitter-update',
-          status: 'CURRENT',
-          through: 'ws',
-          data: {
-            'component_id': 'demoComponent',
-            'tweets': JSON.stringify(tweets)
-          }
-        });
+      const retweetsSelector = 'rise-twitter .tweet-retweets';
+      browser.waitForText(retweetsSelector);
+      browser.getText(retweetsSelector).should.be.equal(testTweets[0].retweet_count.toString());
 
-        const nameSelector = 'rise-twitter .display-name';
-        browser.waitForText(nameSelector);
-        browser.getText(nameSelector).should.be.equal(tweets[0].user.name);
+      const favoritesSelector = 'rise-twitter .tweet-favorites';
+      browser.waitForText(favoritesSelector);
+      browser.getText(favoritesSelector).should.be.equal(testTweets[0].favorite_count.toString());
+  });
 
-        const screenNameSelector = 'rise-twitter .screen-name';
-        browser.waitForText(screenNameSelector);
-        browser.getText(screenNameSelector).should.be.equal('@' + tweets[0].user.screen_name);
+  it('should default to 0 if retweet_count is undefined', () => {
+      browser.url('/');
 
-        const textSelector = 'rise-twitter .tweet-text';
-        browser.waitForText(textSelector);
-        const testText = browser.getText(textSelector);
-        (tweets[0].text).should.contain(testText);
-    });
+      delete testTweets[0]['retweet_count'];
+
+      commonConfig.broadcastMessage({
+        from: 'twitter-module',
+        topic: 'twitter-update',
+        status: 'CURRENT',
+        through: 'ws',
+        data: {
+          'component_id': 'demoComponent',
+          'tweets': JSON.stringify(testTweets)
+        }
+      });
+
+      const retweetsSelector = 'rise-twitter .tweet-retweets';
+      const expectedRetweets = 0;
+      browser.waitForText(retweetsSelector);
+      browser.getText(retweetsSelector).should.be.equal(expectedRetweets.toString());
+  });
+
+  it('should default to 0 if favorite_count is undefined', () => {
+      browser.url('/');
+
+      delete testTweets[0]['favorite_count'];
+
+      commonConfig.broadcastMessage({
+        from: 'twitter-module',
+        topic: 'twitter-update',
+        status: 'CURRENT',
+        through: 'ws',
+        data: {
+          'component_id': 'demoComponent',
+          'tweets': JSON.stringify(testTweets)
+        }
+      });
+
+      const favoritesSelector = 'rise-twitter .tweet-favorites';
+      const expectedFavorites = 0;
+      browser.waitForText(favoritesSelector);
+      browser.getText(favoritesSelector).should.be.equal(expectedFavorites.toString());
+  });
 });
