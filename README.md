@@ -16,12 +16,26 @@ npm run build
 
 # build for production and view the bundle analyzer report
 npm run build --report
+```
 
+## Development Setup
+
+``` bash
+# run scss compiler once
+gulp injectSass
+
+# watch scss file for continuous compilation
+npm watchSass
+```
+
+## Test Scripts
+
+``` bash
 # run unit tests
-npm run unit
+npm run test-unit
 
-# run e2e tests
-npm run e2e
+# run integration tests
+npm run test-integration
 
 # run all tests
 npm test

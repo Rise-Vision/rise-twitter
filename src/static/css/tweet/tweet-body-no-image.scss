@@ -1,0 +1,48 @@
+.tweet-container .body {
+	.tweet-image-container {
+		display: none;
+		img.tweet-image {
+			width: 33%;
+			float: left;
+			margin-right: 4%;
+		}
+	}
+	.tweet-data-container {
+		float: right;
+		width: 100%;
+		.tweet-text-container {
+		  overflow: hidden;
+		  text-overflow: ellipsis;
+			line-height: 120%;
+			font-weight: normal;
+			font-size: $l-text-16x9;
+			span.tweet-text {
+				margin: 2% 0 2% 0;
+				width: 100%;
+			}
+			span.tweet-time {
+				font-weight: bold;
+				font-size: $s-text-16x9;
+			}
+			.tweet-stats {
+				margin-top: 5%;
+				span {
+					font-weight: bold;
+					font-size: $s-text-16x9;
+					margin-right: 7%;
+					letter-spacing: .1vw;
+					vertical-align: top;
+				}
+				img.icon {
+					width: 4%;
+					margin-top: -.5%;
+					margin-right: .5%;
+				}
+			}
+		}
+		.tweet-text-container.long-tweet {
+			font-size: $m-text-16x9;
+			width: 95%;
+		}
+	}
+}

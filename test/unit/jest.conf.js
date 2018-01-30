@@ -12,9 +12,6 @@ module.exports = {
   transform: {
     "^.+\\.(js|html|scss)$": "<rootDir>/test/unit/preprocessor.js"
   },
-  transformIgnorePatterns: [
-    "node_modules/(?!(common-component))"
-  ],
   testPathIgnorePatterns: [
     '<rootDir>/test/e2e'
   ],

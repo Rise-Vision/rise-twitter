@@ -1,5 +1,4 @@
 import { WebComponent } from 'web-component';
-import {LocalMessaging} from 'common-component';
 import Messaging from './messaging';
 import Tweet from './tweet';
 
@@ -19,8 +18,7 @@ export default class RiseTwitter extends HTMLElement {
   connectedCallback() {
     console.log('RiseTwitter', this.shadowRoot);
     this.tweet = new Tweet(this.shadowRoot);
-    this.localMessaging = new LocalMessaging();
-    this.messaging = new Messaging(this.tweet, this.id, this.localMessaging);
+    this.messaging = new Messaging(this.tweet, this.id);
 
     this._createListenersForRisePlaylistItemEvents();
   }
@@ -74,10 +72,9 @@ export default class RiseTwitter extends HTMLElement {
   }
 
   _play() {
-    if (this.messaging.isConnected()) {
+    if (!this.messaging.isConnected) {
+      this.messaging.connectToLMS();
       this.messaging.sendComponentSettings(this.screenName, this.hashtag);
-    } else {
-      console.log('Error: componnent is not connected to LM');
     }
   }
 
