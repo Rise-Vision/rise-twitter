@@ -1,16 +1,29 @@
 import Messaging from "../../src/messaging";
 import Tweet from "../../src/tweet";
+import {LocalMessaging} from 'common-component';
 
 let messaging = null;
 let tweet = null;
 let componentId = "componentIdTest";
+let localMessaging = null;
 describe("Twitter Component Messaging - Unit", () => {
+  beforeAll(() => {
+    top.RiseVision = {};
+    top.RiseVision.Viewer = {};
+    top.RiseVision.Viewer.LocalMessaging = {
+      write: (message) => {},
+      receiveMessages: (handler) => {},
+      canConnect: () => {return true;}
+    };
+  });
+
   beforeEach(() => {
     tweet = new Tweet();
-    messaging = new Messaging(tweet, componentId);
+    localMessaging = new LocalMessaging();
+    messaging = new Messaging(tweet, componentId, localMessaging);
 
     tweet.update = jest.genMockFn();
-    messaging._sendMessage = jest.genMockFn();
+    localMessaging.broadcastMessage = jest.genMockFn();
   });
 
   it("should have messaging defined", () => {
@@ -66,7 +79,6 @@ describe("Twitter Component Messaging - Unit", () => {
 
   it("should call send message with twitter-watch topic and component settings", () => {
     const message = {
-      "from": "ws-client",
       "topic": "twitter-watch",
       "data": {
         "component_id": "componentIdTest",
@@ -77,12 +89,11 @@ describe("Twitter Component Messaging - Unit", () => {
 
     messaging.sendComponentSettings("screenNameTest", "hashtagTest");
 
-    expect(messaging._sendMessage).toHaveBeenCalledWith(message);
+    expect(localMessaging.broadcastMessage).toHaveBeenCalledWith(message);
   });
 
   it("should call send message with twitter-watch topic and component settings with only hashtag", () => {
     const message = {
-      "from": "ws-client",
       "topic": "twitter-watch",
       "data": {
         "component_id": "componentIdTest",
@@ -93,12 +104,11 @@ describe("Twitter Component Messaging - Unit", () => {
 
     messaging.sendComponentSettings("", "hashtagTest");
 
-    expect(messaging._sendMessage).toHaveBeenCalledWith(message);
+    expect(localMessaging.broadcastMessage).toHaveBeenCalledWith(message);
   });
 
   it("should call send message with twitter-watch topic and component settings with only screen name", () => {
     const message = {
-      "from": "ws-client",
       "topic": "twitter-watch",
       "data": {
         "component_id": "componentIdTest",
@@ -109,6 +119,6 @@ describe("Twitter Component Messaging - Unit", () => {
 
     messaging.sendComponentSettings("screenNameTest");
 
-    expect(messaging._sendMessage).toHaveBeenCalledWith(message);
+    expect(localMessaging.broadcastMessage).toHaveBeenCalledWith(message);
   });
 });
