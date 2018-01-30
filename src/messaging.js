@@ -4,6 +4,10 @@ export default class Messaging {
     this.componentId = componentId;
 
     this.localMessaging = localMessaging;
+    this._bindReceiveMessagesHandler();
+  }
+
+  _bindReceiveMessagesHandler() {
     this.localMessaging.receiveMessages((message) => { this._handleMessage(message) });
   }
 

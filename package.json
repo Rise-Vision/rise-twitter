@@ -14,7 +14,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "common-component": "git+https://github.com/Rise-Vision/common-component.git#feature/local-messaging"
+    "common-component": "git+https://github.com/Rise-Vision/common-component.git#1.0.0"
   },
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "^1.0.20",
