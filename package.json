@@ -14,11 +14,15 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "common-component": "git+https://github.com/Rise-Vision/common-component.git#1.0.0"
+    "common-component": "git+https://github.com/Rise-Vision/common-component.git#1.0.0",
+    "jquery": "^3.3.1"
   },
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "^1.0.20",
     "autoprefixer": "^7.1.2",
+    "gulp": "^3.9.1",
+    "map-stream": "0.0.7",
+    "node-sass": "^4.7.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.1.1",
     "babel-jest": "^21.0.2",

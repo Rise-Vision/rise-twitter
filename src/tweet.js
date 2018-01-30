@@ -1,5 +1,7 @@
+/* eslint-disable */
 import tweetTemplate from '../src/static/template/tweet-template.html';
 import fillerTweetsJSON from '../src/static/data/filler-tweets.json';
+import $ from 'jquery';
 
 export default class Tweet {
   constructor(shadowRoot) {
@@ -12,21 +14,27 @@ export default class Tweet {
   }
 
   update(tweets) {
-    // check if all tweets are valid and display tweets if so.
-    for (var tweetPosition in tweets) {
-      var tweet = tweets[tweetPosition];
-      if (this._isValidTweet(tweet)) {
-        this._clearTweets();
-        this._displayTweet(tweet);
-      } else {
-        console.log('Invalid Tweets - displaying filler tweets', tweet);
-        this.handleError();
+    console.log('Displaying updated Tweets');
+
+    var promises = [];
+    if (this._areValidTweets(tweets)) {
+      this._clearTweets();
+      for (var tweetPosition in tweets) {
+        var tweet = tweets[tweetPosition];
+        promises.push(this._displayTweet(tweet));
       }
+      Promise.all(promises)
+      .then(() => {
+        this._runTweets();
+      })
+      .catch((error) => {
+        console.log(error);
+        this.handleError();
+      });
+    } else {
+      console.log('Invalid Tweets - displaying filler tweets', JSON.stringify(tweets));
+      this.handleError();
     }
-    /*
-- make this a promise chain. promiseAll then runTweets after
-    this._runTweets();
-    */
   }
 
   setTheme(settings) {
@@ -44,36 +52,57 @@ export default class Tweet {
 /*************************************
  * Play Tweets
  *************************************/
+
   _runTweets() {
-    const tweetDivs = document.querySelectorAll('.twitter-component-template .tweet');
-    console.log(tweetDivs);
+    const tweetDivs = this.shadowRoot.querySelectorAll('.twitter-component-template .tweet');
 
-    /*
-add `display: none` to all tweet classes
-add `position: absolute` to all tweet classes
+    var fadeInSeconds = 1, delayInSeconds = 10,
+    fadeTime = fadeInSeconds * 1000,
+    delayTime = delayInSeconds * 1000,
+    totalTime = fadeTime + delayTime, allElems, elemNoFade, i, fadingElem;
 
-    lastDiv = null;
-    - iterate over divs
-      if (lastDiv)
-        fadeout lastDiv
-      fade in current
-      lastDiv = current;
-    hold for X seconds
-    -
-    */
+       for (i = 0, allElems = tweetDivs.length, elemNoFade = allElems - 1; i < allElems; i++) {
+         fadingElem = tweetDivs[i];
+         $(fadingElem).hide();
+       }
+
+       for (i = 0, allElems = tweetDivs.length, elemNoFade = allElems - 1; i < allElems; i++) {
+           fadingElem = tweetDivs[i];
+           if (i === 0) {
+               $(fadingElem).fadeIn(fadeTime).delay(delayTime).fadeOut(fadeTime);
+           } else {
+               $(fadingElem).delay(totalTime * i).fadeIn(fadeTime).delay(delayTime).fadeOut(fadeTime);
+           }
+       }
+
   }
 
 /*************************************
- * Load Templates
+ * Validation
  *************************************/
+  _areValidTweets(tweets) {
+    if (!tweets || $.isEmptyObject(tweets)) { return false; }
+
+    for (var tweetPosition in tweets) {
+      var tweet = tweets[tweetPosition];
+      if (!this._isValidTweet(tweet)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   _isValidTweet(tweet) {
-    if (!tweet || !tweet.id) { return false; }
-    if (!tweet.user.name || !tweet.user.screen_name || !tweet.user.profile_image_url) { return false; }
+    if (!tweet || $.isEmptyObject(tweet) || !tweet.id) { return false; }
+    if (!tweet.user || !tweet.user.name || !tweet.user.screen_name || !tweet.user.profile_image_url) { return false; }
     if (!tweet.text || !tweet.created_at || !tweet.entities) { return false; }
 
     return true;
   }
 
+  /*************************************
+   * Load Templates
+   *************************************/
   _clearTweets() {
     this.shadowRoot.querySelector('.twitter-component-template').innerHTML = '';
   }
@@ -155,8 +184,8 @@ add `position: absolute` to all tweet classes
   _updateStats(selector, tweetData) {
     const div = this.shadowRoot.querySelector(selector);
 
-    div.querySelector('.tweet-retweets').append(tweetData.retweet_count || 0);
-    div.querySelector('.tweet-likes').append(tweetData.favourites_count || 0);
+    div.querySelector('.tweet-retweets').append(tweetData.retweet_count || '0');
+    div.querySelector('.tweet-favorites').append(tweetData.favorite_count || '0');
   }
 
   _updateDate(div, tweetData) {

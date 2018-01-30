@@ -25,6 +25,5 @@ module.exports = {
   collectCoverageFrom: [
     'src/**/*.{js}',
     '!**/node_modules/**',
-    '!src/primus.js'
   ]
 }
