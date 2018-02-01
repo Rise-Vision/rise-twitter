@@ -2,15 +2,15 @@
 import tweetTemplate from '../src/static/template/tweet-template.html';
 import fillerTweetsJSON from '../src/static/data/filler-tweets.json';
 import $ from 'jquery';
+import "../src/static/css/main.scss";
 
 export default class Tweet {
-  constructor(shadowRoot) {
+  constructor(shadowRoot, pathToStyle) {
     this.shadowRoot = shadowRoot;
-  }
 
-  handleError() {
-    this._clearTweets();
-    this._displayFillerTweets();
+    if (pathToStyle) {
+      this.shadowRoot.querySelector('.component-style').href = pathToStyle;
+    }
   }
 
   update(tweets) {
@@ -37,6 +37,11 @@ export default class Tweet {
     }
   }
 
+  handleError() {
+    this._clearTweets();
+    this._displayFillerTweets();
+  }
+
   setTheme(settings) {
     switch (settings.theme) {
       case 'dark':
@@ -56,7 +61,7 @@ export default class Tweet {
   _runTweets() {
     const tweetDivs = this.shadowRoot.querySelectorAll('.twitter-component-template .tweet');
 
-    var fadeInSeconds = 1,
+    var fadeInSeconds = 1.5,
       delayInSeconds = 10,
       fadeTime = fadeInSeconds * 1000,
       delayTime = delayInSeconds * 1000,

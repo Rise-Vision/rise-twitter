@@ -2,6 +2,7 @@ import { WebComponent } from 'web-component';
 import {LocalMessaging} from 'common-component';
 import Messaging from './messaging';
 import Tweet from './tweet';
+import $ from 'jquery';
 
 @WebComponent('rise-twitter', {
   template: require('./rise-twitter.html'),
@@ -18,7 +19,7 @@ export default class RiseTwitter extends HTMLElement {
 
   connectedCallback() {
     console.log('RiseTwitter', this.shadowRoot);
-    this.tweet = new Tweet(this.shadowRoot);
+    this.tweet = new Tweet(this.shadowRoot, $('.css-path').data('path'));
     this.localMessaging = new LocalMessaging();
     this.messaging = new Messaging(this.tweet, this.id, this.localMessaging);
 
