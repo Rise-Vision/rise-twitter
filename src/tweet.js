@@ -56,7 +56,7 @@ export default class Tweet {
   _runTweets() {
     const tweetDivs = this.shadowRoot.querySelectorAll('.twitter-component-template .tweet');
 
-    var fadeInSeconds = 1,
+    var fadeInSeconds = 1.5,
       delayInSeconds = 10,
       fadeTime = fadeInSeconds * 1000,
       delayTime = delayInSeconds * 1000,

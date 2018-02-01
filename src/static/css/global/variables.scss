@@ -1,19 +1,16 @@
 /* fonts */
-$font-stack: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-stack: 'Lato', sans-serif;
 
 /* theme-light */
-$light-base1: #000;
-$light-base2: #545454;
-$light-base3: #777;
-$light-base4: #E0E0E0;
+$light-base1: rgba(20, 23, 26, 1);
+$light-base2: rgba(20, 23, 26, 0.5);
+$light-base3: rgba(20, 23, 26, 0.2);
 $light-accent1: #1DA1F2;
 
 /* theme-dark */
-$dark-base1: #FFF;
-$dark-base2: #FFF;
-$dark-base3: #777;
-$dark-base4: #777;
-$dark-base4: #515151;
+$dark-base1: rgba(255, 255, 255, 1);
+$dark-base2: rgba(255, 255, 255, .5);
+$dark-base3: rgba(255, 255, 255, .2);
 $dark-accent1: #1DA1F2;
 
 /* font-size for layout-16x9 */

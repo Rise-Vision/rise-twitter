@@ -14,35 +14,34 @@
 		  overflow: hidden;
 		  text-overflow: ellipsis;
 			line-height: 120%;
-			font-weight: normal;
+			font-weight: 400;
 			font-size: $l-text-16x9;
 			span.tweet-text {
 				margin: 2% 0 2% 0;
 				width: 100%;
 			}
-			span.tweet-time {
-				font-weight: bold;
-				font-size: $s-text-16x9;
-			}
-			.tweet-stats {
-				margin-top: 5%;
-				span {
-					font-weight: bold;
-					font-size: $s-text-16x9;
-					margin-right: 7%;
-					letter-spacing: .1vw;
-					vertical-align: top;
-				}
-				img.icon {
-					width: 4%;
-					margin-top: -.5%;
-					margin-right: .5%;
-				}
-			}
 		}
 		.tweet-text-container.long-tweet {
 			font-size: $m-text-16x9;
 			width: 95%;
+		}
+		span.tweet-time {
+			font-weight: 700;
+			font-size: $s-text-16x9;
+		}
+		.tweet-stats {
+			margin-top: 5%;
+			span {
+				font-size: $s-text-16x9;
+				margin-right: 7%;
+				letter-spacing: .1vw;
+				vertical-align: top;
+			}
+			img.icon {
+				width: 4%;
+				margin-top: -.5%;
+				margin-right: .5%;
+			}
 		}
 	}
 }

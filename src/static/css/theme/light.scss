@@ -1,43 +1,45 @@
 .theme-light {
   .tweet {
-  	.tweet-container {
-  		color: $light-base2;
-  	}
+    .tweet-container {
+      border: 1px solid $light-base3;
+      color: $light-base1;
+    }
   }
   .tweet-container {
-  	.header {
-  		color: $light-base1;
+    .header {
+      color: $light-base1;
+
       .meta {
         .profile-image {
-          border: 1px solid $light-base4;
+          border: 1px solid $light-base3;
         }
       }
-  	}
+    }
   }
   .tweet-container .body {
-  	.tweet-image-container {
-  		img.tweet-image {
-  			-webkit-box-shadow: 0px 9px 23px -3px $light-base2;
-  			-moz-box-shadow: 0px 9px 23px -3px $light-base2;
-  			box-shadow: 0px 9px 23px -3px $light-base2;
-  		}
-  	}
-  	.tweet-data-container {
+    .tweet-image-container {
+      img.tweet-image {
+        -webkit-box-shadow: 0 9px 23px -3px $light-base2;
+        -moz-box-shadow: 0 9px 23px -3px $light-base2;
+        box-shadow: 0 9px 23px -3px $light-base2;
+      }
+    }
+    .tweet-data-container {
       .tweet-text-container {
         color: $light-accent1;
         span.tweet-text {
           color: $light-base1;
         }
-    		span.embedded-link {
-    				color: $light-accent1;
-    			}
-    		span.tweet-time {
-    			color: $light-base1;
-    		}
-    		.tweet-stats {
-    			color: $light-base3;
-    		}
+        span.embedded-link {
+          color: $light-accent1;
+        }
       }
-  	}
+      span.tweet-time {
+        color: $light-base1;
+      }
+      .tweet-stats {
+        color: $light-base2;
+      }
+    }
   }
 }
