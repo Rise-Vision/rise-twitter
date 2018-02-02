@@ -14,7 +14,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "common-component": "git+https://github.com/Rise-Vision/common-component.git#1.0.0",
+    "common-component": "git+https://github.com/Rise-Vision/common-component.git#v1.5.1",
     "jquery": "^3.3.1"
   },
   "devDependencies": {

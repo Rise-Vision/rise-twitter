@@ -1,9 +1,10 @@
 export default class Messaging {
-  constructor(tweet, componentId, localMessaging) {
+  constructor(tweet, componentId, localMessaging, logger) {
     this.tweet = tweet;
     this.componentId = componentId;
 
     this.localMessaging = localMessaging;
+    this.logger = logger;
     this._bindReceiveMessagesHandler();
   }
 

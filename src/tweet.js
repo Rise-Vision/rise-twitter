@@ -4,8 +4,9 @@ import fillerTweetsJSON from '../src/static/data/filler-tweets.json';
 import $ from 'jquery';
 
 export default class Tweet {
-  constructor(shadowRoot) {
+  constructor(shadowRoot, logger) {
     this.shadowRoot = shadowRoot;
+    this.logger = logger
   }
 
   handleError() {
@@ -32,7 +33,7 @@ export default class Tweet {
           this.handleError();
         });
     } else {
-      console.log('Invalid Tweets - displaying filler tweets', JSON.stringify(tweets));
+      this.logger.error(`Invalid Tweets - displaying filler tweets ${JSON.stringify(tweets)}`);
       this.handleError();
     }
   }

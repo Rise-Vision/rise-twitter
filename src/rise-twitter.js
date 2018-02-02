@@ -1,6 +1,7 @@
 import { WebComponent } from 'web-component';
 import {LocalMessaging} from 'common-component';
 import Messaging from './messaging';
+import Logger from './logger';
 import Tweet from './tweet';
 
 @WebComponent('rise-twitter', {
@@ -18,9 +19,10 @@ export default class RiseTwitter extends HTMLElement {
 
   connectedCallback() {
     console.log('RiseTwitter', this.shadowRoot);
-    this.tweet = new Tweet(this.shadowRoot);
+    this.logger = new Logger();
+    this.tweet = new Tweet(this.shadowRoot, this.logger);
     this.localMessaging = new LocalMessaging();
-    this.messaging = new Messaging(this.tweet, this.id, this.localMessaging);
+    this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.logger);
 
     this._createListenersForRisePlaylistItemEvents();
   }
@@ -55,10 +57,12 @@ export default class RiseTwitter extends HTMLElement {
     if (risePlaylistItem) {
       risePlaylistItem.addEventListener('configure', event => {
         this.screenName = event.detail.screenName;
+        this.logger.playlistEvent('Configure Event', {configureObject: JSON.stringify(event.detail)});
       });
 
       risePlaylistItem.addEventListener('play', () => {
         this._play();
+        this.logger.playlistEvent('Play Event');
       });
 
       risePlaylistItem.addEventListener('pause', () => {
@@ -67,9 +71,10 @@ export default class RiseTwitter extends HTMLElement {
 
       risePlaylistItem.addEventListener('stop', () => {
         this._stop();
+        this.logger.playlistEvent('Stop Event');
       });
     } else {
-      console.log('rise-playlist-item not found');
+      this.logger.error('rise-playlist-item not found');
     }
   }
 
@@ -77,7 +82,7 @@ export default class RiseTwitter extends HTMLElement {
     if (this.messaging.isConnected()) {
       this.messaging.sendComponentSettings(this.screenName, this.hashtag);
     } else {
-      console.log('Error: componnent is not connected to LM');
+      this.logger.error('Error: componnent is not connected to LM')
       this.tweet.handleError();
     }
   }
