@@ -14,9 +14,19 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "common-component": "git+https://github.com/Rise-Vision/common-component.git#1.0.0"
+    "common-component": "git+https://github.com/Rise-Vision/common-component.git#v1.0.0",
+    "jquery": "^3.3.1"
   },
   "devDependencies": {
+    "style-loader": "^0.20.1",
+    "css-flip": "^0.5.0",
+    "css-loader": "^0.28.7",
+    "csso-cli": "^1.0.0",
+    "extract-loader": "^1.0.1",
+    "node-sass": "^4.7.2",
+    "postcss-cli": "^4.1.0",
+    "postcss-loader": "^2.0.6",
+    "sass-loader": "^6.0.6",
     "@webcomponents/webcomponentsjs": "^1.0.20",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",

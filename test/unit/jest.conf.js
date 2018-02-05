@@ -7,7 +7,8 @@ module.exports = {
     'json',
   ],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1'
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '\.scss$': '<rootDir>/test/unit/data/scssStub.js'
   },
   transform: {
     "^.+\\.(js|html|scss)$": "<rootDir>/test/unit/preprocessor.js"
@@ -25,6 +26,5 @@ module.exports = {
   collectCoverageFrom: [
     'src/**/*.{js}',
     '!**/node_modules/**',
-    '!src/primus.js'
   ]
 }

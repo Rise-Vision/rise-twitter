@@ -10,6 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const ZipPlugin = require("zip-webpack-plugin");
 const UnzipsfxPlugin = require("unzipsfx-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -23,6 +24,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     chunkFilename: `${config.build.projectName}.js`
   },
   plugins: [
+    new ExtractTextPlugin('[name].css'),
     new webpack.IgnorePlugin(/vertx/),
     new webpack.DefinePlugin({
       'process.env': env

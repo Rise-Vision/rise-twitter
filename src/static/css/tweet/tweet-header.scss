@@ -1,0 +1,34 @@
+.tweet-container .header {
+	.twitter-logo {
+		position: absolute;
+		top: 1%;
+		right: 6%;
+		width: 14%;
+		text-align: right;
+		margin-right: -10px;
+	}
+	.meta {
+		.profile-image {
+			float: left;
+			width: 11%;
+			-webkit-border-radius: 100%;
+			-moz-border-radius: 100%;
+			border-radius: 100%;
+		}
+		.user-details {
+			float: right;
+			width: 88%;
+			text-align: left;
+			span {
+				display: block;
+				font-size: $m-text-16x9;
+				margin: 0px;
+				padding: 0px 0px 0px 4%;
+				line-height: 110%;
+			}
+			span.display-name {
+				font-weight: 700;
+			}
+		}
+	}
+}

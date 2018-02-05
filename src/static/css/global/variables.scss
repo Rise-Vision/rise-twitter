@@ -1,0 +1,33 @@
+/* fonts */
+$font-stack: 'Lato', sans-serif;
+
+/* theme-light */
+$light-base1: rgba(20, 23, 26, 1);
+$light-base2: rgba(20, 23, 26, 0.5);
+$light-base3: rgba(20, 23, 26, 0.2);
+$light-accent1: #1DA1F2;
+
+/* theme-dark */
+$dark-base1: rgba(255, 255, 255, 1);
+$dark-base2: rgba(255, 255, 255, .5);
+$dark-base3: rgba(255, 255, 255, .2);
+$dark-accent1: #1DA1F2;
+
+/* font-size for layout-16x9 */
+$l-text-16x9: 5vw;
+$m-text-16x9: 3.5vw;
+$s-text-16x9: 2.5vw;
+
+/* font-size for layout-4x3 */
+$xl-text-4x3: 5.5vw;
+$l-text-4x3: 5vw;
+$m-text-4x3: 4vw;
+$s-text-4x3: 3.75vw;
+$xs-text-4x3: 3vw;
+
+/* font-size for layout-9x16 */
+$xl-text-9x16: 10vw;
+$l-text-9x16: 7.5vw;
+$m-text-9x16: 6.5vw;
+$s-text-9x16: 5vw;
+$xs-text-9x16: 3vw;
