@@ -1,8 +1,9 @@
 import { WebComponent } from 'web-component';
 import {LocalMessaging} from 'common-component';
 import Messaging from './messaging';
-import Logger from './logger';
 import Tweet from './tweet';
+import Logger from './logger';
+import $ from 'jquery';
 
 @WebComponent('rise-twitter', {
   template: require('./rise-twitter.html'),
@@ -20,7 +21,7 @@ export default class RiseTwitter extends HTMLElement {
   connectedCallback() {
     console.log('RiseTwitter', this.shadowRoot);
     this.logger = new Logger();
-    this.tweet = new Tweet(this.shadowRoot, this.logger);
+    this.tweet = new Tweet(this.shadowRoot, this.logger, $('.css-path').data('path'));
     this.localMessaging = new LocalMessaging();
     this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.logger);
 
@@ -74,7 +75,7 @@ export default class RiseTwitter extends HTMLElement {
         this.logger.playlistEvent('Stop Event');
       });
     } else {
-      this.logger.error('rise-playlist-item not found');
+      console.log('rise-playlist-item not found');
     }
   }
 
@@ -82,7 +83,7 @@ export default class RiseTwitter extends HTMLElement {
     if (this.messaging.isConnected()) {
       this.messaging.sendComponentSettings(this.screenName, this.hashtag);
     } else {
-      this.logger.error('Error: componnent is not connected to LM')
+      this.logger.error('Error: componnent is not connected to LM');
       this.tweet.handleError();
     }
   }

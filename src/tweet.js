@@ -2,16 +2,16 @@
 import tweetTemplate from '../src/static/template/tweet-template.html';
 import fillerTweetsJSON from '../src/static/data/filler-tweets.json';
 import $ from 'jquery';
+import "../src/static/css/main.scss";
 
 export default class Tweet {
-  constructor(shadowRoot, logger) {
+  constructor(shadowRoot, logger, pathToStyle) {
     this.shadowRoot = shadowRoot;
-    this.logger = logger
-  }
+    this.logger = logger;
 
-  handleError() {
-    this._clearTweets();
-    this._displayFillerTweets();
+    if (pathToStyle) {
+      this.shadowRoot.querySelector('.component-style').href = pathToStyle;
+    }
   }
 
   update(tweets) {
@@ -36,6 +36,11 @@ export default class Tweet {
       this.logger.error(`Invalid Tweets - displaying filler tweets ${JSON.stringify(tweets)}`);
       this.handleError();
     }
+  }
+
+  handleError() {
+    this._clearTweets();
+    this._displayFillerTweets();
   }
 
   setTheme(settings) {

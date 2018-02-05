@@ -2,6 +2,7 @@
 const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -21,7 +22,7 @@ const createLintingRule = () => ({
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    component: ['./src/rise-twitter.js', './src/static/css/main.scss'],
+    component: ['./src/rise-twitter.js'],
     vendor: [
       "@webcomponents/webcomponentsjs/custom-elements-es5-adapter",
       "@webcomponents/webcomponentsjs/webcomponents-lite",
@@ -61,30 +62,6 @@ module.exports = {
         ]
       },
       {
-					test: /\.scss$/,
-					use: [
-						{
-							loader: 'file-loader',
-							options: {
-								name: '[name].css',
-								outputPath: 'static/css/'
-							}
-						},
-						{
-							loader: 'extract-loader'
-						},
-						{
-							loader: 'css-loader'
-						},
-						{
-							loader: 'postcss-loader'
-						},
-						{
-							loader: 'sass-loader'
-						}
-					]
-				},
-      {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
@@ -107,6 +84,13 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.scss$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: ['css-loader', 'sass-loader']
+        })
       }
     ]
   },
