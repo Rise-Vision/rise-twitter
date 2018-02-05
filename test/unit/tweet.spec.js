@@ -1,79 +1,101 @@
 import RiseTwitter from "../../src/rise-twitter";
 import Tweet from "../../src/tweet";
+import Logger from "../../src/logger";
+import Messaging from "../../src/messaging";
+import {LocalMessaging} from 'common-component';
 
 let component = null;
 let risePlaylistItem = null;
 let messaging = null;
 let tweet = null;
+let componentId = "componentIdTest";
+let logger = null;
+let localMessaging = null;
+
 describe("Tweet - Unit", () => {
-    beforeEach(() => {
-      const shadowRoot = {};
-      shadowRoot.appendChild = jest.genMockFn();
+  beforeAll(() => {
+    top.RiseVision = {};
+    top.RiseVision.Viewer = {};
+    top.RiseVision.Viewer.LocalMessaging = {
+      write: (message) => {},
+      receiveMessages: (handler) => {},
+      canConnect: () => {return true;}
+    };
+  });
 
-      tweet = new Tweet(shadowRoot);
+  beforeEach(() => {
+    const shadowRoot = {};
+    shadowRoot.appendChild = jest.genMockFn();
 
-      tweet.shadowRoot.querySelector = jest.genMockFn();
-      tweet.shadowRoot.querySelectorAll = jest.genMockFn();
-      console.log = jest.fn();
-    });
+    logger = new Logger();
 
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
+    tweet = new Tweet(shadowRoot, logger);
 
-    it("should clear tweets and display filler tweets", () => {
-      tweet._clearTweets = jest.genMockFn();
-      tweet._displayFillerTweets = jest.genMockFn();
+    localMessaging = new LocalMessaging();
+    messaging = new Messaging(tweet, componentId, localMessaging, logger);
 
-      tweet.handleError();
+    logger.error = jest.genMockFn();
+    tweet.shadowRoot.querySelector = jest.genMockFn();
+    tweet.shadowRoot.querySelectorAll = jest.genMockFn();
+    console.log = jest.fn();
+  });
 
-      expect(tweet._clearTweets).toHaveBeenCalled();
-      expect(tweet._displayFillerTweets).toHaveBeenCalled();
-    });
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 
-    it("should display filler tweets if update tweets are invalid", () => {
-      tweet._areValidTweets = jest.genMockFn();
-      tweet._clearTweets = jest.genMockFn();
-      tweet._displayFillerTweets = jest.genMockFn();
+  it("should clear tweets and display filler tweets", () => {
+    tweet._clearTweets = jest.genMockFn();
+    tweet._displayFillerTweets = jest.genMockFn();
 
-      tweet.update({});
+    tweet.handleError();
 
-      expect(tweet._areValidTweets).toHaveBeenCalled();
-      expect(console.log).toBeCalledWith('Invalid Tweets - displaying filler tweets', JSON.stringify({}));
-      expect(tweet._clearTweets).toHaveBeenCalled();
-      expect(tweet._displayFillerTweets).toHaveBeenCalled();
-    });
+    expect(tweet._clearTweets).toHaveBeenCalled();
+    expect(tweet._displayFillerTweets).toHaveBeenCalled();
+  });
 
-    it("should test validity", () => {
-      tweet._isValidTweet = jest.genMockFn();
+  it("should display filler tweets if update tweets are invalid", () => {
+    tweet._areValidTweets = jest.genMockFn();
+    tweet._clearTweets = jest.genMockFn();
+    tweet._displayFillerTweets = jest.genMockFn();
 
-      tweet._areValidTweets({});
-      expect(tweet._isValidTweet).not.toHaveBeenCalled();
+    tweet.update({});
 
-      tweet._areValidTweets({test: 'testValue'});
-      expect(tweet._isValidTweet).toHaveBeenCalled();
-    });
+    expect(tweet._areValidTweets).toHaveBeenCalled();
+    expect(tweet._clearTweets).toHaveBeenCalled();
+    expect(tweet._displayFillerTweets).toHaveBeenCalled();
+  });
 
-    it("should clear tweets", () => {
-      try {
-        tweet._clearTweets();
-      } catch (e) {
-        expect(e.message).toBe("Cannot set property 'innerHTML' of undefined");
-      }
-    });
+  it("should test validity", () => {
+    tweet._isValidTweet = jest.genMockFn();
 
-    it("should construct base div", () => {
-      return expect(tweet._constructBaseDiv({id: `testing-id`}).then(data => typeof data)).resolves.toBe("object");
-    });
+    tweet._areValidTweets({});
+    expect(tweet._isValidTweet).not.toHaveBeenCalled();
 
-    it("should update data for tweet", () => {
-      tweet._updateHeader = jest.genMockFn();
-      tweet._updateBody = jest.genMockFn();
-      tweet._updateStats = jest.genMockFn();
+    tweet._areValidTweets({test: 'testValue'});
+    expect(tweet._isValidTweet).toHaveBeenCalled();
+  });
 
-      return expect(tweet._updateData({id: `testing-id`})).resolves.toEqual();
-      expect(tweet._updateHeader).toHaveBeenCalled();
-      expect(tweet._updateBody).toHaveBeenCalled();
-      expect(tweet._updateStats).toHaveBeenCalled();
-    });
+  it("should clear tweets", () => {
+    try {
+      tweet._clearTweets();
+    } catch (e) {
+      expect(e.message).toBe("Cannot set property 'innerHTML' of undefined");
+    }
+  });
+
+  it("should construct base div", () => {
+    return expect(tweet._constructBaseDiv({id: `testing-id`}).then(data => typeof data)).resolves.toBe("object");
+  });
+
+  it("should update data for tweet", () => {
+    tweet._updateHeader = jest.genMockFn();
+    tweet._updateBody = jest.genMockFn();
+    tweet._updateStats = jest.genMockFn();
+
+    return expect(tweet._updateData({id: `testing-id`})).resolves.toEqual();
+    expect(tweet._updateHeader).toHaveBeenCalled();
+    expect(tweet._updateBody).toHaveBeenCalled();
+    expect(tweet._updateStats).toHaveBeenCalled();
+  });
 });

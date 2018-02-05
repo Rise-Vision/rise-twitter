@@ -5,8 +5,9 @@ import $ from 'jquery';
 import "../src/static/css/main.scss";
 
 export default class Tweet {
-  constructor(shadowRoot, pathToStyle) {
+  constructor(shadowRoot, logger, pathToStyle) {
     this.shadowRoot = shadowRoot;
+    this.logger = logger;
 
     if (pathToStyle) {
       this.shadowRoot.querySelector('.component-style').href = pathToStyle;
@@ -32,7 +33,7 @@ export default class Tweet {
           this.handleError();
         });
     } else {
-      console.log('Invalid Tweets - displaying filler tweets', JSON.stringify(tweets));
+      this.logger.error(`Invalid Tweets - displaying filler tweets ${JSON.stringify(tweets)}`);
       this.handleError();
     }
   }
