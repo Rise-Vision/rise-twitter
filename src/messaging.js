@@ -15,8 +15,12 @@ export default class Messaging {
   _handleMessage(message) {
     console.log('Received a new message from LMS', message);
 
-    if (message && message.topic === 'twitter-update' && message.data && message.data.component_id === this.componentId) {
-      this.tweet.update(JSON.parse(message.data.tweets));
+    if (message && message.topic === 'twitter-update' && message.data && message.data.component_id === this.componentId && message.status) {
+      if (message.status.toUpperCase() === 'CURRENT') {
+        this.tweet.updateTweets(JSON.parse(message.data.tweets));
+      } else if (message.status.toUpperCase() === 'STREAM') {
+        this.tweet.updateStreamedTweets(JSON.parse(message.data.tweets));
+      }
     }
   }
 

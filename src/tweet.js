@@ -5,31 +5,31 @@ import $ from 'jquery';
 import "../src/static/css/main.scss";
 
 export default class Tweet {
-  constructor(shadowRoot, logger, pathToStyle) {
+  constructor(shadowRoot, logger, settings, pathToStyle) {
     this.shadowRoot = shadowRoot;
     this.logger = logger;
+    this.settings = settings;
 
     if (pathToStyle) {
       this.shadowRoot.querySelector('.component-style').href = pathToStyle;
     }
   }
 
-  update(tweets) {
-    console.log('Displaying updated Tweets');
+  updateTweets(tweets) {
+    console.log('Displaying updated Tweets', tweets);
 
     var promises = [];
     if (this._areValidTweets(tweets)) {
       this._clearTweets();
       for (var tweetPosition in tweets) {
         var tweet = tweets[tweetPosition];
-        promises.push(this._displayTweet(tweet));
+        promises.push(this._displayTweet(tweet, 'append'));
       }
       Promise.all(promises)
         .then(() => {
           this._runTweets();
         })
         .catch((error) => {
-          console.log(error);
           this.handleError();
         });
     } else {
@@ -37,6 +37,25 @@ export default class Tweet {
       this.handleError();
     }
   }
+
+  updateStreamedTweets(tweets) {
+      var promises = [];
+      if (this._areValidTweets(tweets)) {
+        for (var tweetPosition in tweets) {
+          var tweet = tweets[tweetPosition];
+          promises.push(this._displayTweet(tweet, 'prepend'));
+        }
+        Promise.all(promises)
+          .then(() => {
+            this._removeOldTweets();
+          })
+          .catch((error) => {
+            console.log(error, 'Unable to remove outdated tweets');
+          });
+      } else {
+        console.log('Invalid Streamed Tweets - not added to displayed tweets');
+      }
+    }
 
   handleError() {
     this._clearTweets();
@@ -124,13 +143,13 @@ export default class Tweet {
   }
 
   _displayFillerTweets() {
-    this.update(fillerTweetsJSON);
+    this.updateTweets(fillerTweetsJSON);
   }
 
-  _displayTweet(tweet) {
+  _displayTweet(tweet, placement) {
     return this._constructBaseDiv(tweet)
       .then((finalDiv) => {
-        this._injectTweet(finalDiv);
+        this._injectTweet(finalDiv, placement);
       })
       .then(() => {
         this._updateData(tweet);
@@ -150,8 +169,25 @@ export default class Tweet {
     });
   }
 
-  _injectTweet(div) {
-    this.shadowRoot.querySelector('.twitter-component-template').appendChild(div);
+  _injectTweet(div, placement) {
+    if (!placement || placement.toUpperCase() == 'APPEND') {
+      this.shadowRoot.querySelector('.twitter-component-template').appendChild(div);
+    } else {
+      this.shadowRoot.querySelector('.twitter-component-template').prepend(div);
+    }
+  }
+
+  _removeOldTweets() {
+    const tweetDivs = this.shadowRoot.querySelectorAll('.twitter-component-template .tweet');
+    const numToRemove = tweetDivs.length - this.settings.numTweetsToDisplay;
+
+    let tweet = null;
+    if (numToRemove && numToRemove > 0){
+      for (var i = tweetDivs.length - 1 ; i > (tweetDivs.length - 1 - numToRemove); i--) {
+        tweet = tweetDivs[i];
+        $(tweet).remove();
+      }
+    }
   }
 
   /*************************************

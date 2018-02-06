@@ -22,7 +22,7 @@ describe("Twitter Component Messaging - Unit", () => {
     localMessaging = new LocalMessaging();
     messaging = new Messaging(tweet, componentId, localMessaging);
 
-    tweet.update = jest.genMockFn();
+    tweet.updateTweets = jest.genMockFn();
     localMessaging.broadcastMessage = jest.genMockFn();
   });
 
@@ -45,7 +45,7 @@ describe("Twitter Component Messaging - Unit", () => {
 
     messaging._handleMessage(message);
 
-    expect(tweet.update).toHaveBeenCalledWith(tweets);
+    expect(tweet.updateTweets).toHaveBeenCalledWith(tweets);
   });
 
   it("should not call tweet update when reciving an update message with different component id", () => {
@@ -62,7 +62,7 @@ describe("Twitter Component Messaging - Unit", () => {
 
     messaging._handleMessage(message);
 
-    expect(tweet.update).not.toHaveBeenCalled();
+    expect(tweet.updateTweets).not.toHaveBeenCalled();
   });
 
   it("should not call tweet update when reciving an non twitter-update message", () => {
@@ -74,7 +74,7 @@ describe("Twitter Component Messaging - Unit", () => {
 
     messaging._handleMessage(message);
 
-    expect(tweet.update).not.toHaveBeenCalled();
+    expect(tweet.updateTweets).not.toHaveBeenCalled();
   });
 
   it("should call send message with twitter-watch topic and component settings", () => {
