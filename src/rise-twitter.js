@@ -25,7 +25,7 @@ export default class RiseTwitter extends HTMLElement {
     this.logger = new Logger();
     this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, $('.css-path').data('path'));
     this.localMessaging = new LocalMessaging();
-    this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.logger);
+    this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.settings, this.logger);
 
     this._createListenersForRisePlaylistItemEvents();
   }
@@ -64,8 +64,7 @@ export default class RiseTwitter extends HTMLElement {
       });
 
       risePlaylistItem.addEventListener('play', () => {
-        this._play();
-        this.logger.playlistEvent('Play Event');
+        this._handlePlay();
       });
 
       risePlaylistItem.addEventListener('pause', () => {
@@ -81,8 +80,18 @@ export default class RiseTwitter extends HTMLElement {
     }
   }
 
+  _handlePlay() {
+    if (this.settings.getIsAuthorized()) {
+      this._play();
+    } else {
+      // emit done if unauthorized
+      this._done();
+    }
+  }
+
   _play() {
     if (this.messaging.isConnected()) {
+      this.logger.playlistEvent('Play Event');
       this.messaging.sendComponentSettings(this.screenName, this.hashtag);
     } else {
       this.logger.error('Error: componnent is not connected to LM');
@@ -95,5 +104,8 @@ export default class RiseTwitter extends HTMLElement {
 
   _stop() {
     this._pause();
+  }
+
+  _done() {
   }
 }
