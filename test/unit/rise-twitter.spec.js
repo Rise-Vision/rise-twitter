@@ -28,6 +28,10 @@ describe("Twitter Component - Unit", () => {
       component._stop = jest.genMockFn();
     });
 
+    beforeEach(() => {
+      component.settings.setAuthorization(true);
+    });
+
     it("should have component defined", () => {
       expect(RiseTwitter).toBeDefined();
       expect(component).toBeDefined();
@@ -52,7 +56,24 @@ describe("Twitter Component - Unit", () => {
       jest.runAllTimers();
     });
 
-    it("should call play listener when play event is dispached", (done) => {
+    it("should not play listener when play event is dispached when unauthorized", (done) => {
+      jest.useFakeTimers();
+
+      component.settings.setAuthorization(false);
+
+      const event = new CustomEvent("play");
+
+      risePlaylistItem.dispatchEvent(event);
+
+      setTimeout(()=>{
+        expect(component._play).not.toHaveBeenCalled();
+        done();
+      }, 1000);
+
+      jest.runAllTimers();
+    });
+
+    it("should call play listener when play event is dispached when authorized", (done) => {
       jest.useFakeTimers();
 
       const event = new CustomEvent("play");

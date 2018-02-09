@@ -1,11 +1,15 @@
 import Messaging from "../../src/messaging";
 import Tweet from "../../src/tweet";
 import {LocalMessaging} from 'common-component';
+import Settings from "../../src/config/settings";
+import Logger from "../../src/logger";
 
 let messaging = null;
 let tweet = null;
 let componentId = "componentIdTest";
 let localMessaging = null;
+let settings = null;
+let logger = null;
 describe("Twitter Component Messaging - Unit", () => {
   beforeAll(() => {
     top.RiseVision = {};
@@ -20,7 +24,9 @@ describe("Twitter Component Messaging - Unit", () => {
   beforeEach(() => {
     tweet = new Tweet();
     localMessaging = new LocalMessaging();
-    messaging = new Messaging(tweet, componentId, localMessaging);
+    settings = new Settings();
+    logger = new Logger();
+    messaging = new Messaging(tweet, componentId, localMessaging, settings, logger);
 
     tweet.updateTweets = jest.genMockFn();
     localMessaging.broadcastMessage = jest.genMockFn();
