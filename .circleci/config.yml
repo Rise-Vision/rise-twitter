@@ -41,6 +41,8 @@ jobs:
         - checkout
         - attach_workspace:
             at: .
+        - restore_cache:
+            key: node-cache-v2{{ checksum "package.json" }}
         - run:
             name: Stage
             command: node_modules/common-component/stage.sh
@@ -58,7 +60,7 @@ jobs:
         - attach_workspace:
             at: .
         - restore_cache:
-          key: node-cache-v2{{ checksum "package.json" }}
+            key: node-cache-v2{{ checksum "package.json" }}
         - run:
             name: Deploy to beta
             command: node_modules/common-component/deploy.sh
