@@ -14,19 +14,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "common-component": "git+https://github.com/Rise-Vision/common-component.git#v1.5.1",
+    "common-component": "git+https://github.com/Rise-Vision/common-component.git#v1.5.5",
     "jquery": "^3.3.1"
   },
   "devDependencies": {
-    "style-loader": "^0.20.1",
-    "css-flip": "^0.5.0",
-    "css-loader": "^0.28.7",
-    "csso-cli": "^1.0.0",
-    "extract-loader": "^1.0.1",
-    "node-sass": "^4.7.2",
-    "postcss-cli": "^4.1.0",
-    "postcss-loader": "^2.0.6",
-    "sass-loader": "^6.0.6",
     "@webcomponents/webcomponentsjs": "^1.0.20",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
@@ -47,6 +38,9 @@
     "compression-webpack-plugin": "^1.0.1",
     "copy-webpack-plugin": "^4.0.1",
     "cross-spawn": "^5.0.1",
+    "css-flip": "^0.5.0",
+    "css-loader": "^0.28.7",
+    "csso-cli": "^1.0.0",
     "document-register-element": "^1.7.0",
     "eslint": "^3.19.0",
     "eslint-config-standard": "^10.2.1",
@@ -57,6 +51,7 @@
     "eslint-plugin-node": "^5.2.0",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^3.0.1",
+    "extract-loader": "^1.0.1",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
@@ -66,13 +61,18 @@
     "local-messaging-module": "git+https://github.com/Rise-Vision/local-messaging-module.git",
     "node-ipc": "^9.1.1",
     "node-notifier": "^5.1.2",
+    "node-sass": "^4.7.2",
     "ora": "^1.2.0",
     "portfinder": "^1.0.13",
+    "postcss-cli": "^4.1.0",
+    "postcss-loader": "^2.0.6",
     "regenerator-runtime": "^0.11.1",
     "rimraf": "^2.6.0",
+    "sass-loader": "^6.0.6",
+    "script-loader": "^0.7.2",
     "simple-mock": "^0.8.0",
+    "style-loader": "^0.20.1",
     "uglifyjs-webpack-plugin": "^1.1.1",
-    "unzipsfx-webpack-plugin": "git+https://github.com/Rise-Vision/unzipsfx-webpack-plugin.git",
     "url-loader": "^0.5.8",
     "wdio-mocha-framework": "^0.5.12",
     "wdio-selenium-standalone-service": "0.0.9",
@@ -83,7 +83,6 @@
     "webpack": "^3.10.0",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",
-    "webpack-merge": "^4.1.0",
-    "zip-webpack-plugin": "^2.1.0"
+    "webpack-merge": "^4.1.0"
   }
 }
