@@ -8,8 +8,6 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const ZipPlugin = require("zip-webpack-plugin");
-const UnzipsfxPlugin = require("unzipsfx-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const env = process.env.NODE_ENV === 'testing'
@@ -83,17 +81,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // keep module.id stable when vender modules does not change
     new webpack.HashedModuleIdsPlugin(),
     // enable scope hoisting
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    // Zip dist folder
-    new ZipPlugin({
-        path: config.build.assetsRoot,
-        filename: config.build.projectName,
-    }),
-    // create executables
-    new UnzipsfxPlugin({
-      outputPath: config.build.assetsRoot,
-      outputFilename: config.build.projectName,
-    })
+    new webpack.optimize.ModuleConcatenationPlugin()
   ]
 })
 

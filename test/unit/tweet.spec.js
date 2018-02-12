@@ -59,7 +59,7 @@ describe("Tweet - Unit", () => {
     tweet._clearTweets = jest.genMockFn();
     tweet._displayFillerTweets = jest.genMockFn();
 
-    tweet.update({});
+    tweet.updateTweets({});
 
     expect(tweet._areValidTweets).toHaveBeenCalled();
     expect(tweet._clearTweets).toHaveBeenCalled();

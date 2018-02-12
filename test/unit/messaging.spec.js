@@ -1,11 +1,15 @@
 import Messaging from "../../src/messaging";
 import Tweet from "../../src/tweet";
 import {LocalMessaging} from 'common-component';
+import Settings from "../../src/config/settings";
+import Logger from "../../src/logger";
 
 let messaging = null;
 let tweet = null;
 let componentId = "componentIdTest";
 let localMessaging = null;
+let settings = null;
+let logger = null;
 describe("Twitter Component Messaging - Unit", () => {
   beforeAll(() => {
     top.RiseVision = {};
@@ -20,9 +24,11 @@ describe("Twitter Component Messaging - Unit", () => {
   beforeEach(() => {
     tweet = new Tweet();
     localMessaging = new LocalMessaging();
-    messaging = new Messaging(tweet, componentId, localMessaging);
+    settings = new Settings();
+    logger = new Logger();
+    messaging = new Messaging(tweet, componentId, localMessaging, settings, logger);
 
-    tweet.update = jest.genMockFn();
+    tweet.updateTweets = jest.genMockFn();
     localMessaging.broadcastMessage = jest.genMockFn();
   });
 
@@ -45,7 +51,7 @@ describe("Twitter Component Messaging - Unit", () => {
 
     messaging._handleMessage(message);
 
-    expect(tweet.update).toHaveBeenCalledWith(tweets);
+    expect(tweet.updateTweets).toHaveBeenCalledWith(tweets);
   });
 
   it("should not call tweet update when reciving an update message with different component id", () => {
@@ -62,7 +68,7 @@ describe("Twitter Component Messaging - Unit", () => {
 
     messaging._handleMessage(message);
 
-    expect(tweet.update).not.toHaveBeenCalled();
+    expect(tweet.updateTweets).not.toHaveBeenCalled();
   });
 
   it("should not call tweet update when reciving an non twitter-update message", () => {
@@ -74,7 +80,7 @@ describe("Twitter Component Messaging - Unit", () => {
 
     messaging._handleMessage(message);
 
-    expect(tweet.update).not.toHaveBeenCalled();
+    expect(tweet.updateTweets).not.toHaveBeenCalled();
   });
 
   it("should call send message with twitter-watch topic and component settings", () => {

@@ -59,7 +59,7 @@ describe('Twitter Component - Integration', () => {
       commonConfig.broadcastMessage({
         from: 'twitter-module',
         topic: 'twitter-update',
-        status: 'CURRENT',
+        status: 'current',
         through: 'ws',
         data: {
           'component_id': 'demoComponent',
@@ -86,7 +86,7 @@ describe('Twitter Component - Integration', () => {
       commonConfig.broadcastMessage({
         from: 'twitter-module',
         topic: 'twitter-update',
-        status: 'CURRENT',
+        status: 'Current',
         through: 'ws',
         data: {
           'component_id': 'demoComponent',
@@ -158,5 +158,35 @@ describe('Twitter Component - Integration', () => {
       const expectedFavorites = 0;
       browser.waitForText(favoritesSelector);
       browser.getText(favoritesSelector).should.be.equal(expectedFavorites.toString());
+  });
+
+  it('should inject streamed tweets', () => {
+      browser.url('/');
+
+      testTweets[0]['id'] = 111111111111;
+      testTweets[0]['text'] = "this is an example streamed tweet";
+
+      commonConfig.broadcastMessage({
+        from: 'twitter-module',
+        topic: 'twitter-update',
+        status: 'Stream',
+        through: 'ws',
+        data: {
+          'component_id': 'demoComponent',
+          'tweets': JSON.stringify(testTweets)
+        }
+      });
+      const textSelector = 'rise-twitter .tweet-111111111111 .tweet-text';
+      const expectedText = "this is an example streamed tweet";
+      browser.waitForText(textSelector);
+      browser.getText(textSelector).should.be.equal(expectedText.toString());
+
+      setTimeout(function() {
+        const screenNameSelector = 'rise-twitter .tweet';
+        const results = $$(screenNameSelector).filter(function (link) {
+            return link;
+        });
+        expect(results.length).to.be.equal(25);
+      }, 300);
   });
 });
