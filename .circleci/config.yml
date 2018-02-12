@@ -41,7 +41,6 @@ jobs:
         - checkout
         - attach_workspace:
             at: .
-        - run: npm install common-component
         - run:
             name: Stage
             command: node_modules/common-component/stage.sh
@@ -60,7 +59,6 @@ jobs:
             at: .
         - restore_cache:
           key: node-cache-v2{{ checksum "package.json" }}
-        - run: npm install common-component
         - run:
             name: Deploy to beta
             command: node_modules/common-component/deploy.sh
@@ -75,7 +73,6 @@ jobs:
             at: .
         - restore_cache:
             key: node-cache-v2{{ checksum "package.json" }}
-        - run: npm install common-component
         - run:
             name: Deploy to beta
             command: node_modules/common-component/deploy.sh
