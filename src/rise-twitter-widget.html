@@ -11,11 +11,9 @@
     </rise-playlist-item>
     <div class="css-path" data-path="<%= htmlWebpackPlugin.files.css %>"></div>
     <script src="<%= htmlWebpackPlugin.files.chunks['vendor'].entry %>"></script>
-    <script src="https://storage.googleapis.com/rise-content/stable/components/rise-playlist-item/rise-playlist-item.js"></script>
-    <script>
-      if (typeof RisePlaylistItem == "undefined") {
-        document.write(unescape("%3Cscript src='../rise-playlist-item/rise-playlist-item.js' type='text/javascript'%3E%3C/script%3E"));
-      }
+    <script src="<%=process.env.NODE_ENV !== 'production'
+     ? 'https://storage.googleapis.com/rise-content/stable/components/rise-playlist-item/rise-playlist-item.js'
+     : '../rise-playlist-item/rise-playlist-item.js' %>">
     </script>
     <script src="<%= htmlWebpackPlugin.files.chunks['component'].entry %>"></script>
   </body>
