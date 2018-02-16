@@ -18,8 +18,7 @@ jobs:
           no_output_timeout: 1m
 
   "build":
-      docker: &DOCKERIMAGE
-        - image: jenkinsrise/cci-v2-launcher-electron:0.0.5
+      docker: *DOCKERIMAGE_TEST
       steps:
         - checkout
         - attach_workspace:
@@ -37,7 +36,8 @@ jobs:
               - build
 
   "stage":
-      docker: *DOCKERIMAGE
+      docker: &DOCKERIMAGE
+        - image: jenkinsrise/cci-v2-launcher-electron:0.0.5
       steps:
         - checkout
         - attach_workspace:
