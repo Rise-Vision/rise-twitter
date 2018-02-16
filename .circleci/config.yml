@@ -25,7 +25,14 @@ jobs:
             at: .
         - restore_cache:
             key: node-cache-v2{{ checksum "package.json" }}
-        - run: npm run build
+        - run:
+            name: Build
+            command: |
+              if [ "${CIRCLE_BRANCH}" == "build/stable" ]; then
+                npm run build-prod
+              else
+                npm run build-stage
+              fi
         - save_cache:
             key: node-cache-v2{{ checksum "package.json" }}
             paths:

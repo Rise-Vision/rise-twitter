@@ -11,7 +11,8 @@
     "test-integration": "NODE_ENV=test wdio ./test/integration/wdio.conf.js",
     "test": "npm run test-unit && npm run test-integration",
     "lint": "eslint --ext .js,.html src test/unit/specs test/e2e/specs",
-    "build": "node build/build.js"
+    "build-prod": "NODE_ENV=production node build/build.js",
+    "build-stage": "NODE_ENV=stage node build/build.js"
   },
   "dependencies": {
     "common-component": "git+https://github.com/Rise-Vision/common-component.git#v1.5.5",
