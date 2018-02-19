@@ -1,9 +1,8 @@
-import Config from './config/config';
 import ExternalLogger from 'common-component/external-logger';
 
 export default class Logger {
-  constructor() {
-    this.config = new Config();
+  constructor(config) {
+    this.config = config;
     this.externalLogger = new ExternalLogger(this.config.bqProjectName, this.config.bqDataset, this.config.failedEntryFile, this.config.bqTable, this.config.componentName);
   }
 
