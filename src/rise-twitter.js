@@ -22,8 +22,6 @@ export default class RiseTwitter extends HTMLElement {
   connectedCallback() {
     console.log('RiseTwitter', this.shadowRoot);
     this.settings = new Settings();
-    this.logger = new Logger();
-    this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, $('.css-path').data('path'));
 
     this._createListenersForRisePlaylistItemEvents();
   }
@@ -80,11 +78,14 @@ export default class RiseTwitter extends HTMLElement {
   _handleConfigure(event) {
     if (event.detail && event.detail.displayId !== 'preview') {
       this.localMessaging = new LocalMessaging();
+      this.logger = new Logger();
+      this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, $('.css-path').data('path'));
       this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.settings, this.logger);
       this.screenName = event.detail.screenName;
 
       this.logger.playlistEvent('Configure Event', {configureObject: JSON.stringify(event.detail)});
     } else {
+      this.tweet = new Tweet(this.shadowRoot, null, this.settings, $('.css-path').data('path'));
       this.isPreview = true;
     }
   }
