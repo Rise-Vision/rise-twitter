@@ -33,7 +33,7 @@ export default class Tweet {
           this.handleError();
         });
     } else {
-      this.logger.error(`Invalid Tweets - displaying filler tweets ${JSON.stringify(tweets)}`);
+      if (this.logger) this.logger.error(`Invalid Tweets - displaying filler tweets ${JSON.stringify(tweets)}`);
       this.handleError();
     }
   }
