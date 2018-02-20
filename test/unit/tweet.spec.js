@@ -1,15 +1,19 @@
 import RiseTwitter from "../../src/rise-twitter";
 import Tweet from "../../src/tweet";
 import Logger from "../../src/logger";
+import Config from "../../src/config/config";
 import Messaging from "../../src/messaging";
 import {LocalMessaging} from 'common-component';
+import EventHandler from "../../src/event-handler";
 
 let component = null;
 let risePlaylistItem = null;
 let messaging = null;
 let tweet = null;
+let eventHandler = null;
 let componentId = "componentIdTest";
 let logger = null;
+let config = null;
 let localMessaging = null;
 
 describe("Tweet - Unit", () => {
@@ -27,9 +31,13 @@ describe("Tweet - Unit", () => {
     const shadowRoot = {};
     shadowRoot.appendChild = jest.genMockFn();
 
-    logger = new Logger();
+    eventHandler = new EventHandler();
+    eventHandler.emitReady = jest.genMockFn();
+    eventHandler.emitDone = jest.genMockFn();
 
-    tweet = new Tweet(shadowRoot, logger);
+    config = new Config();
+    logger = new Logger(config)
+    tweet = new Tweet(shadowRoot, logger, null, eventHandler);
 
     localMessaging = new LocalMessaging();
     messaging = new Messaging(tweet, componentId, localMessaging, logger);
@@ -54,16 +62,16 @@ describe("Tweet - Unit", () => {
     expect(tweet.displayFillerTweets).toHaveBeenCalled();
   });
 
-  it("should display filler tweets if update tweets are invalid", () => {
+  it("should emit done to playlist if update tweets are invalid", () => {
     tweet._areValidTweets = jest.genMockFn();
     tweet._clearTweets = jest.genMockFn();
-    tweet.displayFillerTweets = jest.genMockFn();
+    tweet._displayFillerTweets = jest.genMockFn();
 
     tweet.updateTweets({});
 
     expect(tweet._areValidTweets).toHaveBeenCalled();
-    expect(tweet._clearTweets).toHaveBeenCalled();
-    expect(tweet.displayFillerTweets).toHaveBeenCalled();
+    expect(eventHandler.emitDone).toHaveBeenCalled();
+    expect(tweet._displayFillerTweets).not.toHaveBeenCalled();
   });
 
   it("should test validity", () => {

@@ -1,12 +1,14 @@
 import RiseTwitter from "../../src/rise-twitter";
 import Tweet from "../../src/tweet";
 import Logger from "../../src/logger";
+import Config from "../../src/config/config";
 import Messaging from "../../src/messaging";
 import {LocalMessaging} from 'common-component';
 
 let component = null;
 let risePlaylistItem = null;
 let messaging = null;
+let config = null;
 let tweet = null;
 let componentId = "componentIdTest";
 let logger = null;
@@ -27,7 +29,8 @@ describe("Tweet - Unit", () => {
     const shadowRoot = {};
     shadowRoot.appendChild = jest.genMockFn();
 
-    logger = new Logger();
+    config = new Config();
+    logger = new Logger(config);
 
     tweet = new Tweet(shadowRoot, logger);
 

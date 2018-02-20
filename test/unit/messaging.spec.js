@@ -1,6 +1,7 @@
 import Messaging from "../../src/messaging";
 import Tweet from "../../src/tweet";
 import {LocalMessaging} from 'common-component';
+import Config from "../../src/config/config";
 import Settings from "../../src/config/settings";
 import Logger from "../../src/logger";
 
@@ -8,6 +9,7 @@ let messaging = null;
 let tweet = null;
 let componentId = "componentIdTest";
 let localMessaging = null;
+let config = null;
 let settings = null;
 let logger = null;
 describe("Twitter Component Messaging - Unit", () => {
@@ -25,7 +27,8 @@ describe("Twitter Component Messaging - Unit", () => {
     tweet = new Tweet();
     localMessaging = new LocalMessaging();
     settings = new Settings();
-    logger = new Logger();
+    config = new Config();
+    logger = new Logger(config);
     messaging = new Messaging(tweet, componentId, localMessaging, settings, logger);
 
     tweet.updateTweets = jest.genMockFn();
