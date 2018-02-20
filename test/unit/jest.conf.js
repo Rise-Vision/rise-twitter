@@ -26,5 +26,6 @@ module.exports = {
   collectCoverageFrom: [
     'src/**/*.{js}',
     '!**/node_modules/**',
+    '!**/static/**'
   ]
 }
