@@ -24,12 +24,19 @@ describe("Twitter Component - Unit", () => {
       component.connectedCallback();
 
       component._play = jest.genMockFn();
+      component._playPreview = jest.genMockFn();
       component._pause = jest.genMockFn();
       component._stop = jest.genMockFn();
+
     });
 
     beforeEach(() => {
       component.settings.setAuthorization(true);
+      component.isPreview = false;
+    });
+
+    afterAll(() => {
+      jest.restoreAllMocks();
     });
 
     it("should have component defined", () => {
@@ -88,6 +95,21 @@ describe("Twitter Component - Unit", () => {
       jest.runAllTimers();
     });
 
+    it("should call playPreview listener when play event is dispached when in preview", (done) => {
+      jest.useFakeTimers();
+      component.isPreview = true;
+      const event = new CustomEvent("play");
+
+      risePlaylistItem.dispatchEvent(event);
+
+      setTimeout(()=>{
+        expect(component._playPreview).toHaveBeenCalled();
+        done();
+      }, 1000);
+
+      jest.runAllTimers();
+    });
+
     it("should call pause listener when pause event is dispached", (done) => {
       jest.useFakeTimers();
 
@@ -130,8 +152,9 @@ describe("Twitter Component - Unit", () => {
       component.connectedCallback();
 
       component.id = "componentIdTest";
-      component.screenName = "screenNameTest";
       component.hashtag = "hashtagTest";
+
+      component._handleConfigure({detail:{displayId: "xxxxxx", screenName: "screenNameTest"}})
 
       messaging = component.getMessaging();
 
@@ -155,6 +178,7 @@ describe("Twitter Component - Unit", () => {
       };
       component = new RiseTwitter();
       component._play = jest.genMockFn();
+      component.isPreview = false;
       component._play();
 
       expect(messaging.sendComponentSettings).not.toHaveBeenCalled();
@@ -170,7 +194,7 @@ describe("Twitter Component - Unit", () => {
       component.shadowRoot = {};
       component.shadowRoot.appendChild = jest.genMockFn();
       component.connectedCallback();
-
+      component.isPreview = false;
       component._pause = jest.genMockFn();
     })
 
