@@ -46,24 +46,24 @@ describe("Tweet - Unit", () => {
 
   it("should clear tweets and display filler tweets", () => {
     tweet._clearTweets = jest.genMockFn();
-    tweet._displayFillerTweets = jest.genMockFn();
+    tweet.displayFillerTweets = jest.genMockFn();
 
     tweet.handleError();
 
     expect(tweet._clearTweets).toHaveBeenCalled();
-    expect(tweet._displayFillerTweets).toHaveBeenCalled();
+    expect(tweet.displayFillerTweets).toHaveBeenCalled();
   });
 
   it("should display filler tweets if update tweets are invalid", () => {
     tweet._areValidTweets = jest.genMockFn();
     tweet._clearTweets = jest.genMockFn();
-    tweet._displayFillerTweets = jest.genMockFn();
+    tweet.displayFillerTweets = jest.genMockFn();
 
     tweet.updateTweets({});
 
     expect(tweet._areValidTweets).toHaveBeenCalled();
     expect(tweet._clearTweets).toHaveBeenCalled();
-    expect(tweet._displayFillerTweets).toHaveBeenCalled();
+    expect(tweet.displayFillerTweets).toHaveBeenCalled();
   });
 
   it("should test validity", () => {

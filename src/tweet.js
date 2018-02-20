@@ -59,7 +59,7 @@ export default class Tweet {
 
   handleError() {
     this._clearTweets();
-    this._displayFillerTweets();
+    this.displayFillerTweets();
   }
 
   setTheme(settings) {
@@ -142,7 +142,7 @@ export default class Tweet {
     this.shadowRoot.querySelector('.twitter-component-template').innerHTML = '';
   }
 
-  _displayFillerTweets() {
+  displayFillerTweets() {
     this.updateTweets(fillerTweetsJSON);
   }
 

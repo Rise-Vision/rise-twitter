@@ -14,7 +14,7 @@ import $ from 'jquery';
 export default class RiseTwitter extends HTMLElement {
   constructor() {
     super();
-
+    this.isPreview = false;
     this.id = this.id || this._generateComponentId();
     console.log('RiseTwitter', this.id);
   }
@@ -24,8 +24,6 @@ export default class RiseTwitter extends HTMLElement {
     this.settings = new Settings();
     this.logger = new Logger();
     this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, $('.css-path').data('path'));
-    this.localMessaging = new LocalMessaging();
-    this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.settings, this.logger);
 
     this._createListenersForRisePlaylistItemEvents();
   }
@@ -59,8 +57,7 @@ export default class RiseTwitter extends HTMLElement {
 
     if (risePlaylistItem) {
       risePlaylistItem.addEventListener('configure', event => {
-        this.screenName = event.detail.screenName;
-        this.logger.playlistEvent('Configure Event', {configureObject: JSON.stringify(event.detail)});
+        this._handleConfigure(event);
       });
 
       risePlaylistItem.addEventListener('play', () => {
@@ -80,13 +77,33 @@ export default class RiseTwitter extends HTMLElement {
     }
   }
 
-  _handlePlay() {
-    if (this.settings.getIsAuthorized()) {
-      this._play();
+  _handleConfigure(event) {
+    if (event.detail && event.detail.displayId !== 'preview') {
+      this.localMessaging = new LocalMessaging();
+      this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.settings, this.logger);
+      this.screenName = event.detail.screenName;
+
+      this.logger.playlistEvent('Configure Event', {configureObject: JSON.stringify(event.detail)});
     } else {
-      // emit done if unauthorized
-      this._done();
+      this.isPreview = true;
     }
+  }
+
+  _handlePlay() {
+    if (this.isPreview) {
+      this._playPreview();
+    } else {
+      if (this.settings.getIsAuthorized()) {
+        this._play();
+      } else {
+        // emit done if unauthorized
+        this._done();
+      }
+    }
+  }
+
+  _playPreview() {
+    this.tweet.displayFillerTweets();
   }
 
   _play() {
