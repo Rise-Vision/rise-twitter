@@ -35,7 +35,7 @@ export default class Tweet {
       }
       Promise.all(promises)
         .then(() => {
-          this.transition.start();
+          this.getTransition().start();
         })
         .catch((error) => {
           this.eventHandler.emitDone();

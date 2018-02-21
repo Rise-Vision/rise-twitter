@@ -103,7 +103,7 @@ export default class RiseTwitter extends HTMLElement {
 
   _handlePlay() {
     if (this.isPreview) {
-      this._playPreview();
+      this._playInPreview();
     } else {
       if (this.settings.getIsAuthorized()) {
         this._play();
@@ -113,9 +113,13 @@ export default class RiseTwitter extends HTMLElement {
     }
   }
 
-  _playPreview() {
+  _playInPreview() {
     this.tweet.displayFillerTweets();
-    this._play();
+    if (this.tweet.getTransition()._isPaused()) {
+      this.tweet.getTransition().start();
+    } else {
+      this.tweet.getTransition().start();
+    }
   }
 
   _play() {
