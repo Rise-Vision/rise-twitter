@@ -8,7 +8,6 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 let env = require('../config/test.env');
 
 if(process.env.NODE_ENV === 'stage') {
@@ -25,7 +24,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     chunkFilename: `${config.build.projectName}.js`
   },
   plugins: [
-    new ExtractTextPlugin('[name].css'),
     new webpack.IgnorePlugin(/vertx/),
     new webpack.DefinePlugin({
       'process.env': env

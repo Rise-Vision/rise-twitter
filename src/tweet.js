@@ -3,18 +3,13 @@ import Transition from '../src/transition.js';
 import tweetTemplate from '../src/static/template/tweet-template.html';
 import fillerTweetsJSON from '../src/static/data/filler-tweets.json';
 import $ from 'jquery';
-import "../src/static/css/main.scss";
 
 export default class Tweet {
-  constructor(shadowRoot, logger, settings, eventHandler, pathToStyle) {
+  constructor(shadowRoot, logger, settings, eventHandler) {
     this.shadowRoot = shadowRoot;
     this.logger = logger;
     this.settings = settings;
     this.eventHandler = eventHandler;
-
-    if (pathToStyle) {
-      this.shadowRoot.querySelector('.component-style').href = pathToStyle;
-    }
 
     this.transition = new Transition(this.shadowRoot, this.logger, this.settings, this.eventHandler);
   }
