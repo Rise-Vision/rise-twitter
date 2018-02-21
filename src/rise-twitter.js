@@ -71,7 +71,6 @@ export default class RiseTwitter extends HTMLElement {
 
       playlistItem.addEventListener('stop', () => {
         this._stop();
-        this.logger.playlistEvent('Stop Event');
       });
     } else {
       console.log('rise-playlist-item not found');
@@ -115,11 +114,7 @@ export default class RiseTwitter extends HTMLElement {
 
   _playInPreview() {
     this.tweet.displayFillerTweets();
-    if (this.tweet.getTransition()._isPaused()) {
-      this.tweet.getTransition().start();
-    } else {
-      this.tweet.getTransition().start();
-    }
+    this.tweet.getTransition().start();
   }
 
   _play() {
@@ -142,6 +137,7 @@ export default class RiseTwitter extends HTMLElement {
   }
 
   _stop() {
+    if (this.logger) { this.logger.playlistEvent('Stop Event'); };
     this._pause();
   }
 }
