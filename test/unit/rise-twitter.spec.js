@@ -34,10 +34,9 @@ describe("Twitter Component - Unit", () => {
       component.connectedCallback();
 
       component._play = jest.genMockFn();
-      component._playPreview = jest.genMockFn();
+      component._playInPreview = jest.genMockFn();
       component._pause = jest.genMockFn();
       component._stop = jest.genMockFn();
-
     });
 
     beforeEach(() => {
@@ -113,7 +112,7 @@ describe("Twitter Component - Unit", () => {
       risePlaylistItem.dispatchEvent(event);
 
       setTimeout(()=>{
-        expect(component._playPreview).toHaveBeenCalled();
+        expect(component._playInPreview).toHaveBeenCalled();
         done();
       }, 1000);
 
