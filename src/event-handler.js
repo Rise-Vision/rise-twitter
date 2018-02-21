@@ -17,14 +17,14 @@ export default class EventHandler {
    *************************************/
   emitReady() {
     if (this.getRisePlaylistItem()) {
-      this.logger.playlistEvent('Ready Event');
+      if (this.logger) { this.logger.playlistEvent('Ready Event'); }
       this.getRisePlaylistItem().callReady();
     }
   }
 
   emitDone() {
     if (this.getRisePlaylistItem()) {
-      this.logger.playlistEvent('Done Event');
+      if (this.logger) { this.logger.playlistEvent('Done Event'); }
       this.getRisePlaylistItem().callDone();
     }
   }
