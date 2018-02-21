@@ -1,10 +1,12 @@
 import RiseTwitter from "../../src/rise-twitter";
 import Tweet from "../../src/tweet";
+import EventHandler from "../../src/event-handler";
 
 let component = null;
 let risePlaylistItem = null;
 let messaging = null;
 let tweet = null;
+let eventHandler = null;
 describe("Twitter Component - Unit", () => {
   describe("Test event listeners", () => {
     beforeAll(() => {
@@ -16,9 +18,17 @@ describe("Twitter Component - Unit", () => {
         canConnect: () => {return true;}
       };
 
+      eventHandler = new EventHandler();
+      eventHandler.emitReady = jest.genMockFn();
+      eventHandler.emitDone = jest.genMockFn();
+
       risePlaylistItem = document.createElement("rise-playlist-item");
+      risePlaylistItem.callReady = jest.genMockFn();
+      risePlaylistItem.callDone = jest.genMockFn();
       document.getElementsByTagName("body")[0].appendChild(risePlaylistItem);
       component = new RiseTwitter();
+      tweet = new Tweet;
+      component.eventHandler = eventHandler;
       component.shadowRoot = {};
       component.shadowRoot.appendChild = jest.genMockFn();
       component.connectedCallback();
@@ -202,7 +212,6 @@ describe("Twitter Component - Unit", () => {
       component._stop();
 
       expect(component._pause).toHaveBeenCalled();
-
     });
   });
 });

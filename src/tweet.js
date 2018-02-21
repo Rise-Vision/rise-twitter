@@ -1,18 +1,26 @@
 /* eslint-disable */
+import Transition from '../src/transition.js';
 import tweetTemplate from '../src/static/template/tweet-template.html';
 import fillerTweetsJSON from '../src/static/data/filler-tweets.json';
 import $ from 'jquery';
 import "../src/static/css/main.scss";
 
 export default class Tweet {
-  constructor(shadowRoot, logger, settings, pathToStyle) {
+  constructor(shadowRoot, logger, settings, eventHandler, pathToStyle) {
     this.shadowRoot = shadowRoot;
     this.logger = logger;
     this.settings = settings;
+    this.eventHandler = eventHandler;
 
     if (pathToStyle) {
       this.shadowRoot.querySelector('.component-style').href = pathToStyle;
     }
+
+    this.transition = new Transition(this.shadowRoot, this.logger, this.settings, this.eventHandler);
+  }
+
+  getTransition() {
+    return this.transition;
   }
 
   updateTweets(tweets) {
@@ -27,14 +35,14 @@ export default class Tweet {
       }
       Promise.all(promises)
         .then(() => {
-          this._runTweets();
+          this.transition.start();
         })
         .catch((error) => {
-          this.handleError();
+          this.eventHandler.emitDone();
         });
     } else {
-      if (this.logger) this.logger.error(`Invalid Tweets - displaying filler tweets ${JSON.stringify(tweets)}`);
-      this.handleError();
+      if (this.logger) {this.logger.error(`Invalid Tweets`);}
+      this.eventHandler.emitDone();
     }
   }
 
@@ -72,36 +80,6 @@ export default class Tweet {
         this.shadowRoot.querySelector('.twitter-component-template').removeClass('theme-dark');
         this.shadowRoot.querySelector('.twitter-component-template').addClass('theme-light');
     }
-  }
-
-  /*************************************
-   * Play Tweets
-   *************************************/
-
-  _runTweets() {
-    const tweetDivs = this.shadowRoot.querySelectorAll('.twitter-component-template .tweet');
-
-    var fadeInSeconds = 1.5,
-      delayInSeconds = 10,
-      fadeTime = fadeInSeconds * 1000,
-      delayTime = delayInSeconds * 1000,
-      totalTime = fadeTime + delayTime,
-      allElems, elemNoFade, i, fadingElem;
-
-    for (i = 0, allElems = tweetDivs.length, elemNoFade = allElems - 1; i < allElems; i++) {
-      fadingElem = tweetDivs[i];
-      $(fadingElem).hide();
-    }
-
-    for (i = 0, allElems = tweetDivs.length, elemNoFade = allElems - 1; i < allElems; i++) {
-      fadingElem = tweetDivs[i];
-      if (i === 0) {
-        $(fadingElem).fadeIn(fadeTime).delay(delayTime).fadeOut(fadeTime);
-      } else {
-        $(fadingElem).delay(totalTime * i).fadeIn(fadeTime).delay(delayTime).fadeOut(fadeTime);
-      }
-    }
-
   }
 
   /*************************************
@@ -155,8 +133,8 @@ export default class Tweet {
         this._updateData(tweet);
       })
       .catch((error) => {
-        console.log(error);
-        this.handleError();
+        if (this.logger) {this.logger.error(`Could not display tweets - ${error}`);}
+        this.eventHandler.emitDone();
       });
   }
 

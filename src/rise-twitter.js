@@ -3,7 +3,9 @@ import {LocalMessaging} from 'common-component';
 import Messaging from './messaging';
 import Tweet from './tweet';
 import Logger from './logger';
+import Config from './config/config';
 import Settings from './config/settings';
+import EventHandler from './event-handler';
 import $ from 'jquery';
 
 @WebComponent('rise-twitter', {
@@ -22,6 +24,7 @@ export default class RiseTwitter extends HTMLElement {
   connectedCallback() {
     console.log('RiseTwitter', this.shadowRoot);
     this.settings = new Settings();
+    this.config = new Config();
 
     this._createListenersForRisePlaylistItemEvents();
   }
@@ -51,42 +54,50 @@ export default class RiseTwitter extends HTMLElement {
   }
 
   _createListenersForRisePlaylistItemEvents() {
-    const risePlaylistItem = document.getElementsByTagName('rise-playlist-item')[0];
+    const playlistItem = document.getElementsByTagName('rise-playlist-item')[0];
 
-    if (risePlaylistItem) {
-      risePlaylistItem.addEventListener('configure', event => {
+    if (playlistItem) {
+      playlistItem.addEventListener('configure', event => {
         this._handleConfigure(event);
       });
 
-      risePlaylistItem.addEventListener('play', () => {
+      playlistItem.addEventListener('play', () => {
         this._handlePlay();
       });
 
-      risePlaylistItem.addEventListener('pause', () => {
+      playlistItem.addEventListener('pause', () => {
         this._pause();
       });
 
-      risePlaylistItem.addEventListener('stop', () => {
+      playlistItem.addEventListener('stop', () => {
         this._stop();
         this.logger.playlistEvent('Stop Event');
       });
     } else {
       console.log('rise-playlist-item not found');
+      this.eventHandler.emitDone();
     }
   }
 
   _handleConfigure(event) {
+    this.config.setDisplayId(event.detail.displayId);
+    this.config.setCompanyId(event.detail.companyId);
+
     if (event.detail && event.detail.displayId !== 'preview') {
       this.localMessaging = new LocalMessaging();
-      this.logger = new Logger();
-      this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, $('.css-path').data('path'));
+      this.logger = new Logger(this.config);
+      this.eventHandler = new EventHandler(this.logger);
+      this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, this.eventHandler, $('.css-path').data('path'));
       this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.settings, this.logger);
       this.screenName = event.detail.screenName;
+      this.eventHandler.emitReady();
 
       this.logger.playlistEvent('Configure Event', {configureObject: JSON.stringify(event.detail)});
     } else {
-      this.tweet = new Tweet(this.shadowRoot, null, this.settings, $('.css-path').data('path'));
+      this.eventHandler = new EventHandler(null);
+      this.tweet = new Tweet(this.shadowRoot, null, this.settings, this.eventHandler, $('.css-path').data('path'));
       this.isPreview = true;
+      this.eventHandler.emitReady();
     }
   }
 
@@ -97,17 +108,22 @@ export default class RiseTwitter extends HTMLElement {
       if (this.settings.getIsAuthorized()) {
         this._play();
       } else {
-        // emit done if unauthorized
-        this._done();
+        this.eventHandler.emitDone();
       }
     }
   }
 
   _playPreview() {
     this.tweet.displayFillerTweets();
+    this._play();
   }
 
   _play() {
+    if (this.tweet.getTransition()._isPaused()) {
+      this.tweet.getTransition().start();
+      return;
+    }
+
     if (this.messaging.isConnected()) {
       this.logger.playlistEvent('Play Event');
       this.messaging.sendComponentSettings(this.screenName, this.hashtag);
@@ -118,12 +134,10 @@ export default class RiseTwitter extends HTMLElement {
   }
 
   _pause() {
+    this.tweet.getTransition().pause();
   }
 
   _stop() {
     this._pause();
-  }
-
-  _done() {
   }
 }

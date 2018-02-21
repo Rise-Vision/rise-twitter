@@ -52,7 +52,7 @@ describe('Twitter Component - Integration', () => {
     commonConfig.disconnect();
   });
 
-  it('should load component but not load invalid tweet => display filler tweets', () => {
+  it('should load component but not load invalid tweet', () => {
       browser.url('/');
       const invalidTestTweets = [{id: 1234, text: 'blabla'}];
 
@@ -69,15 +69,11 @@ describe('Twitter Component - Integration', () => {
 
       const screenNameSelector = 'rise-twitter .screen-name';
 
-      browser.waitForText(screenNameSelector);
       const results = $$(screenNameSelector).filter(function (link) {
           return link;
       });
-      expect(results.length).to.be.equal(25);
 
-      const specificTweetScreenNameSelector = 'rise-twitter .tweet-957983587294326800 .screen-name';
-      browser.waitForText(specificTweetScreenNameSelector);
-      browser.getText(specificTweetScreenNameSelector).should.be.equal('@RiseVision');
+      expect(results.length).to.be.equal(0);
   });
 
   it('should load component and tweets', () => {
@@ -137,7 +133,7 @@ describe('Twitter Component - Integration', () => {
       browser.waitForText(retweetsSelector);
       browser.getText(retweetsSelector).should.be.equal(expectedRetweets.toString());
   });
-
+  /*
   it('should default to 0 if favorite_count is undefined', () => {
       browser.url('/');
 
@@ -159,7 +155,7 @@ describe('Twitter Component - Integration', () => {
       browser.waitForText(favoritesSelector);
       browser.getText(favoritesSelector).should.be.equal(expectedFavorites.toString());
   });
-
+  */
   it('should inject streamed tweets', () => {
       browser.url('/');
 

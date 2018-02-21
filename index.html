@@ -12,8 +12,7 @@
     <script src="<%= htmlWebpackPlugin.files.chunks['vendor'].entry %>"></script>
     <script type="text/javascript" src="<%=process.env.NODE_ENV !== 'production'
      ? 'https://storage.googleapis.com/rise-content/stable/components/rise-playlist-item/rise-playlist-item.js'
-     : '../rise-playlist-item/rise-playlist-item.js' %>">
-    </script>
+     : '../rise-playlist-item/rise-playlist-item.js' %>"></script>
     <script src="<%= htmlWebpackPlugin.files.chunks['component'].entry %>"></script>
 
     <div id="log" style="height: 450px; width: 500px; display:none;"></div>
@@ -42,7 +41,7 @@
 
         setTimeout(()=>{
           risePlaylistItem.dispatchEvent(eventPlay);
-        }, 1000)    
+        }, 5000)
       });
     </script>
   </body>
