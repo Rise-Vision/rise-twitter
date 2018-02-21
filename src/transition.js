@@ -23,7 +23,7 @@ export default class Transition {
 
     // settings - future integration
     this.intervalTime = 10 * 1000;
-    this.fadeTime = this.IntervalTime * (3 / 20);
+    this.fadeTime = this.intervalTime * (3 / 20);
     this.numTweetsToDisplay = 25;
     this.numOfActualTweets = this._getTweets() ? this._getTweets().length : null;
   }
@@ -79,6 +79,7 @@ export default class Transition {
     var that = this;
 
     if (this.transitionIntervalId === null) {
+      that._startTransition();
       this.transitionIntervalId = setInterval(function() {
         that._startTransition();
       }, this.intervalTime);
