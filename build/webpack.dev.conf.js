@@ -6,7 +6,6 @@ const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const HOST = process.env.HOST || config.dev.host;
 const PORT = process.env.PORT && Number(process.env.PORT) || config.dev.port;
@@ -35,7 +34,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     }
   },
   plugins: [
-    new ExtractTextPlugin('[name].css'),
     new webpack.IgnorePlugin(/vertx/),
     new webpack.DefinePlugin({
       'process.env': require('../config/dev.env')

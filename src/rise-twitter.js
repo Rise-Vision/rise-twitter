@@ -6,10 +6,10 @@ import Logger from './logger';
 import Config from './config/config';
 import Settings from './config/settings';
 import EventHandler from './event-handler';
-import $ from 'jquery';
 
 @WebComponent('rise-twitter', {
   template: require('./rise-twitter.html'),
+  styles: require('./static/css/main.scss'),
   shadowDOM: true
 })
 
@@ -86,7 +86,7 @@ export default class RiseTwitter extends HTMLElement {
       this.localMessaging = new LocalMessaging();
       this.logger = new Logger(this.config);
       this.eventHandler = new EventHandler(this.logger);
-      this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, this.eventHandler, $('.css-path').data('path'));
+      this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, this.eventHandler);
       this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.settings, this.logger);
       this.screenName = event.detail.screenName;
       this.eventHandler.emitReady();
@@ -94,7 +94,7 @@ export default class RiseTwitter extends HTMLElement {
       this.logger.playlistEvent('Configure Event', {configureObject: JSON.stringify(event.detail)});
     } else {
       this.eventHandler = new EventHandler(null);
-      this.tweet = new Tweet(this.shadowRoot, null, this.settings, this.eventHandler, $('.css-path').data('path'));
+      this.tweet = new Tweet(this.shadowRoot, null, this.settings, this.eventHandler);
       this.isPreview = true;
       this.eventHandler.emitReady();
     }
