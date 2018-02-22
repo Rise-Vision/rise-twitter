@@ -24,12 +24,12 @@ describe("Twitter Component Messaging - Unit", () => {
   });
 
   beforeEach(() => {
-    tweet = new Tweet();
     localMessaging = new LocalMessaging();
     settings = new Settings();
     config = new Config();
-    logger = new Logger(config);
-    messaging = new Messaging(tweet, componentId, localMessaging, settings, logger);
+    tweet = new Tweet();
+    logger = new Logger(config, localMessaging);
+    messaging = new Messaging(tweet, componentId, localMessaging, config, settings, logger);
 
     tweet.updateTweets = jest.genMockFn();
     localMessaging.broadcastMessage = jest.genMockFn();
@@ -90,6 +90,7 @@ describe("Twitter Component Messaging - Unit", () => {
     const message = {
       "topic": "twitter-watch",
       "data": {
+        "component_name": "rise-twitter",
         "component_id": "componentIdTest",
         "screen_name": "screenNameTest",
         "hashtag": "hashtagTest",
@@ -105,6 +106,7 @@ describe("Twitter Component Messaging - Unit", () => {
     const message = {
       "topic": "twitter-watch",
       "data": {
+        "component_name": "rise-twitter",
         "component_id": "componentIdTest",
         "screen_name": "",
         "hashtag": "hashtagTest",
@@ -120,6 +122,7 @@ describe("Twitter Component Messaging - Unit", () => {
     const message = {
       "topic": "twitter-watch",
       "data": {
+        "component_name": "rise-twitter",
         "component_id": "componentIdTest",
         "screen_name": "screenNameTest",
         "hashtag": "",

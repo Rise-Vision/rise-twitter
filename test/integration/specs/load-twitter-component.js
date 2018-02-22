@@ -133,7 +133,7 @@ describe('Twitter Component - Integration', () => {
       browser.waitForText(retweetsSelector);
       browser.getText(retweetsSelector).should.be.equal(expectedRetweets.toString());
   });
-  /*
+
   it('should default to 0 if favorite_count is undefined', () => {
       browser.url('/');
 
@@ -155,7 +155,7 @@ describe('Twitter Component - Integration', () => {
       browser.waitForText(favoritesSelector);
       browser.getText(favoritesSelector).should.be.equal(expectedFavorites.toString());
   });
-  */
+  
   it('should inject streamed tweets', () => {
       browser.url('/');
 
