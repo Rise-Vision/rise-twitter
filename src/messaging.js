@@ -1,9 +1,10 @@
 export default class Messaging {
-  constructor(tweet, componentId, localMessaging, settings, logger) {
+  constructor(tweet, componentId, localMessaging, config, settings, logger) {
     this.tweet = tweet;
     this.componentId = componentId;
 
     this.localMessaging = localMessaging;
+    this.config = config;
     this.settings = settings;
     this.logger = logger;
 
@@ -56,7 +57,6 @@ export default class Messaging {
 
   // eslint-disable-next-line
   sendComponentSettings(screen_name = '', hashtag = '') {
-    console.log('sending component settings', this.isConnected());
-    this.localMessaging.broadcastMessage({topic: 'twitter-watch', data: {component_id: this.componentId, screen_name, hashtag}});
+    this.localMessaging.broadcastMessage({topic: 'twitter-watch', data: {component_name: this.config.componentName, component_id: this.componentId, screen_name, hashtag}});
   }
 }

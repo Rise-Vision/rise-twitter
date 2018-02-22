@@ -30,12 +30,12 @@ describe("Tweet - Unit", () => {
     shadowRoot.appendChild = jest.genMockFn();
 
     config = new Config();
-    logger = new Logger(config);
+    localMessaging = new LocalMessaging();
+    logger = new Logger(config, localMessaging);
 
     tweet = new Tweet(shadowRoot, logger);
 
-    localMessaging = new LocalMessaging();
-    messaging = new Messaging(tweet, componentId, localMessaging, logger);
+    messaging = new Messaging(tweet, componentId, localMessaging, config, null, logger);
 
     logger.externalLogger.log = jest.genMockFn();
     console.log = jest.fn();
@@ -64,7 +64,7 @@ describe("Tweet - Unit", () => {
   it("should log standard external message", () => {
     const expectedDetails = {"company_id": "unknown", "display_id": "preview", "event_details": "error message", "version": "unknown"};
 
-    logger.external("standard", "error message");
+    logger._external("standard", "error message");
 
     expect(logger.externalLogger.log).toHaveBeenCalledWith("standard", expectedDetails);
   });

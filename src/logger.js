@@ -1,21 +1,23 @@
+/* eslint no-return-assign: "off" */
+
 import ExternalLogger from 'common-component/external-logger';
 
 export default class Logger {
-  constructor(config) {
+  constructor(config, localMessaging) {
     this.config = config;
-    this.externalLogger = new ExternalLogger(this.config.bqProjectName, this.config.bqDataset, this.config.failedEntryFile, this.config.bqTable, this.config.componentName);
+    this.externalLogger = new ExternalLogger(localMessaging, this.config.bqProjectName, this.config.bqDataset, this.config.failedEntryFile, this.config.bqTable, this.config.componentName);
   }
 
   playlistEvent(eventDetails, data) {
-    this.external('Playlist Event', eventDetails);
+    this._external('Playlist Event', eventDetails);
   }
 
   error(eventDetails, data) {
     console.log(eventDetails);
-    this.external('Error', eventDetails);
+    this._external('Error', eventDetails);
   }
 
-  external(evt, eventDetails, data) {
+  _external(evt, eventDetails, data) {
     this.externalLogger.log(evt, this._constructDetails(eventDetails, data = {}));
   }
 
