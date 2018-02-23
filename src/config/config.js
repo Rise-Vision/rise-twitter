@@ -3,7 +3,7 @@ export default class Config {
     this.componentName = 'rise-twitter';
     this.bqProjectName = 'client-side-events';
     this.bqDataset = 'Component_Events';
-    this.bqTable = 'rise-twitter-events';
+    this.bqTable = 'rise_twitter_events';
     this.failedEntryFile = 'rise-twitter-failed.log';
     this.displayId = '';
     this.companyId = '';

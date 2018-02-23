@@ -33,6 +33,8 @@ export default class Tweet {
           this.getTransition().start();
         })
         .catch((error) => {
+          console.log('error displaying tweets', error);
+          if (this.logger) {this.logger.error(`Invalid Tweets`);}
           this.eventHandler.emitDone();
         });
     } else {

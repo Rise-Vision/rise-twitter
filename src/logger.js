@@ -5,7 +5,16 @@ import ExternalLogger from 'common-component/external-logger';
 export default class Logger {
   constructor(config, localMessaging) {
     this.config = config;
-    this.externalLogger = new ExternalLogger(localMessaging, this.config.bqProjectName, this.config.bqDataset, this.config.failedEntryFile, this.config.bqTable, this.config.componentName);
+    this.localMessaging = localMessaging;
+    this.externalLogger = new ExternalLogger(this.localMessaging, this.config.bqProjectName, this.config.bqDataset, this.config.failedEntryFile, this.config.bqTable, this.config.componentName);
+  }
+
+  getLocalMessaging() {
+    return this.localMessaging;
+  }
+
+  canConnectToLMS() {
+    return this.getLocalMessaging().canConnect();
   }
 
   playlistEvent(eventDetails, data) {
@@ -18,7 +27,9 @@ export default class Logger {
   }
 
   _external(evt, eventDetails, data) {
-    this.externalLogger.log(evt, this._constructDetails(eventDetails, data = {}));
+    if (this.getLocalMessaging() && this.canConnectToLMS()) {
+      this.externalLogger.log(evt, this._constructDetails(eventDetails, data = {}));
+    }
   }
 
   _constructDetails(eventDetails, data) {
