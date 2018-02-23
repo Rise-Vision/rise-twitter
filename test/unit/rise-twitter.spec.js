@@ -25,8 +25,11 @@ describe("Twitter Component - Unit", () => {
       risePlaylistItem = document.createElement("rise-playlist-item");
       risePlaylistItem.callReady = jest.genMockFn();
       risePlaylistItem.callDone = jest.genMockFn();
+      risePlaylistItem.callRSParamGet = jest.genMockFn();
+
       document.getElementsByTagName("body")[0].appendChild(risePlaylistItem);
       component = new RiseTwitter();
+      risePlaylistItem.appendChild(component);
       tweet = new Tweet;
       component.eventHandler = eventHandler;
       component.shadowRoot = {};

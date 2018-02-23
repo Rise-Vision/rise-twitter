@@ -1,7 +1,7 @@
 export default class EventHandler {
-  constructor(logger) {
+  constructor(logger, risePlaylistItem) {
     this.logger = logger;
-    this.risePlaylistItem = document.getElementsByTagName('rise-playlist-item')[0];
+    this.risePlaylistItem = risePlaylistItem;
   }
 
   setRisePlaylistItem(risePlaylistItem) {
@@ -26,6 +26,13 @@ export default class EventHandler {
     if (this.getRisePlaylistItem()) {
       if (this.logger) { this.logger.playlistEvent('Done Event'); }
       this.getRisePlaylistItem().callDone();
+    }
+  }
+
+  emitReadyForEvents() {
+    if (this.getRisePlaylistItem()) {
+      if (this.logger) { this.logger.playlistEvent('Ready for Events'); }
+      this.getRisePlaylistItem().callRSParamGet();
     }
   }
 }
