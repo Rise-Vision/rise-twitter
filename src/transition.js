@@ -59,14 +59,13 @@ export default class Transition {
     var currentTweet = this._getTweets()[currentTweetIndex];
     var previousTweet = this._getTweets()[previousTweetIndex];
 
-    if (currentTweetIndex === this.numOfActualTweets - 1) {
+    if (currentTweetIndex === this.numOfActualTweets) {
       this._finishedTransition();
     } else {
       $(previousTweet).fadeOut(this.fadeTime);
       $(currentTweet).fadeIn(this.fadeTime);
       this._setCurrentTweetIndex(currentTweetIndex + 1);
     }
-    
   }
 
   _clearTweets() {
@@ -78,13 +77,11 @@ export default class Transition {
   }
 
   _startTransitionTimer() {
-    var that = this;
-
     if (this.transitionIntervalId === null) {
-      that._startTransition();
-      this.transitionIntervalId = setInterval(function() {
-        that._startTransition();
+      this.transitionIntervalId = setInterval( () => {
+        this._startTransition();
       }, this.intervalTime);
+      this._startTransition();
     }
   }
 
@@ -135,7 +132,6 @@ export default class Transition {
     this.waitingForUpdate = false;
     this.tweets = null;
     this.currentTweetIndex = 0;
-    this.transitionIntervalId = null;
     this.numOfActualTweets = null;
   }
 }
