@@ -120,7 +120,6 @@ export default class RiseTwitter extends HTMLElement {
 
   _playInPreview() {
     this.tweet.displayFillerTweets();
-    this.tweet.getTransition().start();
   }
 
   _play() {
