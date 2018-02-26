@@ -17,8 +17,6 @@ export default class Transition {
     // state
     this.currentTweetIndex = 0;
     this.transitionIntervalId = null;
-    this.waitingForUpdate = false;
-    this.waitingToStart = false;
     this.isPaused = false;
 
     // settings - future integration
@@ -45,8 +43,8 @@ export default class Transition {
     return this.currentTweetIndex;
   }
 
-  _isPaused() {
-    return this.isPaused && this.transitionIntervalId !== null;
+  isPausedFunction() {
+    return this.isPaused;
   }
 
   /*************************************
@@ -101,7 +99,7 @@ export default class Transition {
   start() {
     this._isPaused = false;
 
-    if (this.transitionIntervalId === null) {
+    if (this.tweets === null) {
       this._setTweets();
       this._clearTweets();
     }
@@ -109,14 +107,12 @@ export default class Transition {
     if (this.tweets.length > 0) {
       this._startTransitionTimer();
     } else {
-      this.waitingToStart = true;
+      this._finishedTransition();
     }
   }
 
   pause() {
     this._isPaused = true;
-    this.waitingToStart = false;
-    this._clearTweets();
     this._stopTransitionTimer();
   }
 
@@ -128,8 +124,6 @@ export default class Transition {
     this._clearTweets();
     this._stopTransitionTimer();
     this._isPaused = false;
-    this.waitingToStart = false;
-    this.waitingForUpdate = false;
     this.tweets = null;
     this.currentTweetIndex = 0;
     this.numOfActualTweets = null;

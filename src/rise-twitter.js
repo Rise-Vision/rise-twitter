@@ -124,7 +124,7 @@ export default class RiseTwitter extends HTMLElement {
 
   _play() {
     console.log('_play IsAuthorized');
-    if (this.tweet.getTransition()._isPaused()) {
+    if (this.tweet.getTransition().isPausedFunction()) {
       this.tweet.getTransition().start();
       return;
     }
