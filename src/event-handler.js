@@ -2,6 +2,7 @@ export default class EventHandler {
   constructor(logger, risePlaylistItem) {
     this.logger = logger;
     this.risePlaylistItem = risePlaylistItem;
+    this.DONE_TIME_OUT = 5000; // 5 seconds;
   }
 
   setRisePlaylistItem(risePlaylistItem) {
@@ -27,7 +28,10 @@ export default class EventHandler {
     if (this.getRisePlaylistItem()) {
       if (this.logger) { this.logger.playlistEvent('Done Event'); }
       console.log('emitDone');
-      this.getRisePlaylistItem().callDone();
+      this.clearDoneTimeout();
+      this.doneTimeout = setTimeout(()=>{
+        this.getRisePlaylistItem().callDone();
+      }, this.DONE_TIME_OUT);
     }
   }
 
@@ -37,5 +41,9 @@ export default class EventHandler {
       console.log('emitReadyForEvents');
       this.getRisePlaylistItem().callRSParamGet();
     }
+  }
+
+  clearDoneTimeout() {
+    clearTimeout(this.doneTimeout);
   }
 }
