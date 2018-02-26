@@ -59,12 +59,14 @@ export default class Transition {
     var currentTweet = this._getTweets()[currentTweetIndex];
     var previousTweet = this._getTweets()[previousTweetIndex];
 
-    if (currentTweetIndex === this.numOfActualTweets) {
+    if (currentTweetIndex === this.numOfActualTweets - 1) {
       this._finishedTransition();
+    } else {
+      $(previousTweet).fadeOut(this.fadeTime);
+      $(currentTweet).fadeIn(this.fadeTime);
+      this._setCurrentTweetIndex(currentTweetIndex + 1);
     }
-    $(previousTweet).fadeOut(this.fadeTime);
-    $(currentTweet).fadeIn(this.fadeTime);
-    this._setCurrentTweetIndex(currentTweetIndex + 1);
+    
   }
 
   _clearTweets() {
