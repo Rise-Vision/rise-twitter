@@ -59,7 +59,7 @@ export default class RiseTwitter extends HTMLElement {
   _createListenersForRisePlaylistItemEvents() {
     console.log('_createListenersForRisePlaylistItemEvents', this.playlistItem);
     if (this.playlistItem && this.playlistItem.tagName === 'RISE-PLAYLIST-ITEM') {
-      console.log('_createListenersForRisePlaylistItemEvents', this.playlistItem);
+      console.log('_createListenersForRisePlaylistItemEvents - addEventListener');
       this.playlistItem.addEventListener('configure', event => {
         this._handleConfigure(event);
       });
@@ -78,8 +78,6 @@ export default class RiseTwitter extends HTMLElement {
 
       this.eventHandler.emitReadyForEvents();
     } else {
-      console.log('emitDone');
-
       console.log('rise-playlist-item not found');
       this.eventHandler.emitDone();
     }
