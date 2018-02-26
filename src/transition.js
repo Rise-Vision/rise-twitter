@@ -68,6 +68,7 @@ export default class Transition {
   }
 
   _clearTweets() {
+    this._setCurrentTweetIndex(0);
     if (this._getTweets()) {
       for (var i = 0; i < this._getTweets().length; i++) {
         $(this._getTweets()[i]).hide();
