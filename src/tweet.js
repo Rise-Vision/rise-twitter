@@ -206,6 +206,11 @@ export default class Tweet {
 
     this._updateDate(div, tweetData);
 
+    const twitterImage = document.createElement('img');
+    twitterImage.className = 'tweet-image';
+
+    div.querySelector('.tweet-image-container').append(twitterImage);
+
     const tweetText = tweetData.text;
 
     if (tweetText.Length > 140) {
