@@ -101,7 +101,7 @@ export default class Transition {
   start() {
     this._isPaused = false;
 
-    if (this.tweets.length > 0) {
+    if (this.numOfActualTweets > 0) {
       this._startTransitionTimer();
     } else {
       this._finishedTransition();
