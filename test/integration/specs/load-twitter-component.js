@@ -56,7 +56,6 @@ describe('Twitter Component - Integration', () => {
     commonConfig.broadcastMessage({
       from: 'twitter-module',
       topic: 'licensing-update',
-      status: 'Current',
       through: 'ws',
       data: {
         'is_authorized': true,

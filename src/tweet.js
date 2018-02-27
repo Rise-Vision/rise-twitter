@@ -195,7 +195,7 @@ export default class Tweet {
     const profileImage = document.createElement('img');
     profileImage.className = 'profile-image';
     profileImage.setAttribute('src', userData.profile_image_url);
-    div.querySelector('.meta').appendChild(profileImage);
+    div.querySelector('.meta').prepend(profileImage);
 
     div.querySelector('.display-name').append(userData.name);
     div.querySelector('.screen-name').append('@' + userData.screen_name);
