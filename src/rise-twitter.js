@@ -91,10 +91,10 @@ export default class RiseTwitter extends HTMLElement {
     console.log('_handleConfigure', event);
     if (event.detail && event.detail.displayId !== 'preview') {
       this.localMessaging = new LocalMessaging();
+      this.localMessaging.init();
 
       console.log('this.localMessaging connected');
       this.logger = new Logger(this.config, this.localMessaging);
-      this.localMessaging.init();
       this.eventHandler = new EventHandler(this.logger, this.playlistItem);
       this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, this.eventHandler, this.state);
       this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.config, this.settings, this.logger);
@@ -117,6 +117,9 @@ export default class RiseTwitter extends HTMLElement {
         this._play();
       } else {
         console.log('_handlePlay NOT IsAuthorized');
+        if (this.messaging.isConnected()) {
+          this.messaging.sendLicensingWatch();
+        } 
         this.eventHandler.emitDone();
       }
     }

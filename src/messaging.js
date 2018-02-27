@@ -55,6 +55,10 @@ export default class Messaging {
     return this.localMessaging.canConnect();
   }
 
+  sendLicensingWatch() {
+    this.localMessaging.broadcastMessage({topic: 'licensing-watch', data: {component_name: this.config.componentName, component_id: this.componentId}});
+  }
+
   // eslint-disable-next-line
   sendComponentSettings(screen_name = '', hashtag = '') {
     this.localMessaging.broadcastMessage({topic: 'twitter-watch', data: {component_name: this.config.componentName, component_id: this.componentId, screen_name, hashtag}});
