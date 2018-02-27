@@ -29,6 +29,7 @@ export default class Transition {
   setTweets(tweets) {
     this.tweets = tweets;
     this.numOfActualTweets = this.shadowRoot.querySelectorAll('.twitter-component-template .tweet').length;
+    this._clearTweets();
   }
 
   getTweets() {
