@@ -39,7 +39,6 @@ describe("Tweet - Unit", () => {
 
     logger.externalLogger.log = jest.genMockFn();
     console.log = jest.fn();
-    localMessaging.init();
   });
 
   afterEach(() => {
