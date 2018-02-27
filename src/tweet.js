@@ -148,7 +148,6 @@ export default class Tweet {
       const div = document.createElement('div');
       div.innerHTML = tweetTemplate.trim();
       div.className = 'tweet ' + 'tweet-' + tweet.id;
-      div.style.display = "none";
       resolve(div);
     });
   }
