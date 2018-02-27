@@ -1,8 +1,7 @@
 import $ from 'jquery';
 
 export default class Transition {
-  constructor(shadowRoot, logger, settings, eventHandler) {
-    this.shadowRoot = shadowRoot;
+  constructor(logger, settings, eventHandler) {
     this.logger = logger;
     this.settings = settings;
     this.eventHandler = eventHandler;
@@ -17,23 +16,22 @@ export default class Transition {
     // state
     this.currentTweetIndex = 0;
     this.transitionIntervalId = null;
-    this.waitingForUpdate = false;
-    this.waitingToStart = false;
     this.isPaused = false;
 
     // settings - future integration
     this.intervalTime = 10 * 1000;
     this.fadeTime = this.intervalTime * (3 / 20);
     this.numTweetsToDisplay = 25;
-    this.numOfActualTweets = this._getTweets() ? this._getTweets().length : null;
+    this.numOfActualTweets = this.getTweets() ? this.getTweets().length : null;
   }
 
-  _setTweets() {
-    this.tweets = this.shadowRoot.querySelectorAll('.twitter-component-template .tweet');
-    this.numOfActualTweets = this.shadowRoot.querySelectorAll('.twitter-component-template .tweet').length;
+  setTweets(tweets) {
+    this.tweets = tweets;
+    this.numOfActualTweets = this.tweets.length;
+    this._clearTweets();
   }
 
-  _getTweets() {
+  getTweets() {
     return this.tweets;
   }
 
@@ -45,8 +43,8 @@ export default class Transition {
     return this.currentTweetIndex;
   }
 
-  _isPaused() {
-    return this.isPaused && this.transitionIntervalId !== null;
+  isPausedFunction() {
+    return this.isPaused;
   }
 
   /*************************************
@@ -56,33 +54,32 @@ export default class Transition {
     var currentTweetIndex = this._getCurrentTweetIndex();
     var previousTweetIndex = currentTweetIndex - 1;
 
-    var currentTweet = this._getTweets()[currentTweetIndex];
-    var previousTweet = this._getTweets()[previousTweetIndex];
+    var currentTweet = this.getTweets()[currentTweetIndex];
+    var previousTweet = this.getTweets()[previousTweetIndex];
 
     if (currentTweetIndex === this.numOfActualTweets) {
       this._finishedTransition();
+    } else {
+      $(previousTweet).fadeOut(this.fadeTime);
+      $(currentTweet).fadeIn(this.fadeTime);
+      this._setCurrentTweetIndex(currentTweetIndex + 1);
     }
-    $(previousTweet).fadeOut(this.fadeTime);
-    $(currentTweet).fadeIn(this.fadeTime);
-    this._setCurrentTweetIndex(currentTweetIndex + 1);
   }
 
   _clearTweets() {
-    if (this._getTweets()) {
-      for (var i = 0; i < this._getTweets().length; i++) {
-        $(this._getTweets()[i]).hide();
+    if (this.getTweets()) {
+      for (var i = 0; i < this.getTweets().length; i++) {
+        $(this.getTweets()[i]).hide();
       }
     }
   }
 
   _startTransitionTimer() {
-    var that = this;
-
     if (this.transitionIntervalId === null) {
-      that._startTransition();
-      this.transitionIntervalId = setInterval(function() {
-        that._startTransition();
+      this.transitionIntervalId = setInterval(() => {
+        this._startTransition();
       }, this.intervalTime);
+      this._startTransition();
     }
   }
 
@@ -92,7 +89,9 @@ export default class Transition {
   }
 
   _finishedTransition() {
-    this.reset();
+    this._clearTweets();
+    this._stopTransitionTimer();
+    this.isPaused = true;
     this.eventHandler.emitDone();
   }
 
@@ -102,22 +101,15 @@ export default class Transition {
   start() {
     this._isPaused = false;
 
-    if (this.transitionIntervalId === null) {
-      this._setTweets();
-      this._clearTweets();
-    }
-
-    if (this.tweets.length > 0) {
+    if (this.numOfActualTweets > 0) {
       this._startTransitionTimer();
     } else {
-      this.waitingToStart = true;
+      this._finishedTransition();
     }
   }
 
   pause() {
     this._isPaused = true;
-    this.waitingToStart = false;
-    this._clearTweets();
     this._stopTransitionTimer();
   }
 
@@ -129,11 +121,8 @@ export default class Transition {
     this._clearTweets();
     this._stopTransitionTimer();
     this._isPaused = false;
-    this.waitingToStart = false;
-    this.waitingForUpdate = false;
     this.tweets = null;
     this.currentTweetIndex = 0;
-    this.transitionIntervalId = null;
     this.numOfActualTweets = null;
   }
 }

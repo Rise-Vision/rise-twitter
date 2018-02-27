@@ -5,6 +5,7 @@ import Tweet from './tweet';
 import Logger from './logger';
 import Config from './config/config';
 import Settings from './config/settings';
+import State from './state';
 import EventHandler from './event-handler';
 
 @WebComponent('rise-twitter', {
@@ -26,6 +27,7 @@ export default class RiseTwitter extends HTMLElement {
     console.log('RiseTwitter', this.shadowRoot);
     this.playlistItem = this.parentElement;
     this.settings = new Settings();
+    this.state = new State();
     this.config = new Config();
     this.eventHandler = new EventHandler(null, this.playlistItem);
 
@@ -92,13 +94,13 @@ export default class RiseTwitter extends HTMLElement {
       console.log('this.localMessaging connected');
       this.logger = new Logger(this.config, this.localMessaging);
       this.eventHandler = new EventHandler(this.logger, this.playlistItem);
-      this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, this.eventHandler);
+      this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, this.eventHandler, this.state);
       this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.config, this.settings, this.logger);
       this.screenName = event.detail.screenName;
       this.eventHandler.emitReady();
       this.logger.playlistEvent('Configure Event', {configureObject: JSON.stringify(event.detail)});
     } else {
-      this.tweet = new Tweet(this.shadowRoot, null, this.settings, this.eventHandler);
+      this.tweet = new Tweet(this.shadowRoot, null, this.settings, this.eventHandler, this.state);
       this.isPreview = true;
       this.eventHandler.emitReady();
     }
@@ -113,19 +115,23 @@ export default class RiseTwitter extends HTMLElement {
         this._play();
       } else {
         console.log('_handlePlay NOT IsAuthorized');
+        if (this.messaging.isConnected()) {
+          this.messaging.sendLicensingWatch();
+        }
         this.eventHandler.emitDone();
       }
     }
   }
 
   _playInPreview() {
+    this.state.setIsPaused(false);
     this.tweet.displayFillerTweets();
-    this.tweet.getTransition().start();
   }
 
   _play() {
+    this.state.setIsPaused(false);
     console.log('_play IsAuthorized');
-    if (this.tweet.getTransition()._isPaused()) {
+    if (this.tweet.getTweets() && this.tweet.getTweets().length > 0) {
       this.tweet.getTransition().start();
       return;
     }
@@ -142,6 +148,7 @@ export default class RiseTwitter extends HTMLElement {
   }
 
   _pause() {
+    this.state.setIsPaused(true);
     console.log('_pause');
     this.tweet.getTransition().pause();
   }

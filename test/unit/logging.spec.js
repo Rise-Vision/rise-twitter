@@ -21,7 +21,7 @@ describe("Tweet - Unit", () => {
     top.RiseVision.Viewer.LocalMessaging = {
       write: (message) => {},
       receiveMessages: (handler) => {},
-      canConnect: () => {return true;}
+      canConnect: () => {return true;},
     };
   });
 

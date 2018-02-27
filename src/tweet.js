@@ -5,13 +5,13 @@ import fillerTweetsJSON from '../src/static/data/filler-tweets.json';
 import $ from 'jquery';
 
 export default class Tweet {
-  constructor(shadowRoot, logger, settings, eventHandler) {
+  constructor(shadowRoot, logger, settings, eventHandler, state) {
     this.shadowRoot = shadowRoot;
     this.logger = logger;
     this.settings = settings;
     this.eventHandler = eventHandler;
-
-    this.transition = new Transition(this.shadowRoot, this.logger, this.settings, this.eventHandler);
+    this.state = state;
+    this.transition = new Transition(this.logger, this.settings, this.eventHandler);
   }
 
   getTransition() {
@@ -30,7 +30,10 @@ export default class Tweet {
       }
       Promise.all(promises)
         .then(() => {
-          this.getTransition().start();
+          this.getTransition().setTweets(this.getTweets());
+          if(!this.state.getIsPaused()) {
+            this.getTransition().start();
+          }
         })
         .catch((error) => {
           console.log('error displaying tweets', error);
@@ -43,6 +46,10 @@ export default class Tweet {
     }
   }
 
+  getTweets() {
+    return this.shadowRoot.querySelectorAll('.twitter-component-template .tweet');
+  }
+
   updateStreamedTweets(tweets) {
       var promises = [];
       if (this._areValidTweets(tweets)) {
@@ -53,6 +60,7 @@ export default class Tweet {
         Promise.all(promises)
           .then(() => {
             this._removeOldTweets();
+            this.getTransition().setTweets(this.getTweets());
           })
           .catch((error) => {
             console.log(error, 'Unable to remove outdated tweets');
@@ -184,8 +192,11 @@ export default class Tweet {
 
   _updateHeader(selector, userData) {
     const div = this.shadowRoot.querySelector(selector);
+    const profileImage = document.createElement('img');
+    profileImage.className = 'profile-image';
+    profileImage.setAttribute('src', userData.profile_image_url);
+    div.querySelector('.meta').prepend(profileImage);
 
-    div.querySelector('.profile-image').setAttribute('src', userData.profile_image_url);
     div.querySelector('.display-name').append(userData.name);
     div.querySelector('.screen-name').append('@' + userData.screen_name);
   }
@@ -194,6 +205,11 @@ export default class Tweet {
     const div = this.shadowRoot.querySelector(selector);
 
     this._updateDate(div, tweetData);
+
+    const twitterImage = document.createElement('img');
+    twitterImage.className = 'tweet-image';
+
+    div.querySelector('.tweet-image-container').append(twitterImage);
 
     const tweetText = tweetData.text;
 

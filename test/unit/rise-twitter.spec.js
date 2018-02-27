@@ -161,6 +161,7 @@ describe("Twitter Component - Unit", () => {
       component = new RiseTwitter();
       component.shadowRoot = {};
       component.shadowRoot.appendChild = jest.genMockFn();
+      component.shadowRoot.querySelectorAll = jest.genMockFn();
       component.connectedCallback();
 
       component.id = "componentIdTest";
