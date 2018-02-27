@@ -192,8 +192,11 @@ export default class Tweet {
 
   _updateHeader(selector, userData) {
     const div = this.shadowRoot.querySelector(selector);
+    const profileImage = document.createElement('img');
+    profileImage.className = 'profile-image';
+    profileImage.setAttribute('src', userData.profile_image_url);
+    div.querySelector('.meta').appendChild(profileImage);
 
-    div.querySelector('.profile-image').setAttribute('src', userData.profile_image_url);
     div.querySelector('.display-name').append(userData.name);
     div.querySelector('.screen-name').append('@' + userData.screen_name);
   }
