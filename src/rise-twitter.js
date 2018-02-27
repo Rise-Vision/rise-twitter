@@ -119,7 +119,7 @@ export default class RiseTwitter extends HTMLElement {
         console.log('_handlePlay NOT IsAuthorized');
         if (this.messaging.isConnected()) {
           this.messaging.sendLicensingWatch();
-        } 
+        }
         this.eventHandler.emitDone();
       }
     }
