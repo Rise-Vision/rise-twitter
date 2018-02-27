@@ -1,8 +1,7 @@
 import $ from 'jquery';
 
 export default class Transition {
-  constructor(shadowRoot, logger, settings, eventHandler) {
-    this.shadowRoot = shadowRoot;
+  constructor(logger, settings, eventHandler) {
     this.logger = logger;
     this.settings = settings;
     this.eventHandler = eventHandler;
@@ -28,7 +27,7 @@ export default class Transition {
 
   setTweets(tweets) {
     this.tweets = tweets;
-    this.numOfActualTweets = this.shadowRoot.querySelectorAll('.twitter-component-template .tweet').length;
+    this.numOfActualTweets = this.tweets.length;
     this._clearTweets();
   }
 

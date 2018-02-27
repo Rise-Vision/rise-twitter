@@ -11,7 +11,7 @@ export default class Tweet {
     this.settings = settings;
     this.eventHandler = eventHandler;
     this.state = state;
-    this.transition = new Transition(this.shadowRoot, this.logger, this.settings, this.eventHandler);
+    this.transition = new Transition(this.logger, this.settings, this.eventHandler);
   }
 
   getTransition() {
