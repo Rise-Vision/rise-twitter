@@ -29,7 +29,7 @@ export default class EventHandler {
       if (this.logger) { this.logger.playlistEvent('Done Event'); }
       console.log('emitDone');
       this.clearDoneTimeout();
-      this.doneTimeout = setTimeout(()=>{
+      this.doneTimeout = setTimeout(() => {
         this.getRisePlaylistItem().callDone();
       }, this.DONE_TIME_OUT);
     }

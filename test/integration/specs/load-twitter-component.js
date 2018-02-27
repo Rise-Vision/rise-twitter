@@ -52,9 +52,24 @@ describe('Twitter Component - Integration', () => {
     commonConfig.disconnect();
   });
 
+  const sendLicensing = () => {
+    commonConfig.broadcastMessage({
+      from: 'twitter-module',
+      topic: 'licensing-update',
+      status: 'Current',
+      through: 'ws',
+      data: {
+        'is_authorized': true,
+        'user_friendly_status': 'authorized'
+      }
+    });
+  }
+
   it('should load component but not load invalid tweet', () => {
       browser.url('/');
       const invalidTestTweets = [{id: 1234, text: 'blabla'}];
+
+      sendLicensing();
 
       commonConfig.broadcastMessage({
         from: 'twitter-module',
@@ -78,6 +93,8 @@ describe('Twitter Component - Integration', () => {
 
   it('should load component and tweets', () => {
       browser.url('/');
+
+      sendLicensing();
 
       commonConfig.broadcastMessage({
         from: 'twitter-module',
@@ -117,6 +134,8 @@ describe('Twitter Component - Integration', () => {
 
       delete testTweets[0]['retweet_count'];
 
+      sendLicensing();
+
       commonConfig.broadcastMessage({
         from: 'twitter-module',
         topic: 'twitter-update',
@@ -139,6 +158,8 @@ describe('Twitter Component - Integration', () => {
 
       delete testTweets[0]['favorite_count'];
 
+      sendLicensing();
+
       commonConfig.broadcastMessage({
         from: 'twitter-module',
         topic: 'twitter-update',
@@ -155,12 +176,14 @@ describe('Twitter Component - Integration', () => {
       browser.waitForText(favoritesSelector);
       browser.getText(favoritesSelector).should.be.equal(expectedFavorites.toString());
   });
-  
+
   it('should inject streamed tweets', () => {
       browser.url('/');
 
       testTweets[0]['id'] = 111111111111;
       testTweets[0]['text'] = "this is an example streamed tweet";
+
+      sendLicensing();
 
       commonConfig.broadcastMessage({
         from: 'twitter-module',

@@ -23,15 +23,15 @@ export default class Transition {
     this.intervalTime = 10 * 1000;
     this.fadeTime = this.intervalTime * (3 / 20);
     this.numTweetsToDisplay = 25;
-    this.numOfActualTweets = this._getTweets() ? this._getTweets().length : null;
+    this.numOfActualTweets = this.getTweets() ? this.getTweets().length : null;
   }
 
-  _setTweets() {
-    this.tweets = this.shadowRoot.querySelectorAll('.twitter-component-template .tweet');
+  setTweets(tweets) {
+    this.tweets = tweets;
     this.numOfActualTweets = this.shadowRoot.querySelectorAll('.twitter-component-template .tweet').length;
   }
 
-  _getTweets() {
+  getTweets() {
     return this.tweets;
   }
 
@@ -54,8 +54,8 @@ export default class Transition {
     var currentTweetIndex = this._getCurrentTweetIndex();
     var previousTweetIndex = currentTweetIndex - 1;
 
-    var currentTweet = this._getTweets()[currentTweetIndex];
-    var previousTweet = this._getTweets()[previousTweetIndex];
+    var currentTweet = this.getTweets()[currentTweetIndex];
+    var previousTweet = this.getTweets()[previousTweetIndex];
 
     if (currentTweetIndex === this.numOfActualTweets) {
       this._finishedTransition();
@@ -67,16 +67,16 @@ export default class Transition {
   }
 
   _clearTweets() {
-    if (this._getTweets()) {
-      for (var i = 0; i < this._getTweets().length; i++) {
-        $(this._getTweets()[i]).hide();
+    if (this.getTweets()) {
+      for (var i = 0; i < this.getTweets().length; i++) {
+        $(this.getTweets()[i]).hide();
       }
     }
   }
 
   _startTransitionTimer() {
     if (this.transitionIntervalId === null) {
-      this.transitionIntervalId = setInterval( () => {
+      this.transitionIntervalId = setInterval(() => {
         this._startTransition();
       }, this.intervalTime);
       this._startTransition();
@@ -89,7 +89,9 @@ export default class Transition {
   }
 
   _finishedTransition() {
-    this.reset();
+    this._clearTweets();
+    this._stopTransitionTimer();
+    this.isPaused = true;
     this.eventHandler.emitDone();
   }
 
@@ -98,11 +100,6 @@ export default class Transition {
    *************************************/
   start() {
     this._isPaused = false;
-
-    if (this.tweets === null) {
-      this._setTweets();
-      this._clearTweets();
-    }
 
     if (this.tweets.length > 0) {
       this._startTransitionTimer();

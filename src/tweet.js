@@ -5,12 +5,12 @@ import fillerTweetsJSON from '../src/static/data/filler-tweets.json';
 import $ from 'jquery';
 
 export default class Tweet {
-  constructor(shadowRoot, logger, settings, eventHandler) {
+  constructor(shadowRoot, logger, settings, eventHandler, state) {
     this.shadowRoot = shadowRoot;
     this.logger = logger;
     this.settings = settings;
     this.eventHandler = eventHandler;
-
+    this.state = state;
     this.transition = new Transition(this.shadowRoot, this.logger, this.settings, this.eventHandler);
   }
 
@@ -30,7 +30,10 @@ export default class Tweet {
       }
       Promise.all(promises)
         .then(() => {
-          this.getTransition().start();
+          this.getTransition().setTweets(this.getTweets());
+          if(!this.state.getIsPaused) {
+            this.getTransition().start();
+          }
         })
         .catch((error) => {
           console.log('error displaying tweets', error);
@@ -43,6 +46,10 @@ export default class Tweet {
     }
   }
 
+  getTweets() {
+    return this.shadowRoot.querySelectorAll('.twitter-component-template .tweet');
+  }
+
   updateStreamedTweets(tweets) {
       var promises = [];
       if (this._areValidTweets(tweets)) {
@@ -53,6 +60,7 @@ export default class Tweet {
         Promise.all(promises)
           .then(() => {
             this._removeOldTweets();
+            this.getTransition().setTweets(this.getTweets());
           })
           .catch((error) => {
             console.log(error, 'Unable to remove outdated tweets');
@@ -140,6 +148,7 @@ export default class Tweet {
       const div = document.createElement('div');
       div.innerHTML = tweetTemplate.trim();
       div.className = 'tweet ' + 'tweet-' + tweet.id;
+      div.style.display = "none";
       resolve(div);
     });
   }
