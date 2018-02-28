@@ -92,6 +92,7 @@ export default class Transition {
     this._clearTweets();
     this._stopTransitionTimer();
     this.isPaused = true;
+    this.currentTweetIndex = 0;
     this.eventHandler.emitDone();
   }
 
