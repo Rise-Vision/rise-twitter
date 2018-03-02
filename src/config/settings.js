@@ -1,7 +1,7 @@
 export default class Settings {
   constructor() {
     this.numTweetsToDisplay = 25;
-    this.isAuthorized = false;
+    this.isAuthorized = null;
   }
 
   setAuthorization(status) {

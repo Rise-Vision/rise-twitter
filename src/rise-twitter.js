@@ -30,6 +30,7 @@ export default class RiseTwitter extends HTMLElement {
     this.state = new State();
     this.config = new Config();
     this.eventHandler = new EventHandler(null, this.playlistItem);
+    this.licensingAttempts = 0;
 
     this._createListenersForRisePlaylistItemEvents();
   }
@@ -119,11 +120,12 @@ export default class RiseTwitter extends HTMLElement {
       this._playInPreview();
     } else {
       if (this.settings.getIsAuthorized()) {
-        console.log('_handlePlay IsAuthorized');
+        console.log('_handlePlay authorized');
         this._play();
       } else {
-        console.log('_handlePlay NOT IsAuthorized');
-        if (this.messaging.isConnected()) {
+        console.log('_handlePlay unauthorized');
+        if (this.messaging.isConnected() && this.settings.getIsAuthorized() === null && this.licensingAttempts < 5) {
+          this.licensingAttempts++;
           this.messaging.sendLicensingWatch();
         }
         this.eventHandler.emitDone();
@@ -159,10 +161,10 @@ export default class RiseTwitter extends HTMLElement {
   _startWaitingForTweetsTimer() {
     this.waitingForTweets = setTimeout(() => {
       clearTimeout(this.waitingForTweets);
-      if(this.tweet.getTweets().length === 0){
+      if (this.tweet.getTweets().length === 0) {
         this.eventHandler.emitDone();
       }
-    },this.config.waitingForTweetsTime);
+    }, this.config.waitingForTweetsTime);
   }
 
   _pause() {
