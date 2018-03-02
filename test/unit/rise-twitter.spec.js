@@ -170,18 +170,65 @@ describe("Twitter Component - Unit", () => {
       component._handleConfigure({detail:{displayId: "xxxxxx", screenName: "screenNameTest"}})
 
       messaging = component.getMessaging();
+      tweet = component.getTweet();
+      tweet.getTweets = jest.fn();
 
+      eventHandler = component.getEventHandler();
+      eventHandler.emitDone = jest.genMockFn();
       messaging.sendComponentSettings = jest.genMockFn();
+
     })
 
-    it("should call component connect and send component settings if connection is closed when play is called", () => {
+    it("should call component connect and send component settings if connection is open when play is called", () => {
+      component._startWaitingForTweetsTimer = jest.genMockFn();
+
       component._play();
 
       expect(messaging.sendComponentSettings).toHaveBeenCalledWith("screenNameTest", "hashtagTest");
+      expect(component._startWaitingForTweetsTimer).toHaveBeenCalled();
 
     });
 
-    it("should not send component settings if connection is not open when play is called", () => {
+    describe("Test play startWaitingForTweetsTimer", () => {
+      beforeEach(() => {
+        tweet.getTweets.mockReturnValue(new Array());
+      });
+
+      it("should call setTimeout when calling _startWaitingForTweetsTimer", () => {
+        jest.useFakeTimers();
+        component._startWaitingForTweetsTimer();
+
+        expect(setTimeout).toHaveBeenCalledTimes(1);
+        expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 5000);
+
+      });
+
+      it("should call emitDone when calling _startWaitingForTweetsTimer and getTweets has length 0", () => {
+
+        jest.useFakeTimers();
+
+        component._startWaitingForTweetsTimer();
+
+        jest.runAllTimers();
+
+        expect(eventHandler.emitDone).toHaveBeenCalled();
+
+      });
+
+      it("should not call emitDone when calling _startWaitingForTweetsTimer and getTweets has length greater than 0", () => {
+        tweet.getTweets.mockReturnValue([1,2,3]);
+        jest.useFakeTimers();
+
+        component._startWaitingForTweetsTimer();
+
+        jest.runAllTimers();
+
+        expect(eventHandler.emitDone).not.toHaveBeenCalled();
+
+      });
+    });
+
+    it("should not send component settings if connection is closed when play is called", () => {
       top.RiseVision = {};
       top.RiseVision.Viewer = {};
       top.RiseVision.Viewer.LocalMessaging = {
