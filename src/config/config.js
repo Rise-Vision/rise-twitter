@@ -8,6 +8,7 @@ export default class Config {
     this.displayId = '';
     this.companyId = '';
     this.componentVersion = '';
+    this.waitingForTweetsTime = 5000;
   }
 
   setDisplayId(displayId) {

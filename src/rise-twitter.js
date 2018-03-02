@@ -38,6 +38,14 @@ export default class RiseTwitter extends HTMLElement {
     return this.messaging;
   }
 
+  getTweet() {
+    return this.tweet;
+  }
+
+  getEventHandler() {
+    return this.eventHandler;
+  }
+
   _generateComponentId() {
     return `rise-twitter-` + Math.random().toString().substring(2);
   }
@@ -140,11 +148,21 @@ export default class RiseTwitter extends HTMLElement {
       console.log('_play is Connected');
       this.logger.playlistEvent('Play Event');
       this.messaging.sendComponentSettings(this.screenName, this.hashtag);
+      this._startWaitingForTweetsTimer();
     } else {
       console.log('_play NOT connected');
       this.logger.error('Error: componnent is not connected to LM');
       this.tweet.handleError();
     }
+  }
+
+  _startWaitingForTweetsTimer() {
+    this.waitingForTweets = setTimeout(() => {
+      clearTimeout(this.waitingForTweets);
+      if(this.tweet.getTweets().length === 0){
+        this.eventHandler.emitDone();
+      }
+    },this.config.waitingForTweetsTime);
   }
 
   _pause() {
