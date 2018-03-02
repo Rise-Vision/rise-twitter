@@ -135,7 +135,13 @@ export default class RiseTwitter extends HTMLElement {
 
   _playInPreview() {
     this.state.setIsPaused(false);
-    this.tweet.displayFillerTweets();
+
+    console.log('_play in Preview');
+    if (this.tweet.getTweets() && this.tweet.getTweets().length > 0) {
+      this.tweet.getTransition().start();
+    } else {
+      this.tweet.displayFillerTweets();
+    }
   }
 
   _play() {
