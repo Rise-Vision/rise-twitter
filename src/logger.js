@@ -21,6 +21,10 @@ export default class Logger {
     this._external('Playlist Event', eventDetails);
   }
 
+  evt(evt, eventDetails, data) {
+    this._external(evt, eventDetails);
+  }
+
   error(eventDetails, data) {
     console.log(eventDetails);
     this._external('Error', eventDetails);
