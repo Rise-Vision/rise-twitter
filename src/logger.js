@@ -6,7 +6,7 @@ export default class Logger {
   constructor(config, localMessaging) {
     this.config = config;
     this.localMessaging = localMessaging;
-    this.externalLogger = new ExternalLogger(this.localMessaging, this.config.bqProjectName, this.config.bqDataset, this.config.failedEntryFile, this.config.bqTable, this.config.componentName);
+    this.externalLogger = new ExternalLogger(this.localMessaging, this.config.bqProjectName, this.config.bqDataset, this.config.failedEntryFile, this.config.bqTable, this.config.componentName, this.config.componentId);
   }
 
   getLocalMessaging() {

@@ -1,6 +1,7 @@
 export default class Config {
   constructor() {
     this.componentName = 'rise-twitter';
+    this.componentId = '';
     this.bqProjectName = 'client-side-events';
     this.bqDataset = 'Component_Events';
     this.bqTable = 'rise_twitter_events';
@@ -17,6 +18,10 @@ export default class Config {
 
   setCompanyId(companyId) {
     this.companyId = companyId;
+  }
+
+  setComponentId(componentId) {
+    this.componentId = componentId;
   }
 
   setComponentVersion(version) {

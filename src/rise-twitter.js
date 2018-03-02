@@ -32,6 +32,7 @@ export default class RiseTwitter extends HTMLElement {
     this.eventHandler = new EventHandler(null, this.playlistItem);
     this.licensingAttempts = 0;
 
+    this.config.setComponentId(this.id);
     this._createListenersForRisePlaylistItemEvents();
   }
 
