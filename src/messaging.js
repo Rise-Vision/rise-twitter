@@ -37,7 +37,7 @@ export default class Messaging {
         this.tweet.updateStreamedTweets(JSON.parse(message.data.tweets));
       }
     } else {
-      this.logger.error('Error: Invalid TWITTER-UPDATE message');
+      this.logger.error(`Error: Invalid TWITTER-UPDATE message ${JSON.stringify(message)}`);
     }
   }
 

@@ -177,6 +177,8 @@ describe("Twitter Component - Unit", () => {
       eventHandler.emitDone = jest.genMockFn();
       messaging.sendComponentSettings = jest.genMockFn();
 
+      tweet.getTweets.mockReturnValue(new Array());
+
     })
 
     it("should call component connect and send component settings if connection is open when play is called", () => {
@@ -186,6 +188,40 @@ describe("Twitter Component - Unit", () => {
 
       expect(messaging.sendComponentSettings).toHaveBeenCalledWith("screenNameTest", "hashtagTest");
       expect(component._startWaitingForTweetsTimer).toHaveBeenCalled();
+
+    });
+
+    it("should call _startAPausePeriodBetweenTweetRequests after calling play 5 times and no tweets have returned", () => {
+      component._startAPausePeriodBetweenTweetRequests = jest.genMockFn();
+
+      component._play();
+      component._play();
+      component._play();
+      component._play();
+      component._play();
+      component._play();
+
+      expect(messaging.sendComponentSettings).toHaveBeenCalledTimes(5);
+      expect(component._startAPausePeriodBetweenTweetRequests).toHaveBeenCalled();
+
+    });
+
+    it("should call setTimeout with an hour timer", () => {
+      jest.useFakeTimers();
+      component._startAPausePeriodBetweenTweetRequests();
+
+      expect(setTimeout).toHaveBeenCalledTimes(1);
+      expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 60*60*1000);
+
+    });
+
+    it("should call setTimeout one time even though the start functions has been called multiple times", () => {
+      jest.useFakeTimers();
+      component._startAPausePeriodBetweenTweetRequests();
+      component._startAPausePeriodBetweenTweetRequests();
+
+      expect(setTimeout).toHaveBeenCalledTimes(1);
+      expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 60*60*1000);
 
     });
 
