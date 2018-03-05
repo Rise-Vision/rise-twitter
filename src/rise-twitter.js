@@ -21,6 +21,9 @@ export default class RiseTwitter extends HTMLElement {
     this.id = this.id || this._generateComponentId();
     console.log('RiseTwitter', this.id);
     this.className = 'innerComponent';
+    this.waitingForTweets = null;
+    this.pauseRequestingTweetsTimer = null;
+    this.currentNumberOfAttempts = 0;
   }
 
   connectedCallback() {
@@ -156,12 +159,27 @@ export default class RiseTwitter extends HTMLElement {
     if (this.messaging.isConnected()) {
       console.log('_play is Connected');
       this.logger.playlistEvent('Play Event');
-      this.messaging.sendComponentSettings(this.screenName, this.hashtag);
+      if (this.currentNumberOfAttempts < this.config.totalNumberOfAttempts) {
+        this.messaging.sendComponentSettings(this.screenName, this.hashtag);
+        this.currentNumberOfAttempts++;
+      } else {
+        this._startAPausePeriodBetweenTweetRequests();
+      }
+
       this._startWaitingForTweetsTimer();
     } else {
       console.log('_play NOT connected');
       this.logger.error('Error: componnent is not connected to LM');
       this.tweet.handleError();
+    }
+  }
+
+  _startAPausePeriodBetweenTweetRequests() {
+    if (this.pauseRequestingTweetsTimer === null) {
+      this.pauseRequestingTweetsTimer = setTimeout(() => {
+        this.currentNumberOfAttempts = 0;
+        this.pauseRequestingTweetsTimer = null;
+      }, this.config.waitingForRequestingTweetsTime);
     }
   }
 

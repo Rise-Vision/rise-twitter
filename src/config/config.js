@@ -10,6 +10,8 @@ export default class Config {
     this.companyId = '';
     this.componentVersion = '';
     this.waitingForTweetsTime = 5000;
+    this.waitingForRequestingTweetsTime = 60 * 60 * 1000; // 1hour
+    this.totalNumberOfAttempts = 5;
   }
 
   setDisplayId(displayId) {
