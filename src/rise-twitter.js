@@ -33,7 +33,6 @@ export default class RiseTwitter extends HTMLElement {
     this.eventHandler = new EventHandler(null, this.playlistItem);
     this.licensingAttempts = 0;
 
-    this.config.setComponentId(this.id);
     this._createListenersForRisePlaylistItemEvents();
   }
 
@@ -99,6 +98,9 @@ export default class RiseTwitter extends HTMLElement {
     if (event.detail && event.detail.displayId !== 'preview') {
       this.screenName = event.detail.screenName;
       this.id = event.detail.componentId;
+      this.config.setComponentId(this.id);
+      console.log('CONFIGURE - RiseTwitter', this.config.componentId);
+
       this.localMessaging = new LocalMessaging();
       console.log('this.localMessaging connected');
       this.logger = new Logger(this.config, this.localMessaging);
@@ -106,7 +108,7 @@ export default class RiseTwitter extends HTMLElement {
       this._validadeConfiguration();
 
       this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, this.eventHandler, this.state);
-      this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.config, this.settings, this.logger);
+      this.messaging = new Messaging(this.tweet, this.localMessaging, this.config, this.settings, this.logger);
       this.eventHandler.emitReady();
       this.logger.playlistEvent('Configure Event', {configureObject: JSON.stringify(event.detail)});
     } else {

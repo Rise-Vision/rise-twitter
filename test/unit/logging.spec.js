@@ -30,12 +30,14 @@ describe("Tweet - Unit", () => {
     shadowRoot.appendChild = jest.genMockFn();
 
     config = new Config();
+    config.setComponentId(componentId);
+    
     localMessaging = new LocalMessaging();
     logger = new Logger(config, localMessaging);
 
     tweet = new Tweet(shadowRoot, logger);
 
-    messaging = new Messaging(tweet, componentId, localMessaging, config, null, logger);
+    messaging = new Messaging(tweet, localMessaging, config, null, logger);
 
     logger.externalLogger.log = jest.genMockFn();
     console.log = jest.fn();

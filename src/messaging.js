@@ -1,12 +1,12 @@
 export default class Messaging {
-  constructor(tweet, componentId, localMessaging, config, settings, logger) {
+  constructor(tweet, localMessaging, config, settings, logger) {
     this.tweet = tweet;
-    this.componentId = componentId;
-
     this.localMessaging = localMessaging;
     this.config = config;
     this.settings = settings;
     this.logger = logger;
+
+    this.componentId = this.config.componentId;
 
     this._bindReceiveMessagesHandler();
   }
@@ -36,8 +36,6 @@ export default class Messaging {
       } else if (message.status.toUpperCase() === 'STREAM') {
         this.tweet.updateStreamedTweets(JSON.parse(message.data.tweets));
       }
-    } else {
-      this.logger.error(`Error: Invalid TWITTER-UPDATE message ${JSON.stringify(message)}`);
     }
   }
 

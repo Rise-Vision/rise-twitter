@@ -33,6 +33,8 @@ describe("Transition - Unit", () => {
     shadowRoot.appendChild = jest.genMockFn();
 
     config = new Config();
+    config.setComponentId(componentId);
+    
     settings = new Settings();
     logger = new Logger(config);
 
@@ -40,7 +42,7 @@ describe("Transition - Unit", () => {
     transition = tweet.getTransition();
 
     localMessaging = new LocalMessaging();
-    messaging = new Messaging(tweet, componentId, localMessaging, logger);
+    messaging = new Messaging(tweet, localMessaging, config, settings, logger);
 
     logger.error = jest.genMockFn();
     tweet.shadowRoot.querySelector = jest.genMockFn();
