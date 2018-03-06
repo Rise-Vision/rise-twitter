@@ -18,7 +18,6 @@ export default class RiseTwitter extends HTMLElement {
   constructor() {
     super();
     this.isPreview = false;
-    console.log('RiseTwitter', this.id);
     this.className = 'innerComponent';
     this.waitingForTweets = null;
     this.pauseRequestingTweetsTimer = null;
@@ -48,10 +47,6 @@ export default class RiseTwitter extends HTMLElement {
 
   getEventHandler() {
     return this.eventHandler;
-  }
-
-  _generateComponentId() {
-    return `rise-twitter-` + Math.random().toString().substring(2);
   }
 
   get screenName() {
