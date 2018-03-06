@@ -104,10 +104,7 @@ export default class RiseTwitter extends HTMLElement {
     if (event.detail && event.detail.displayId !== 'preview') {
       this.screenName = event.detail.screenName;
       this.id = event.detail.componentId;
-      if (!this.id) {
-        this.logger.error('Error: componnent id is missing');
-        this.eventHandler.emitDone();
-      }
+      this._validadeConfiguration();
       this.localMessaging = new LocalMessaging();
       console.log('this.localMessaging connected');
       this.logger = new Logger(this.config, this.localMessaging);
@@ -120,6 +117,18 @@ export default class RiseTwitter extends HTMLElement {
       this.tweet = new Tweet(this.shadowRoot, null, this.settings, this.eventHandler, this.state);
       this.isPreview = true;
       this.eventHandler.emitReady();
+    }
+  }
+
+  _validadeConfiguration() {
+    if (!this.id) {
+      this.logger.error('Error: componnentId is missing');
+      this.eventHandler.emitDone();
+    }
+
+    if (!this.screenName) {
+      this.logger.error('Error: screenName is missing');
+      this.eventHandler.emitDone();
     }
   }
 
