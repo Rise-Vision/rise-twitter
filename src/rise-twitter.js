@@ -18,8 +18,6 @@ export default class RiseTwitter extends HTMLElement {
   constructor() {
     super();
     this.isPreview = false;
-    this.id = this.id || this._generateComponentId();
-    console.log('RiseTwitter', this.id);
     this.className = 'innerComponent';
     this.waitingForTweets = null;
     this.pauseRequestingTweetsTimer = null;
@@ -49,10 +47,6 @@ export default class RiseTwitter extends HTMLElement {
 
   getEventHandler() {
     return this.eventHandler;
-  }
-
-  _generateComponentId() {
-    return `rise-twitter-` + Math.random().toString().substring(2);
   }
 
   get screenName() {
@@ -103,19 +97,34 @@ export default class RiseTwitter extends HTMLElement {
     this.config.setCompanyId(event.detail.companyId);
     console.log('_handleConfigure', event);
     if (event.detail && event.detail.displayId !== 'preview') {
+      this.screenName = event.detail.screenName;
+      this.id = event.detail.componentId;
       this.localMessaging = new LocalMessaging();
       console.log('this.localMessaging connected');
       this.logger = new Logger(this.config, this.localMessaging);
       this.eventHandler = new EventHandler(this.logger, this.playlistItem);
+      this._validadeConfiguration();
+
       this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, this.eventHandler, this.state);
       this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.config, this.settings, this.logger);
-      this.screenName = event.detail.screenName;
       this.eventHandler.emitReady();
       this.logger.playlistEvent('Configure Event', {configureObject: JSON.stringify(event.detail)});
     } else {
       this.tweet = new Tweet(this.shadowRoot, null, this.settings, this.eventHandler, this.state);
       this.isPreview = true;
       this.eventHandler.emitReady();
+    }
+  }
+
+  _validadeConfiguration() {
+    if (!this.id) {
+      this.logger.error('Error: componnentId is missing');
+      this.eventHandler.emitDone();
+    }
+
+    if (!this.screenName) {
+      this.logger.error('Error: screenName is missing');
+      this.eventHandler.emitDone();
     }
   }
 
