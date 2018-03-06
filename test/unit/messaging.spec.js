@@ -27,9 +27,10 @@ describe("Twitter Component Messaging - Unit", () => {
     localMessaging = new LocalMessaging();
     settings = new Settings();
     config = new Config();
+    config.setComponentId(componentId);
     tweet = new Tweet();
     logger = new Logger(config, localMessaging);
-    messaging = new Messaging(tweet, componentId, localMessaging, config, settings, logger);
+    messaging = new Messaging(tweet, localMessaging, config, settings, logger);
 
     tweet.updateTweets = jest.genMockFn();
     localMessaging.broadcastMessage = jest.genMockFn();

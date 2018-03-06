@@ -2,6 +2,7 @@ import RiseTwitter from "../../src/rise-twitter";
 import Tweet from "../../src/tweet";
 import Logger from "../../src/logger";
 import Config from "../../src/config/config";
+import Settings from "../../src/config/settings";
 import Messaging from "../../src/messaging";
 import {LocalMessaging} from 'common-component';
 import EventHandler from "../../src/event-handler";
@@ -14,6 +15,7 @@ let eventHandler = null;
 let componentId = "componentIdTest";
 let logger = null;
 let config = null;
+let settings = null;
 let localMessaging = null;
 
 describe("Tweet - Unit", () => {
@@ -36,11 +38,14 @@ describe("Tweet - Unit", () => {
     eventHandler.emitDone = jest.genMockFn();
 
     config = new Config();
+    config.setComponentId(componentId);
+
+    settings = new Settings();
     logger = new Logger(config)
     tweet = new Tweet(shadowRoot, logger, null, eventHandler);
 
     localMessaging = new LocalMessaging();
-    messaging = new Messaging(tweet, componentId, localMessaging, logger);
+    messaging = new Messaging(tweet, localMessaging, config, settings, logger);
 
     logger.error = jest.genMockFn();
     tweet.shadowRoot.querySelector = jest.genMockFn();
