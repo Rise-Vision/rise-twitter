@@ -18,7 +18,6 @@ export default class RiseTwitter extends HTMLElement {
   constructor() {
     super();
     this.isPreview = false;
-    this.id = this.id || this._generateComponentId();
     console.log('RiseTwitter', this.id);
     this.className = 'innerComponent';
     this.waitingForTweets = null;
@@ -110,6 +109,7 @@ export default class RiseTwitter extends HTMLElement {
       this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, this.eventHandler, this.state);
       this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.config, this.settings, this.logger);
       this.screenName = event.detail.screenName;
+      this.id = event.detail.componentId;
       this.eventHandler.emitReady();
       this.logger.playlistEvent('Configure Event', {configureObject: JSON.stringify(event.detail)});
     } else {
