@@ -104,11 +104,12 @@ export default class RiseTwitter extends HTMLElement {
     if (event.detail && event.detail.displayId !== 'preview') {
       this.screenName = event.detail.screenName;
       this.id = event.detail.componentId;
-      this._validadeConfiguration();
       this.localMessaging = new LocalMessaging();
       console.log('this.localMessaging connected');
       this.logger = new Logger(this.config, this.localMessaging);
       this.eventHandler = new EventHandler(this.logger, this.playlistItem);
+      this._validadeConfiguration();
+
       this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, this.eventHandler, this.state);
       this.messaging = new Messaging(this.tweet, this.id, this.localMessaging, this.config, this.settings, this.logger);
       this.eventHandler.emitReady();
