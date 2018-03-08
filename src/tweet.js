@@ -220,7 +220,7 @@ export default class Tweet {
     if (tweetData.entities.urls && tweetData.entities.urls.length > 0 && tweetData.entities.urls[0]) {
       this._updateLinks(div, tweetData);
     } else {
-      div.querySelector('span.tweet-text').innerHTML = decodeURI(tweetText);
+      div.querySelector('span.tweet-text').innerHTML = tweetText;
     }
   }
 
@@ -243,7 +243,7 @@ export default class Tweet {
       const url = tweetData.entities.urls[urlIndex].url;
       textWithoutLinks = textWithoutLinks.replace(url, '');
     }
-    div.querySelector('span.tweet-text').innerHTML = decodeURI(textWithoutLinks);
+    div.querySelector('span.tweet-text').innerHTML = textWithoutLinks;
 
     for (const urlIndex in tweetData.entities.urls) {
       const url = tweetData.entities.urls[urlIndex].url;
