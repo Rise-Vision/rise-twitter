@@ -30,6 +30,7 @@ export default class Tweet {
       }
       Promise.all(promises)
         .then(() => {
+          this.getTransition().pause();
           this.getTransition().setTweets(this.getTweets());
           if(!this.state.getIsPaused()) {
             this.getTransition().start();
