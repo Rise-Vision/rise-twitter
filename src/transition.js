@@ -100,10 +100,11 @@ export default class Transition {
    * Public Functions
    *************************************/
   start() {
-    this._isPaused = false;
-
     if (this.numOfActualTweets > 0) {
-      this._startTransitionTimer();
+      if (this._isPaused) {
+        this._isPaused = false;
+        this._startTransitionTimer();
+      }  
     } else {
       this._finishedTransition();
     }
