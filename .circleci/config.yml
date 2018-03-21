@@ -74,6 +74,7 @@ jobs:
             command: node_modules/common-component/deploy.sh
             environment:
               COMPONENTNAME: rise-twitter
+              BRANCH: BETA
 
   "deploy-stable":
       docker: *DOCKERIMAGE
