@@ -15,7 +15,7 @@
     "build-stage": "NODE_ENV=stage node build/build.js"
   },
   "dependencies": {
-    "common-component": "git+https://github.com/Rise-Vision/common-component.git#v1.8.0",
+    "common-component": "git+https://github.com/Rise-Vision/common-component.git#v1.8.1",
     "jquery": "^3.3.1"
   },
   "devDependencies": {

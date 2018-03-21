@@ -74,7 +74,6 @@ jobs:
             command: node_modules/common-component/deploy.sh
             environment:
               COMPONENTNAME: rise-twitter
-              BRANCH: BETA
 
   "deploy-stable":
       docker: *DOCKERIMAGE
@@ -85,7 +84,7 @@ jobs:
         - restore_cache:
             key: node-cache-v2{{ checksum "package.json" }}
         - run:
-            name: Deploy to beta
+            name: Deploy to stable
             command: node_modules/common-component/deploy.sh
             environment:
               COMPONENTNAME: rise-twitter
