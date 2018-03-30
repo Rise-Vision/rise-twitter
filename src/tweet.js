@@ -194,7 +194,7 @@ export default class Tweet {
     const div = this.shadowRoot.querySelector(selector);
     const profileImage = document.createElement('img');
     profileImage.className = 'profile-image';
-    profileImage.setAttribute('src', userData.profile_image_url);
+    profileImage.setAttribute('src', userData.profile_image_url.replace('_normal', ''));
     div.querySelector('.meta').prepend(profileImage);
 
     div.querySelector('.display-name').append(userData.name);
