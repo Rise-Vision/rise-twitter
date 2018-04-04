@@ -15,7 +15,7 @@ describe('Twitter Component - Integration', () => {
   beforeEach(()=>{
     testTweets = [ { created_at: 'Fri Jan 26 03:54:15 +0000 2018',
               id: 956737018452697100,
-              text: 'let\'s see what happens when we include multiple links https://t.co/mkd9UQImGK https://t.co/APnwHc7cR4',
+              full_text: 'let\'s see what happens when we include multiple links https://t.co/mkd9UQImGK https://t.co/APnwHc7cR4',
               entities: { hashtags: [], symbols: [], user_mentions: [],
                 urls:
                   [{"url":"https://t.co/mkd9UQImGK",
@@ -66,7 +66,7 @@ describe('Twitter Component - Integration', () => {
 
   it('should load component but not load invalid tweet', () => {
       browser.url('/');
-      const invalidTestTweets = [{id: 1234, text: 'blabla'}];
+      const invalidTestTweets = [{id: 1234, full_text: 'blabla'}];
 
       sendLicensing();
 
@@ -117,7 +117,7 @@ describe('Twitter Component - Integration', () => {
       const textSelector = 'rise-twitter .tweet-text';
       browser.waitForText(textSelector);
       const testText = browser.getText(textSelector);
-      (testTweets[0].text).should.contain(testText);
+      (testTweets[0].full_text).should.contain(testText);
 
       const retweetsSelector = 'rise-twitter .tweet-retweets';
       browser.waitForText(retweetsSelector);
@@ -180,7 +180,7 @@ describe('Twitter Component - Integration', () => {
       browser.url('/');
 
       testTweets[0]['id'] = 111111111111;
-      testTweets[0]['text'] = "this is an example streamed tweet";
+      testTweets[0]['full_text'] = "this is an example streamed tweet";
 
       sendLicensing();
 

@@ -111,7 +111,7 @@ export default class Tweet {
     if (!tweet.user || !tweet.user.name || !tweet.user.screen_name || !tweet.user.profile_image_url) {
       return false;
     }
-    if (!tweet.text || !tweet.created_at || !tweet.entities) {
+    if (!(tweet.full_text || tweet.text) || !tweet.created_at || !tweet.entities) {
       return false;
     }
 
@@ -211,7 +211,7 @@ export default class Tweet {
 
     div.querySelector('.tweet-image-container').append(twitterImage);
 
-    const tweetText = tweetData.text;
+    const tweetText = tweetData.text || tweetData.full_text;
 
     if (tweetText.Length > 140) {
       div.querySelector('.tweet-text-container').addClass('long-tweet');
@@ -237,7 +237,7 @@ export default class Tweet {
   }
 
   _updateLinks(div, tweetData) {
-    let textWithoutLinks = tweetData.text;
+    let textWithoutLinks = tweetData.text || tweetData.full_text;
 
     for (const urlIndex in tweetData.entities.urls) {
       const url = tweetData.entities.urls[urlIndex].url;
