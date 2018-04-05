@@ -78,12 +78,12 @@ export default class Tweet {
   setTheme(settings) {
     switch (settings.theme) {
       case 'dark':
-        this.shadowRoot.querySelector('.twitter-component-template').removeClass('theme-light');
-        this.shadowRoot.querySelector('.twitter-component-template').addClass('theme-dark');
+        this.shadowRoot.querySelector('.twitter-component-template').classList.remove('theme-light');
+        this.shadowRoot.querySelector('.twitter-component-template').classList.add('theme-dark');
         break;
       default:
-        this.shadowRoot.querySelector('.twitter-component-template').removeClass('theme-dark');
-        this.shadowRoot.querySelector('.twitter-component-template').addClass('theme-light');
+        this.shadowRoot.querySelector('.twitter-component-template').classList.remove('theme-dark');
+        this.shadowRoot.querySelector('.twitter-component-template').classList.add('theme-light');
     }
   }
 
@@ -214,7 +214,7 @@ export default class Tweet {
     const tweetText = tweetData.text || tweetData.full_text;
 
     if (tweetText.length > 140) {
-      div.querySelector('.tweet-text-container').addClass('long-tweet');
+      div.querySelector('.tweet-text-container').classList.add('long-tweet');
     }
 
     if (tweetData.entities.urls && tweetData.entities.urls.length > 0 && tweetData.entities.urls[0]) {

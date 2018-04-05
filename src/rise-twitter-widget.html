@@ -9,7 +9,7 @@
     <rise-playlist-item>
       <rise-twitter></rise-twitter>
     </rise-playlist-item>
-    <!--script>
+    <script>
       if (document.domain.indexOf("localhost") === -1) {
         try {
           document.domain = "risevision.com";
@@ -17,7 +17,7 @@
           // can't set document.domain, risevision.com not an accepted suffix of current document domain
         }
       }
-    </script-->
+    </script>
     <script src="<%= htmlWebpackPlugin.files.chunks['vendor'].entry %>"></script>
     <script src="<%=process.env.NODE_ENV !== 'production'
      ? 'https://storage.googleapis.com/rise-content/stable/components/rise-playlist-item/rise-playlist-item.js'
