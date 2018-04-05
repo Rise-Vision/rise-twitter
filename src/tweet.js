@@ -213,7 +213,7 @@ export default class Tweet {
 
     const tweetText = tweetData.text || tweetData.full_text;
 
-    if (tweetText.Length > 140) {
+    if (tweetText.length > 140) {
       div.querySelector('.tweet-text-container').addClass('long-tweet');
     }
 
