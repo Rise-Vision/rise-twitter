@@ -78,12 +78,12 @@ export default class Tweet {
   setTheme(settings) {
     switch (settings.theme) {
       case 'dark':
-        this.shadowRoot.querySelector('.twitter-component-template').removeClass('theme-light');
-        this.shadowRoot.querySelector('.twitter-component-template').addClass('theme-dark');
+        this.shadowRoot.querySelector('.twitter-component-template').classList.remove('theme-light');
+        this.shadowRoot.querySelector('.twitter-component-template').classList.add('theme-dark');
         break;
       default:
-        this.shadowRoot.querySelector('.twitter-component-template').removeClass('theme-dark');
-        this.shadowRoot.querySelector('.twitter-component-template').addClass('theme-light');
+        this.shadowRoot.querySelector('.twitter-component-template').classList.remove('theme-dark');
+        this.shadowRoot.querySelector('.twitter-component-template').classList.add('theme-light');
     }
   }
 
@@ -111,7 +111,7 @@ export default class Tweet {
     if (!tweet.user || !tweet.user.name || !tweet.user.screen_name || !tweet.user.profile_image_url) {
       return false;
     }
-    if (!tweet.text || !tweet.created_at || !tweet.entities) {
+    if (!(tweet.full_text || tweet.text) || !tweet.created_at || !tweet.entities) {
       return false;
     }
 
@@ -211,13 +211,13 @@ export default class Tweet {
 
     div.querySelector('.tweet-image-container').append(twitterImage);
 
-    const tweetText = tweetData.text;
+    const tweetText = tweetData.text || tweetData.full_text;
 
-    if (tweetText.Length > 140) {
-      div.querySelector('.tweet-text-container').addClass('long-tweet');
+    if (tweetText.length > 140) {
+      div.querySelector('.tweet-text-container').classList.add('long-tweet');
     }
 
-    if (tweetData.entities.urls && tweetData.entities.urls.length > 0 && tweetData.entities.urls[0]) {
+    if ((tweetData.entities.urls && tweetData.entities.urls.length > 0 && tweetData.entities.urls[0]) || tweetData.extended_entities && tweetData.extended_entities.media && tweetData.extended_entities.media.length > 0) {
       this._updateLinks(div, tweetData);
     } else {
       div.querySelector('span.tweet-text').innerHTML = tweetText;
@@ -237,21 +237,28 @@ export default class Tweet {
   }
 
   _updateLinks(div, tweetData) {
-    let textWithoutLinks = tweetData.text;
+    let textAndLinks = tweetData.text || tweetData.full_text;
 
     for (const urlIndex in tweetData.entities.urls) {
       const url = tweetData.entities.urls[urlIndex].url;
-      textWithoutLinks = textWithoutLinks.replace(url, '');
+      textAndLinks = textAndLinks.replace(url, this._getLinkSpan(url).outerHTML);
     }
-    div.querySelector('span.tweet-text').innerHTML = textWithoutLinks;
-
-    for (const urlIndex in tweetData.entities.urls) {
-      const url = tweetData.entities.urls[urlIndex].url;
-      const urlSpan = document.createElement('span');
-
-      urlSpan.innerHTML = ' ' + url;
-      urlSpan.className = 'embedded-link';
-      div.querySelector('.tweet-text-container').append(urlSpan);
+    if (tweetData.extended_entities) {
+      for (const mediaIndex in tweetData.extended_entities.media) {
+        const url = tweetData.extended_entities.media[mediaIndex].url;
+        textAndLinks = textAndLinks.replace(url, '');
+      }
     }
+
+    div.querySelector('span.tweet-text').innerHTML = textAndLinks;
+  }
+
+  _getLinkSpan(url) {
+    const urlSpan = document.createElement('span');
+
+    urlSpan.innerHTML = url;
+    urlSpan.className = 'embedded-link';
+
+    return urlSpan;
   }
 }
