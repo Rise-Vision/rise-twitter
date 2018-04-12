@@ -41,8 +41,8 @@ export default class Messaging {
 
   _handleLicensingUpdate(message) {
     if (message && message.data && message.data.is_authorized !== null && message.data.user_friendly_status) {
-      console.log(`Authorization status changed - ${message.data.user_friendly_status}`);
-      this.logger.evt(message.data.user_friendly_status ? 'Authorized' : 'Unauthorized');
+      console.log(`Authorization status updated - ${message.data.user_friendly_status}`);
+      this.logger.evt(message.data.is_authorized ? 'Authorized' : 'Unauthorized');
       this.settings.setAuthorization(message.data.is_authorized);
     } else {
       this.logger.error('Error: Invalid LICENSING-UPDATE message');
