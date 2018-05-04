@@ -5,11 +5,19 @@ const commonConfig = require('common-display-module');
 const simple = require("simple-mock");
 const mock = simple.mock;
 const ipc = require("node-ipc");
+const fs = require("fs")
 let localMessagingModule = require('local-messaging-module');
 let testTweets = null;
 
 describe('Twitter Component - Integration', () => {
   before(()=>{
+    fs.watch = function (filename, options, cb) {
+      if (filename.indexOf("RiseDisplayNetworkII.ini") != -1) {
+        cb(null, new Buffer("fake contents"));
+      } else {
+        fs.watch(filename, options, cb);
+      }
+    };
     return localMessagingModule.start(ipc, "ls-test-did", "ls-test-mid");
   });
   beforeEach(()=>{
