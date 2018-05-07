@@ -3,7 +3,7 @@ version: 2
 jobs:
   "test":
     docker: &DOCKERIMAGE_TEST
-      - image: jenkinsrise/cci-v2-docker-e2e:0.0.1
+      - image: jenkinsrise/jenkinsrise-cci-image-launcher-electron-e2e:0.0.2
     steps:
       - checkout
       - restore_cache:
@@ -16,6 +16,38 @@ jobs:
       - run:
           command: npm run test
           no_output_timeout: 1m
+
+  "e2e":
+    docker: *DOCKERIMAGE_TEST
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - restore_cache:
+          key: node-cache-v2{{ checksum "package.json" }}
+      - run:
+          name: install e2e app
+          command: |
+            git clone https://github.com/Rise-Vision/rise-launcher-electron-e2e.git
+            cd rise-launcher-electron-e2e
+            npm install
+      - run: 
+          name: run test
+          command: | 
+            mkdir ~/rvplayer
+            echo displayid=28C6QVD3VUC2 > ~/rvplayer/RiseDisplayNetworkII.ini
+            echo proxy= >> ~/rvplayer/RiseDisplayNetworkII.ini
+            cd rise-launcher-electron-e2e
+            node test-display-runner.js 28C6QVD3VUC2 "https://storage.googleapis.com/risevision-display-screenshots/S3GERMKMJGX6.jpg" 
+      - run: 
+          name: save screenshot
+          command: |
+            mkdir ~/output
+            mv ./rise-launcher-electron-e2e/screenshot.jpg ~/output
+            mv ./rise-launcher-electron-e2e/expected-screenshot.jpg ~/output
+          when: always
+      - store_artifacts:
+          path: ~/output
 
   "build":
       docker: *DOCKERIMAGE_TEST
@@ -33,10 +65,6 @@ jobs:
               else
                 npm run build-stage
               fi
-        - save_cache:
-            key: node-cache-v2{{ checksum "package.json" }}
-            paths:
-              - ./node_modules
         - persist_to_workspace:
             root: .
             paths:
@@ -95,6 +123,9 @@ workflows:
   workflow1:
     jobs:
       - "test"
+      - "e2e":
+          requires:
+            - test
       - "build":
           requires:
             - test
