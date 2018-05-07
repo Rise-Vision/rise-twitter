@@ -7,9 +7,11 @@ const mock = simple.mock;
 const ipc = require("node-ipc");
 let localMessagingModule = require('local-messaging-module');
 let testTweets = null;
+const fs = require("fs");
 
 describe('Twitter Component - Integration', () => {
   before(()=>{
+    mock(fs, "watch").callbackWith();
     return localMessagingModule.start(ipc, "ls-test-did", "ls-test-mid");
   });
   beforeEach(()=>{
