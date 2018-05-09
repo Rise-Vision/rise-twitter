@@ -3,7 +3,7 @@ version: 2
 jobs:
   "test":
     docker: &DOCKERIMAGE_TEST
-      - image: jenkinsrise/cci-v2-docker-e2e:0.0.1
+      - image: jenkinsrise/jenkinsrise-cci-image-launcher-electron-e2e:0.0.2
     steps:
       - checkout
       - restore_cache:
@@ -16,6 +16,55 @@ jobs:
       - run:
           command: npm run test
           no_output_timeout: 1m
+
+  "e2e":
+    docker: *DOCKERIMAGE_TEST
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - restore_cache:
+          key: node-cache-v2{{ checksum "package.json" }}
+      - run:
+          name: get access_token
+          command: |
+            git clone git@github.com:Rise-Vision/private-keys.git
+            client_secret=$(cat private-keys/client-authentication/tokens.txt | grep client_secret)
+            refresh_token=$(cat private-keys/client-authentication/tokens.txt | grep refresh_token)
+            curl -s --data ""  "https://www.googleapis.com/oauth2/v3/token?client_id=614513768474.apps.googleusercontent.com&${client_secret}&${refresh_token}&grant_type=refresh_token" | python -c "import json,sys;obj=json.load(sys.stdin);print obj['access_token'];" > access_token;
+      - run:
+          name: update presentation
+          command: |
+            presentation_id='a9172f6b-7312-434e-a6f2-0417fba076d7'
+            curl -H 'Authorization:Bearer '$(cat access_token) "https://rvaserver2.appspot.com/_ah/api/core/v1/presentation?id=${presentation_id}" > content.json
+            cat content.json | jq 'to_entries[] | {data:{layout: .value.layout}}' > patch.json
+            sed -r -i.bak 's%([0-9]{1,4}\.[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2})(/rise-twitter-widget\.html)%'$(cat version)'\2%' patch.json
+            curl --request PATCH -d @patch.json -H 'Authorization:Bearer '$(cat access_token) "https://rvaserver2.appspot.com/_ah/api/core/v1/presentation?id=${presentation_id}"
+      - run:
+          name: install e2e app
+          command: |
+            git clone https://github.com/Rise-Vision/rise-launcher-electron-e2e.git
+            cd rise-launcher-electron-e2e
+            git checkout fix/increase-number-of-prints
+            npm install
+      - run: 
+          name: run test
+          command: | 
+            display_id=28C6QVD3VUC2
+            mkdir ~/rvplayer
+            echo displayid=${display_id} > ~/rvplayer/RiseDisplayNetworkII.ini
+            echo proxy= >> ~/rvplayer/RiseDisplayNetworkII.ini
+            cd rise-launcher-electron-e2e
+            node test-display-runner.js ${display_id} "https://storage.googleapis.com/risevision-display-screenshots/${display_id}.jpg" 20 
+      - run: 
+          name: save screenshot
+          command: |
+            mkdir ~/output
+            mv ./rise-launcher-electron-e2e/screenshot.jpg ~/output
+            mv ./rise-launcher-electron-e2e/expected-screenshot.jpg ~/output
+          when: always
+      - store_artifacts:
+          path: ~/output
 
   "build":
       docker: *DOCKERIMAGE_TEST
@@ -33,10 +82,6 @@ jobs:
               else
                 npm run build-stage
               fi
-        - save_cache:
-            key: node-cache-v2{{ checksum "package.json" }}
-            paths:
-              - ./node_modules
         - persist_to_workspace:
             root: .
             paths:
@@ -115,6 +160,9 @@ workflows:
                 - build/stable
                 - /^stage\/.*/
                 - /^staging\/.*/
+      - "e2e":
+          requires:
+            - stage
       - "deploy-stable":
           requires:
             - stage
