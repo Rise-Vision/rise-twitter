@@ -45,7 +45,6 @@ jobs:
           command: |
             git clone https://github.com/Rise-Vision/rise-launcher-electron-e2e.git
             cd rise-launcher-electron-e2e
-            git checkout fix/increase-number-of-prints
             npm install
       - run: 
           name: run test
