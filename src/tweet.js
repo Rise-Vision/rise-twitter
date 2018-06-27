@@ -37,11 +37,11 @@ export default class Tweet {
         })
         .catch((error) => {
           console.log('error displaying tweets', error);
-          if (this.logger) {this.logger.error(`Invalid Tweets`);}
+          if (this.logger) {this.logger.error(`Could not set tweets - ${JSON.stringify(tweets)}`);}
           this.eventHandler.emitDone();
         });
     } else {
-      if (this.logger) {this.logger.error(`Invalid Tweets`);}
+      if (this.logger) {this.logger.error(`Invalid Tweets - ${JSON.stringify(tweets)}`);}
       this.eventHandler.emitDone();
     }
   }
@@ -138,7 +138,7 @@ export default class Tweet {
         this._updateData(tweet);
       })
       .catch((error) => {
-        if (this.logger) {this.logger.error(`Could not display tweets - ${error}`);}
+        if (this.logger) {this.logger.error(`Could not display tweet - ${error} - ${JSON.stringify(tweet)}`);}
         this.eventHandler.emitDone();
       });
   }
