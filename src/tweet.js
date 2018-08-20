@@ -41,7 +41,7 @@ export default class Tweet {
           this.eventHandler.emitDone();
         });
     } else {
-      if (this.logger) {this.logger.error(`Invalid Tweets - ${JSON.stringify(tweets)}`);}
+      if (this.logger) {this.logger.warning(`invalid tweets - ${JSON.stringify(tweets)}`);}
       this.eventHandler.emitDone();
     }
   }
