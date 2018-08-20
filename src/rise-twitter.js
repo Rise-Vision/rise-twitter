@@ -125,7 +125,7 @@ export default class RiseTwitter extends HTMLElement {
     }
 
     if (!this.screenName) {
-      this.logger.error('Error: screenName is missing');
+      this.logger.warning('screen_name is missing');
       this.eventHandler.emitDone();
     }
   }

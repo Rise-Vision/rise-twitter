@@ -25,6 +25,11 @@ export default class Logger {
     this._external(evt, eventDetails);
   }
 
+  warning(eventDetails, data) {
+    console.log(eventDetails);
+    this._external('warning', eventDetails, data);
+  }
+
   error(eventDetails, data) {
     console.log(eventDetails);
     this._external('Error', eventDetails, data);
