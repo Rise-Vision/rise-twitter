@@ -1,10 +1,11 @@
 export default class Messaging {
-  constructor(tweet, localMessaging, config, settings, logger) {
+  constructor(tweet, localMessaging, config, settings, logger, licensing) {
     this.tweet = tweet;
     this.localMessaging = localMessaging;
     this.config = config;
     this.settings = settings;
     this.logger = logger;
+    this.licensing = licensing;
 
     this.componentId = this.config.componentId;
 
@@ -22,10 +23,38 @@ export default class Messaging {
     }
 
     switch (message.topic.toUpperCase()) {
-      case 'TWITTER-UPDATE':
-        return this._handleTwitterUpdate(message);
+      case 'CLIENT-LIST':
+        return this._handleClientListUpdate(message);
       case 'LICENSING-UPDATE':
         return this._handleLicensingUpdate(message);
+      case 'TWITTER-STATUS-UPDATE':
+        return this._handleTwitterStatusUpdate(message);
+      case 'TWITTER-UPDATE':
+        return this._handleTwitterUpdate(message);
+    }
+  }
+
+  _handleLicensingUpdate(message) {
+    if (message && message.isAuthorized !== null && message.userFriendlyStatus) {
+      console.log(`Authorization status updated - ${message.userFriendlyStatus}`);
+      this.logger.evt(message.userFriendlyStatus);
+      this.settings.setAuthorization(message.isAuthorized);
+    } else {
+      this.logger.error('Error: Invalid LICENSING-UPDATE message');
+    }
+  }
+
+  _handleClientListUpdate(message) {
+    return Promise.all([
+      this.licensing.requestLicensingDataIfLicensingIsAvailable(message)
+    ]);
+  }
+
+  _handleTwitterStatusUpdate(message) {
+    if (message && message.status !== null) {
+      console.log(`Twitter Module ${message.userFriendlyStatus} to accept data requests`);
+      this.logger.evt(`Twitter Module ${message.userFriendlyStatus} to accept data requests`);
+      this.settings.setTwitterModuleStatus(message.status);
     }
   }
 
@@ -36,16 +65,6 @@ export default class Messaging {
       } else if (message.status.toUpperCase() === 'STREAM') {
         this.tweet.updateStreamedTweets(JSON.parse(message.data.tweets));
       }
-    }
-  }
-
-  _handleLicensingUpdate(message) {
-    if (message && message.data && message.data.is_authorized !== null && message.data.user_friendly_status) {
-      console.log(`Authorization status updated - ${message.data.user_friendly_status}`);
-      this.logger.evt(message.data.is_authorized ? 'Authorized' : 'Unauthorized');
-      this.settings.setAuthorization(message.data.is_authorized);
-    } else {
-      this.logger.error('Error: Invalid LICENSING-UPDATE message');
     }
   }
 

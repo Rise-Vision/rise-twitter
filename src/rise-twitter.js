@@ -2,6 +2,7 @@ import { WebComponent } from 'web-component';
 import {LocalMessaging} from 'common-component';
 import Messaging from './messaging';
 import Tweet from './tweet';
+import Licensing from './licensing';
 import Logger from './logger';
 import Config from './config/config';
 import Settings from './config/settings';
@@ -105,12 +106,13 @@ export default class RiseTwitter extends HTMLElement {
       console.log('this.localMessaging connected');
       this.logger = new Logger(this.config, this.localMessaging);
       this.eventHandler = new EventHandler(this.logger, this.playlistItem);
-      this._validadeConfiguration();
+      this._validateConfiguration();
 
       this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, this.eventHandler, this.state);
-      this.messaging = new Messaging(this.tweet, this.localMessaging, this.config, this.settings, this.logger);
       this.eventHandler.emitReady();
       this.logger.playlistEvent('Configure Event', {configureObject: JSON.stringify(event.detail)});
+      this.licensing = new Licensing(this.localMessaging, this.logger, this.config, this.settings);
+      this.messaging = new Messaging(this.tweet, this.localMessaging, this.config, this.settings, this.logger, this.licensing);
     } else {
       this.tweet = new Tweet(this.shadowRoot, null, this.settings, this.eventHandler, this.state);
       this.isPreview = true;
@@ -118,7 +120,7 @@ export default class RiseTwitter extends HTMLElement {
     }
   }
 
-  _validadeConfiguration() {
+  _validateConfiguration() {
     if (!this.id) {
       this.logger.error('Error: componnentId is missing');
       this.eventHandler.emitDone();
@@ -135,14 +137,10 @@ export default class RiseTwitter extends HTMLElement {
       this._playInPreview();
     } else {
       if (this.settings.getIsAuthorized()) {
-        console.log('_handlePlay authorized');
+        console.log('_handlePlay - authorized');
         this._play();
       } else {
-        console.log('_handlePlay unauthorized');
-        if (this.messaging.isConnected() && this.settings.getIsAuthorized() === null && this.licensingAttempts < 5) {
-          this.licensingAttempts++;
-          this.messaging.sendLicensingWatch();
-        }
+        console.log('_handlePlay - unauthorized');
         this.eventHandler.emitDone();
       }
     }
@@ -161,14 +159,23 @@ export default class RiseTwitter extends HTMLElement {
 
   _play() {
     this.state.setIsPaused(false);
-    console.log('_play IsAuthorized');
+
+    // play tweets if existing in DOM
     if (this.tweet.getTweets() && this.tweet.getTweets().length > 0) {
       this.tweet.getTransition().start();
       return;
     }
 
-    if (this.messaging.isConnected()) {
-      console.log('_play is Connected');
+    // if Twitter credentials unauthenticated play filler tweets
+    if (this.settings.getTwitterModuleStatus() === null || !this.settings.getTwitterModuleStatus()) {
+      console.log('Twitter Credentials unauthenticated');
+      this.logger.error('Twitter Credentials unauthenticated');
+      this.tweet.handleError();
+      return;
+    }
+
+    if (this.messaging.isConnected() && this.settings.getRequiredModulesAvailable()) {
+      console.log('LMS is Connected and required modules avaliable');
       this.logger.playlistEvent('Play Event');
       if (this.currentNumberOfAttempts < this.config.totalNumberOfAttempts) {
         this.messaging.sendComponentSettings(this.screenName, this.hashtag);
@@ -180,7 +187,7 @@ export default class RiseTwitter extends HTMLElement {
       this._startWaitingForTweetsTimer();
     } else {
       console.log('_play NOT connected');
-      this.logger.error('Error: componnent is not connected to LM');
+      this.logger.error('Error: componnent is not connected to required modules');
       this.tweet.handleError();
     }
   }
