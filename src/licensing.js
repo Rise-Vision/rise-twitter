@@ -1,9 +1,9 @@
-import CommonLicensing from 'common-component/licensing';
+import CommonRPPLicensing from 'common-component/player-professional-licensing';
 
 export default class Licensing {
   constructor(localMessaging, logger, config, settings) {
     this.settings = settings;
-    this.commonLicensing = new CommonLicensing(localMessaging, logger, config);
+    this.commonLicensing = new CommonRPPLicensing(localMessaging, logger, config);
   }
 
   requestLicensingDataIfLicensingIsAvailable(message) {
