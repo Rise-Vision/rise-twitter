@@ -44,6 +44,8 @@ describe("Twitter Component - Unit", () => {
 
     beforeEach(() => {
       component.settings.setAuthorization(true);
+      component.settings.setTwitterModuleStatus(true);
+      component.settings.setRequiredModulesAvailable(true);
       component.isPreview = false;
     });
 
@@ -172,6 +174,7 @@ describe("Twitter Component - Unit", () => {
       messaging = component.getMessaging();
       tweet = component.getTweet();
       tweet.getTweets = jest.fn();
+      tweet.handleError = jest.fn();
 
       eventHandler = component.getEventHandler();
       eventHandler.emitDone = jest.genMockFn();
@@ -179,7 +182,44 @@ describe("Twitter Component - Unit", () => {
 
       tweet.getTweets.mockReturnValue(new Array());
 
+      component.settings.setAuthorization(true);
+      component.settings.setTwitterModuleStatus(true);
+      component.settings.setRequiredModulesAvailable(true);
     })
+
+    it("should not send component settings when play event is dispached when modules are not avaliable", (done) => {
+      jest.useFakeTimers();
+
+      component.settings.setRequiredModulesAvailable(false);
+
+      const event = new CustomEvent("play");
+
+      risePlaylistItem.dispatchEvent(event);
+
+      setTimeout(()=>{
+        expect(messaging.sendComponentSettings).not.toHaveBeenCalled();
+        done();
+      }, 1000);
+
+      jest.runAllTimers();
+    });
+
+    it("should not send component settings when play event is dispached when twitter is not READY", (done) => {
+      jest.useFakeTimers();
+
+      component.settings.setTwitterModuleStatus(false);
+
+      const event = new CustomEvent("play");
+
+      risePlaylistItem.dispatchEvent(event);
+
+      setTimeout(()=>{
+        expect(messaging.sendComponentSettings).not.toHaveBeenCalled();
+        done();
+      }, 1000);
+
+      jest.runAllTimers();
+    });
 
     it("should call component connect and send component settings if connection is open when play is called", () => {
       component._startWaitingForTweetsTimer = jest.genMockFn();
