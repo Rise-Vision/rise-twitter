@@ -25,8 +25,6 @@ export default class Messaging {
     switch (message.topic.toUpperCase()) {
       case 'CLIENT-LIST':
         return this._handleClientListUpdate(message);
-      case 'LICENSING-UPDATE':
-        return this._handleLicensingUpdate(message);
       case 'TWITTER-STATUS-UPDATE':
         return this._handleTwitterStatusUpdate(message);
       case 'TWITTER-UPDATE':
@@ -34,19 +32,10 @@ export default class Messaging {
     }
   }
 
-  _handleLicensingUpdate(message) {
-    if (message && message.isAuthorized !== null && message.userFriendlyStatus) {
-      console.log(`Authorization status updated - ${message.userFriendlyStatus}`);
-      this.logger.evt(message.userFriendlyStatus);
-      this.settings.setAuthorization(message.isAuthorized);
-    } else {
-      this.logger.error('Error: Invalid LICENSING-UPDATE message');
-    }
-  }
-
   _handleClientListUpdate(message) {
     return Promise.all([
-      this.licensing.requestLicensingDataIfLicensingIsAvailable(message)
+      this.licensing.requestLicensingDataIfLicensingIsAvailable(message),
+      this.requestTwitterStatusRequest(message)
     ]);
   }
 
@@ -68,6 +57,11 @@ export default class Messaging {
     }
   }
 
+  requestModuleClientList() {
+    console.log('Requesting client list');
+    this.localMessaging.getModuleClientList();
+  }
+
   isConnected() {
     return this.localMessaging.canConnect();
   }
@@ -76,8 +70,23 @@ export default class Messaging {
     this.localMessaging.broadcastMessage({topic: 'licensing-watch', data: {component_name: this.config.componentName, component_id: this.componentId}});
   }
 
+  requestTwitterStatusRequest(message) {
+    let running = false;
+
+    const clients = message.clients;
+    const required = ['twitter'];
+
+    running = required.every((val) => clients.includes(val));
+
+    if (running && this.settings.getTwitterModuleStatus() === null) {
+      console.log('Requesting Twitter Credentials Status from Twitter Module');
+      this.localMessaging.broadcastMessage({topic: 'twitter-status-request'});
+    }
+  }
+
   // eslint-disable-next-line
   sendComponentSettings(screen_name = '', hashtag = '') {
+    console.log('Requesting Twitter Data from Twitter Module');
     this.localMessaging.broadcastMessage({topic: 'twitter-watch', data: {component_name: this.config.componentName, component_id: this.componentId, screen_name, hashtag}});
   }
 }

@@ -1,5 +1,5 @@
 import { WebComponent } from 'web-component';
-import {LocalMessaging} from 'common-component';
+import LocalMessaging from 'common-component/local-messaging';
 import Messaging from './messaging';
 import Tweet from './tweet';
 import Licensing from './licensing';
@@ -32,7 +32,6 @@ export default class RiseTwitter extends HTMLElement {
     this.state = new State();
     this.config = new Config();
     this.eventHandler = new EventHandler(null, this.playlistItem);
-    this.licensingAttempts = 0;
 
     this._createListenersForRisePlaylistItemEvents();
   }
@@ -103,7 +102,7 @@ export default class RiseTwitter extends HTMLElement {
       console.log('CONFIGURE - RiseTwitter', this.config.componentId);
 
       this.localMessaging = new LocalMessaging();
-      console.log('this.localMessaging connected');
+      console.log('Local Messaging connected');
       this.logger = new Logger(this.config, this.localMessaging);
       this.eventHandler = new EventHandler(this.logger, this.playlistItem);
       this._validateConfiguration();
@@ -112,7 +111,11 @@ export default class RiseTwitter extends HTMLElement {
       this.eventHandler.emitReady();
       this.logger.playlistEvent('Configure Event', {configureObject: JSON.stringify(event.detail)});
       this.licensing = new Licensing(this.localMessaging, this.logger, this.config, this.settings);
+      console.log('Licensing Connected');
       this.messaging = new Messaging(this.tweet, this.localMessaging, this.config, this.settings, this.logger, this.licensing);
+
+      // make initial client list request which kicks off Twitter Widget functionality
+      this.messaging.requestModuleClientList();
     } else {
       this.tweet = new Tweet(this.shadowRoot, null, this.settings, this.eventHandler, this.state);
       this.isPreview = true;
@@ -141,6 +144,7 @@ export default class RiseTwitter extends HTMLElement {
         this._play();
       } else {
         console.log('_handlePlay - unauthorized');
+        this.messaging.requestModuleClientList();
         this.eventHandler.emitDone();
       }
     }
@@ -168,13 +172,11 @@ export default class RiseTwitter extends HTMLElement {
 
     // if Twitter credentials unauthenticated play filler tweets
     if (this.settings.getTwitterModuleStatus() === null || !this.settings.getTwitterModuleStatus()) {
-      console.log('Twitter Credentials unauthenticated');
       this.logger.error('Twitter Credentials unauthenticated');
       this.tweet.handleError();
-      return;
     }
 
-    if (this.messaging.isConnected() && this.settings.getRequiredModulesAvailable()) {
+    if (this.settings.getRequiredModulesAvailable()) {
       console.log('LMS is Connected and required modules avaliable');
       this.logger.playlistEvent('Play Event');
       if (this.currentNumberOfAttempts < this.config.totalNumberOfAttempts) {
@@ -186,7 +188,6 @@ export default class RiseTwitter extends HTMLElement {
 
       this._startWaitingForTweetsTimer();
     } else {
-      console.log('_play NOT connected');
       this.logger.error('Error: componnent is not connected to required modules');
       this.tweet.handleError();
     }
@@ -212,12 +213,10 @@ export default class RiseTwitter extends HTMLElement {
 
   _pause() {
     this.state.setIsPaused(true);
-    console.log('_pause');
     this.tweet.getTransition().pause();
   }
 
   _stop() {
-    console.log('_stop');
     if (this.logger) { this.logger.playlistEvent('Stop Event'); };
     this._pause();
   }
