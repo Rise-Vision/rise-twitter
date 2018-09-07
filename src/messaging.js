@@ -71,12 +71,7 @@ export default class Messaging {
   }
 
   requestTwitterStatusRequest(message) {
-    let running = false;
-
-    const clients = message.clients;
-    const required = ['twitter'];
-
-    running = required.every((val) => clients.includes(val));
+    let running = message.clients.includes('twitter');
 
     if (running && this.settings.getTwitterModuleStatus() === null) {
       console.log('Requesting Twitter Credentials Status from Twitter Module');
