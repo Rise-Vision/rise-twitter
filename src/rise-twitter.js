@@ -140,10 +140,10 @@ export default class RiseTwitter extends HTMLElement {
       this._playInPreview();
     } else {
       if (this.settings.getIsAuthorized()) {
-        console.log('_handlePlay - authorized');
+        this.logger.evt('_handlePlay - authorized');
         this._play();
       } else {
-        console.log('_handlePlay - unauthorized');
+        this.logger.evt('_handlePlay - unauthorized');
         this.messaging.requestModuleClientList();
         this.eventHandler.emitDone();
       }
@@ -177,7 +177,7 @@ export default class RiseTwitter extends HTMLElement {
     }
 
     if (this.settings.getRequiredModulesAvailable()) {
-      console.log('LMS is Connected and required modules avaliable');
+      this.logger.evt('LMS is Connected and required modules avaliable');
       this.logger.playlistEvent('Play Event');
       if (this.currentNumberOfAttempts < this.config.totalNumberOfAttempts) {
         this.messaging.sendComponentSettings(this.screenName, this.hashtag);

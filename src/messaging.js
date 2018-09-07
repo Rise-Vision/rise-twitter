@@ -58,7 +58,7 @@ export default class Messaging {
   }
 
   requestModuleClientList() {
-    console.log('Requesting client list');
+    this.logger.evt('Requesting client list');
     this.localMessaging.getModuleClientList();
   }
 
@@ -74,14 +74,14 @@ export default class Messaging {
     let running = message.clients.includes('twitter');
 
     if (running && this.settings.getTwitterModuleStatus() === null) {
-      console.log('Requesting Twitter Credentials Status from Twitter Module');
+      this.logger.evt('Requesting Twitter Credentials Status from Twitter Module');
       this.localMessaging.broadcastMessage({topic: 'twitter-status-request'});
     }
   }
 
   // eslint-disable-next-line
   sendComponentSettings(screen_name = '', hashtag = '') {
-    console.log('Requesting Twitter Data from Twitter Module');
+    this.logger.evt('Requesting Twitter Data from Twitter Module');
     this.localMessaging.broadcastMessage({topic: 'twitter-watch', data: {component_name: this.config.componentName, component_id: this.componentId, screen_name, hashtag}});
   }
 }

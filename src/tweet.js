@@ -19,7 +19,7 @@ export default class Tweet {
   }
 
   updateTweets(tweets) {
-    console.log('Displaying updated Tweets', tweets);
+    if (this.logger) {this.logger.error('Displaying updated Tweets');}
 
     var promises = [];
     if (this._areValidTweets(tweets)) {
@@ -63,10 +63,10 @@ export default class Tweet {
             this.getTransition().setTweets(this.getTweets());
           })
           .catch((error) => {
-            console.log(error, 'Unable to remove outdated tweets');
+            if (this.logger) {this.logger.error('Unable to remove outdated tweets');}
           });
       } else {
-        console.log('Invalid Streamed Tweets - not added to displayed tweets');
+        if (this.logger) {this.logger.error('Invalid Streamed Tweets - not added to displayed tweets');}
       }
     }
 
