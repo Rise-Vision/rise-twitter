@@ -73,6 +73,7 @@ describe("Tweet - Unit", () => {
   it("should not request licensing if licensing has already been fetched", () => {
     const message = {clients: ['local-storage', 'licensing', 'twitter']};
     settings.setRequiredModulesAvailable(true);
+    settings.setAuthorization(true);
 
     licensing.requestLicensingDataIfLicensingIsAvailable(message);
 

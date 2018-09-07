@@ -15,11 +15,11 @@ npm install
 # serve with hot reload at localhost:3000
 npm run dev
 
-# build for production with minification
-npm run build
+# build for staging with minification
+npm run build-stage
 
-# build for production and view the bundle analyzer report
-npm run build --report
+# build for production with minification
+npm run build-prod
 ```
 
 ## Test Scripts
@@ -32,14 +32,59 @@ npm run test-unit
 npm run test-integration
 
 # run all tests
-npm test
+npm run test
 ```
 
 ## Run Locally
-
+First, clone every individual Player Module (i.e. [Twitter Module](https://github.com/Rise-Vision/twitter-module)) and start them.
 ``` bash
 # at localhost:3000
 npm run start
+```
+
+## Manual Testing
+As Twitter Component needs [Twitter Module](https://github.com/Rise-Vision/twitter-module) to run, we need [Rise Player](https://github.com/Rise-Vision/rise-player) or a simulated Rise Player to manually test. It is not recommended that you clone, install and run every individual module (i.e. Twitter Module, Licensing Module, Local Storage Module) and run Twitter Component Locally.
+
+Instead, manually test using an actual display or use a simulated display via software similar to VirtualBox. Here are the testing steps:
+
+1. Build Twitter Component for production
+``` bash
+npm run build-prod
+```
+
+2. Upload the resulting files in the dist folder to a server and make all files public in a folder called "rise-twitter"
+
+3. Clone [Rise Playlist](https://github.com/Rise-Vision/rise-playlist) and build
+```
+git clone https://github.com/Rise-Vision/rise-playlist.git
+npm install
+npm run build
+```
+
+4. Upload the resulting files in the dist folder to the same server and make all the files public in a folder called "rise-player" so that the file structure is as such:
+
+```
+- rise-twitter
+- rise-player
+```
+
+5. Create a presentation and add an instance of Twitter Widget.
+
+6. Click on "View HTML" and navigate to the placeholder with the Twitter Widget and replace URL in objectData attribute to the rise-twitter-widget.html file mentioned in step 2.
+
+7. Save and publish your presentation and set your display or simulated display to show the presentation.
+
+8. Start Player on your display or simulated display.
+
+## Deploying to Staging
+
+Merging to master automatically deploys to staging
+
+## Deploying to Stable
+
+Pull Master branch into Stable branch
+```
+git pull origin master
 ```
 
 ## Submitting Issues

@@ -35,7 +35,7 @@
         risePlaylistItem.appendChild(riseTwitter);
 
         const eventPlay = new CustomEvent("play");
-        const eventConfigure = new CustomEvent("configure", {detail: {displayId: "xxxxxx", screenName: "RiseVision", componentId: "demoComponent"}});
+        const eventConfigure = new CustomEvent("configure", {detail: {displayId: "preview", screenName: "RiseVision", componentId: "demoComponent"}});
         risePlaylistItem.dispatchEvent(eventConfigure);
 
         setTimeout(()=>{
