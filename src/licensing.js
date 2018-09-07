@@ -17,7 +17,7 @@ export default class Licensing {
     let running = required.every((val) => clients.includes(val));
 
     if (running && this.settings.getIsAuthorized() === null) {
-      console.log('Requesting Licensing');
+      this.logger.evt('Requesting Licensing');
       this.settings.setRequiredModulesAvailable(true);
       this.commonLicensing.requestAuthorization();
     }
