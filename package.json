@@ -43,7 +43,7 @@
     "css-loader": "^0.28.7",
     "csso-cli": "^1.0.0",
     "document-register-element": "^1.7.0",
-    "eslint": "^4.18.2",
+    "eslint": "^3.19.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.7.1",
