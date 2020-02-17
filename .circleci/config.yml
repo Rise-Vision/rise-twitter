@@ -46,16 +46,16 @@ jobs:
             git clone https://github.com/Rise-Vision/rise-launcher-electron-e2e.git
             cd rise-launcher-electron-e2e
             npm install
-      - run: 
+      - run:
           name: run test
-          command: | 
+          command: |
             display_id=28C6QVD3VUC2
             mkdir ~/rvplayer
             echo displayid=${display_id} > ~/rvplayer/RiseDisplayNetworkII.ini
             echo proxy= >> ~/rvplayer/RiseDisplayNetworkII.ini
             cd rise-launcher-electron-e2e
-            node test-display-runner.js ${display_id} "https://storage.googleapis.com/risevision-display-screenshots/${display_id}.jpg" 20 
-      - run: 
+            node test-display-runner.js ${display_id} "https://storage.googleapis.com/risevision-display-screenshots/${display_id}.jpg" 20
+      - run:
           name: save screenshot
           command: |
             mkdir ~/output
@@ -169,6 +169,8 @@ workflows:
             branches:
               only:
                 - build/stable
+                - /^stage\/.*/
+                - /^staging\/.*/
 
       - "deploy-beta":
           requires:
