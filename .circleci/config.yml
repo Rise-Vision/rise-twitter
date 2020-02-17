@@ -169,8 +169,6 @@ workflows:
             branches:
               only:
                 - build/stable
-                - /^stage\/.*/
-                - /^staging\/.*/
 
       - "deploy-beta":
           requires:
