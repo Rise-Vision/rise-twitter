@@ -54,7 +54,22 @@ jobs:
             echo displayid=${display_id} > ~/rvplayer/RiseDisplayNetworkII.ini
             echo proxy= >> ~/rvplayer/RiseDisplayNetworkII.ini
             cd rise-launcher-electron-e2e
-            node test-display-runner.js ${display_id} "https://storage.googleapis.com/risevision-display-screenshots/${display_id}.jpg" 20
+            # node test-display-runner.js ${display_id} "https://storage.googleapis.com/risevision-display-screenshots/${display_id}.jpg" 20
+      - run:
+          name: download expected screenshot
+          working_directory: rise-launcher-electron-e2e
+          command: |
+            EXPECTED_SNAPSHOT_URL=https://storage.googleapis.com/risevision-display-screenshots/28C6QVD3VUC2.jpg
+            curl $EXPECTED_SNAPSHOT_URL > expected-screenshot.jpg
+      - run:
+          name: download Rise Player Electron
+          working_directory: rise-launcher-electron-e2e
+          command: curl https://storage.googleapis.com/install-versions.risevision.com/installer-lnx-64.sh > installer.sh
+      - run: chmod +x ./rise-launcher-electron-e2e/installer.sh
+      - run:
+          name: run the test
+          working_directory: rise-launcher-electron-e2e
+          command: node test-display-runner-using-downloaded-installer.js 28C6QVD3VUC2 20
       - run:
           name: save screenshot
           command: |
