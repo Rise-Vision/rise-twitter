@@ -14,9 +14,11 @@ export default class Licensing {
     const clients = message.clients;
     const required = ['local-storage', 'licensing', 'twitter'];
 
+    console.log('entering request licensing data');
     let running = required.every((val) => clients.includes(val));
 
     if (running && this.settings.getIsAuthorized() === null) {
+      console.log('requesting licensing data');
       this.logger.evt('Requesting Licensing');
       this.settings.setRequiredModulesAvailable(true);
       this.commonLicensing.requestAuthorization();
