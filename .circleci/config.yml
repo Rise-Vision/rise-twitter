@@ -70,7 +70,7 @@ jobs:
       - run:
           name: run the test
           working_directory: rise-launcher-electron-e2e
-          command: node test-display-runner-using-downloaded-installer.js 28C6QVD3VUC2 20
+          command: node test-display-runner-using-downloaded-installer.js $DISPLAY_ID 20
       - run:
           name: save screenshot
           command: |
