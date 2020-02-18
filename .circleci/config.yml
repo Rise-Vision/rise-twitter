@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 jobs:
   "test":
@@ -19,6 +19,10 @@ jobs:
 
   "e2e":
     docker: *DOCKERIMAGE_TEST
+    environment:
+      INSTALLER_BASE: https://storage.googleapis.com/install-versions.risevision.com
+      SCREENSHOTS_BASE: https://storage.googleapis.com/risevision-display-screenshots
+      DISPLAY_ID: 28C6QVD3VUC2
     steps:
       - checkout
       - attach_workspace:
@@ -46,16 +50,28 @@ jobs:
             git clone https://github.com/Rise-Vision/rise-launcher-electron-e2e.git
             cd rise-launcher-electron-e2e
             npm install
-      - run: 
-          name: run test
-          command: | 
-            display_id=28C6QVD3VUC2
+      - run:
+          name: configure display parameters
+          command: |
             mkdir ~/rvplayer
-            echo displayid=${display_id} > ~/rvplayer/RiseDisplayNetworkII.ini
+            echo displayid=$DISPLAY_ID > ~/rvplayer/RiseDisplayNetworkII.ini
             echo proxy= >> ~/rvplayer/RiseDisplayNetworkII.ini
-            cd rise-launcher-electron-e2e
-            node test-display-runner.js ${display_id} "https://storage.googleapis.com/risevision-display-screenshots/${display_id}.jpg" 20 
-      - run: 
+      - run:
+          name: download expected screenshot
+          working_directory: rise-launcher-electron-e2e
+          command: |
+            EXPECTED_SNAPSHOT_URL=$SCREENSHOTS_BASE/$DISPLAY_ID.jpg
+            curl $EXPECTED_SNAPSHOT_URL > expected-screenshot.jpg
+      - run:
+          name: download Rise Player Electron
+          working_directory: rise-launcher-electron-e2e
+          command: curl $INSTALLER_BASE/installer-lnx-64.sh > installer.sh
+      - run: chmod +x ./rise-launcher-electron-e2e/installer.sh
+      - run:
+          name: run the test
+          working_directory: rise-launcher-electron-e2e
+          command: node test-display-runner-using-downloaded-installer.js $DISPLAY_ID 20
+      - run:
           name: save screenshot
           command: |
             mkdir ~/output
@@ -164,7 +180,7 @@ workflows:
             - stage
       - "deploy-stable":
           requires:
-            - stage
+            - e2e
           filters:
             branches:
               only:
@@ -172,7 +188,7 @@ workflows:
 
       - "deploy-beta":
           requires:
-            - stage
+            - e2e
           filters:
             branches:
               only:
