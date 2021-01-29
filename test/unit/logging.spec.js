@@ -31,7 +31,7 @@ describe("Tweet - Unit", () => {
 
     config = new Config();
     config.setComponentId(componentId);
-    
+
     localMessaging = new LocalMessaging();
     logger = new Logger(config, localMessaging);
 
@@ -50,9 +50,9 @@ describe("Tweet - Unit", () => {
   it("should log external error message", () => {
     const expectedDetails = {"company_id": "unknown", "display_id": "preview", "event_details": "error message", "version": "unknown"};
 
-    logger.error("error message");
+    logger.error("error message", null, "test");
 
-    expect(logger.externalLogger.log).toHaveBeenCalledWith("Error", expectedDetails);
+    expect(logger.externalLogger.log).toHaveBeenCalledWith("Error", expectedDetails, {severity: "error", errorCode: "test"});
   });
 
   it("should log external playlistEvent message", () => {
@@ -60,7 +60,7 @@ describe("Tweet - Unit", () => {
 
     logger.playlistEvent("error message");
 
-    expect(logger.externalLogger.log).toHaveBeenCalledWith("Playlist Event", expectedDetails);
+    expect(logger.externalLogger.log).toHaveBeenCalledWith("Playlist Event", expectedDetails, {severity: "info"});
   });
 
   it("should log standard external message", () => {
@@ -68,6 +68,6 @@ describe("Tweet - Unit", () => {
 
     logger._external("standard", "error message");
 
-    expect(logger.externalLogger.log).toHaveBeenCalledWith("standard", expectedDetails);
+    expect(logger.externalLogger.log).toHaveBeenCalledWith("standard", expectedDetails, undefined);
   });
 });
