@@ -27,12 +27,12 @@ export default class Logger {
 
   warning(eventDetails, data) {
     console.log(eventDetails);
-    this._external('warning', eventDetails, data, { severity: 'warning', debugInfo: data });
+    this._external('warning', eventDetails, data, { severity: 'warning' });
   }
 
   error(eventDetails, data, errorCode) {
     console.log(eventDetails);
-    this._external('Error', eventDetails, data, { severity: 'error', errorCode, debugInfo: data });
+    this._external('Error', eventDetails, data, { severity: 'error', errorCode });
   }
 
   _external(evt, eventDetails, data, endpointParams) {
