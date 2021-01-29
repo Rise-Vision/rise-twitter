@@ -17,27 +17,27 @@ export default class Logger {
     return this.getLocalMessaging().canConnect();
   }
 
-  playlistEvent(eventDetails, data) {
-    this._external('Playlist Event', eventDetails);
+  playlistEvent(eventDetails) {
+    this._external('Playlist Event', eventDetails, null, { severity: 'info' });
   }
 
-  evt(evt, eventDetails, data) {
-    this._external(evt, eventDetails);
+  evt(evt, eventDetails) {
+    this._external(evt, eventDetails, null, { severity: 'info' });
   }
 
   warning(eventDetails, data) {
     console.log(eventDetails);
-    this._external('warning', eventDetails, data);
+    this._external('warning', eventDetails, data, { severity: 'warning', debugInfo: data });
   }
 
-  error(eventDetails, data) {
+  error(eventDetails, data, errorCode) {
     console.log(eventDetails);
-    this._external('Error', eventDetails, data);
+    this._external('Error', eventDetails, data, { severity: 'error', errorCode, debugInfo: data });
   }
 
-  _external(evt, eventDetails, data) {
+  _external(evt, eventDetails, data, endpointParams) {
     if (this.getLocalMessaging() && this.canConnectToLMS()) {
-      this.externalLogger.log(evt, this._constructDetails(eventDetails, data = {}));
+      this.externalLogger.log(evt, this._constructDetails(eventDetails, data = {}), endpointParams);
     }
   }
 
