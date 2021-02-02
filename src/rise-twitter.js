@@ -99,6 +99,8 @@ export default class RiseTwitter extends HTMLElement {
       this.screenName = event.detail.screenName;
       this.id = event.detail.componentId;
       this.config.setComponentId(this.id);
+      // TODO: hard coding version due to a planned deprecation of this widget
+      this.config.setComponentVersion('1.0.0');
       console.log('CONFIGURE - RiseTwitter', this.config.componentId);
 
       this.localMessaging = new LocalMessaging();

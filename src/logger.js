@@ -18,11 +18,11 @@ export default class Logger {
   }
 
   playlistEvent(eventDetails) {
-    this._external('Playlist Event', eventDetails, null, { severity: 'info' });
+    this._external('Playlist Event', eventDetails, null, { severity: 'info', debugInfo: { event: 'Playlist Event' } });
   }
 
   evt(evt, eventDetails) {
-    this._external(evt, eventDetails, null, { severity: 'info' });
+    this._external(evt, eventDetails, null, { severity: 'info', debugInfo: { event: evt } });
   }
 
   warning(eventDetails, data) {
@@ -41,6 +41,9 @@ export default class Logger {
 
   _external(evt, eventDetails, data, endpointParams) {
     if (this.getLocalMessaging() && this.canConnectToLMS()) {
+      if (endpointParams) {
+        endpointParams.eventApp = 'widget-twitter';
+      }
       this.externalLogger.log(evt, this._constructDetails(eventDetails, data = {}), endpointParams);
     }
   }
