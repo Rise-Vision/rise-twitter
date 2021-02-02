@@ -36,14 +36,11 @@ export default class Logger {
   }
 
   startEndpointHeartbeats() {
-    this.externalLogger.startEndpointHeartbeats('widget-twitter');
+    this.externalLogger.startEndpointHeartbeats('widget-twitter', this.config.componentVersion);
   }
 
   _external(evt, eventDetails, data, endpointParams) {
     if (this.getLocalMessaging() && this.canConnectToLMS()) {
-      if (endpointParams) {
-        endpointParams.eventApp = 'widget-twitter'
-      }
       this.externalLogger.log(evt, this._constructDetails(eventDetails, data = {}), endpointParams);
     }
   }
