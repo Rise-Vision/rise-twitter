@@ -99,6 +99,8 @@ export default class RiseTwitter extends HTMLElement {
       this.screenName = event.detail.screenName;
       this.id = event.detail.componentId;
       this.config.setComponentId(this.id);
+      // TODO: hard coding version due to a planned deprecation of this widget
+      this.config.setComponentVersion('1.0.0');
       console.log('CONFIGURE - RiseTwitter', this.config.componentId);
 
       this.localMessaging = new LocalMessaging();
@@ -106,6 +108,8 @@ export default class RiseTwitter extends HTMLElement {
       this.logger = new Logger(this.config, this.localMessaging);
       this.eventHandler = new EventHandler(this.logger, this.playlistItem);
       this._validateConfiguration();
+
+      this.logger.startEndpointHeartbeats();
 
       this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, this.eventHandler, this.state);
       this.eventHandler.emitReady();
@@ -125,7 +129,7 @@ export default class RiseTwitter extends HTMLElement {
 
   _validateConfiguration() {
     if (!this.id) {
-      this.logger.error('Error: componnentId is missing');
+      this.logger.error('Error: componnentId is missing', null, 'E000000089');
       this.eventHandler.emitDone();
     }
 
@@ -172,7 +176,7 @@ export default class RiseTwitter extends HTMLElement {
 
     // if Twitter credentials unauthenticated play filler tweets
     if (this.settings.getTwitterModuleStatus() === null || !this.settings.getTwitterModuleStatus()) {
-      this.logger.error('Twitter Credentials unauthenticated');
+      this.logger.error('Twitter Credentials unauthenticated', null, 'E000000090');
       this.tweet.handleError();
     }
 
@@ -188,7 +192,7 @@ export default class RiseTwitter extends HTMLElement {
 
       this._startWaitingForTweetsTimer();
     } else {
-      this.logger.error('Error: componnent is not connected to required modules');
+      this.logger.error('Error: component is not connected to required modules', null, 'E000000091');
       this.tweet.handleError();
     }
   }

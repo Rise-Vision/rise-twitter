@@ -37,7 +37,7 @@ export default class Tweet {
         })
         .catch((error) => {
           console.log('error displaying tweets', error);
-          if (this.logger) {this.logger.error(`Could not set tweets - ${JSON.stringify(tweets)}`);}
+          if (this.logger) {this.logger.error(`Could not set tweets - ${JSON.stringify(tweets)}`, null, 'E000000086');}
           this.eventHandler.emitDone();
         });
     } else {
@@ -63,7 +63,7 @@ export default class Tweet {
             this.getTransition().setTweets(this.getTweets());
           })
           .catch((error) => {
-            if (this.logger) {this.logger.error('Unable to remove outdated tweets');}
+            if (this.logger) {this.logger.error('Unable to remove outdated tweets', null, 'E000000087');}
           });
       } else {
         if (this.logger) {this.logger.warning('Invalid Streamed Tweets - not added to displayed tweets');}
@@ -138,7 +138,7 @@ export default class Tweet {
         this._updateData(tweet);
       })
       .catch((error) => {
-        if (this.logger) {this.logger.error(`Could not display tweet - ${error} - ${JSON.stringify(tweet)}`);}
+        if (this.logger) {this.logger.error(`Could not display tweet - ${error} - ${JSON.stringify(tweet)}`, null, 'E000000088');}
         this.eventHandler.emitDone();
       });
   }

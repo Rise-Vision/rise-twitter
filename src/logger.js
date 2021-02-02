@@ -17,33 +17,40 @@ export default class Logger {
     return this.getLocalMessaging().canConnect();
   }
 
-  playlistEvent(eventDetails, data) {
-    this._external('Playlist Event', eventDetails);
+  playlistEvent(eventDetails) {
+    this._external('Playlist Event', eventDetails, null, { severity: 'info', debugInfo: { event: 'Playlist Event' } });
   }
 
-  evt(evt, eventDetails, data) {
-    this._external(evt, eventDetails);
+  evt(evt, eventDetails) {
+    this._external(evt, eventDetails, null, { severity: 'info', debugInfo: { event: evt } });
   }
 
   warning(eventDetails, data) {
     console.log(eventDetails);
-    this._external('warning', eventDetails, data);
+    this._external('warning', eventDetails, data, { severity: 'warning' });
   }
 
-  error(eventDetails, data) {
+  error(eventDetails, data, errorCode) {
     console.log(eventDetails);
-    this._external('Error', eventDetails, data);
+    this._external('Error', eventDetails, data, { severity: 'error', errorCode });
   }
 
-  _external(evt, eventDetails, data) {
+  startEndpointHeartbeats() {
+    this.externalLogger.startEndpointHeartbeats('widget-twitter', this.config.componentVersion);
+  }
+
+  _external(evt, eventDetails, data, endpointParams) {
     if (this.getLocalMessaging() && this.canConnectToLMS()) {
-      this.externalLogger.log(evt, this._constructDetails(eventDetails, data = {}));
+      if (endpointParams) {
+        endpointParams.eventApp = 'widget-twitter';
+      }
+      this.externalLogger.log(evt, this._constructDetails(eventDetails, data = {}), endpointParams);
     }
   }
 
   _constructDetails(eventDetails, data) {
     return Object.assign({
-      'event_details': eventDetails,
+      'event_details': eventDetails || 'n/a',
       'display_id': this.config.displayId || 'preview',
       'company_id': this.config.companyId || 'unknown',
       'version': this.config.componentVersion || 'unknown'
