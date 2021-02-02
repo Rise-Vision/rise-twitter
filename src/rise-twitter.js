@@ -107,6 +107,8 @@ export default class RiseTwitter extends HTMLElement {
       this.eventHandler = new EventHandler(this.logger, this.playlistItem);
       this._validateConfiguration();
 
+      this.logger.startEndpointHeartbeats();
+
       this.tweet = new Tweet(this.shadowRoot, this.logger, this.settings, this.eventHandler, this.state);
       this.eventHandler.emitReady();
       this.logger.playlistEvent('Configure Event', {configureObject: JSON.stringify(event.detail)});
