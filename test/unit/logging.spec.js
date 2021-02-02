@@ -52,7 +52,7 @@ describe("Tweet - Unit", () => {
 
     logger.error("error message", null, "test");
 
-    expect(logger.externalLogger.log).toHaveBeenCalledWith("Error", expectedDetails, {severity: "error", errorCode: "test"});
+    expect(logger.externalLogger.log).toHaveBeenCalledWith("Error", expectedDetails, {severity: "error", errorCode: "test", eventApp: "widget-twitter"});
   });
 
   it("should log external playlistEvent message", () => {
@@ -60,7 +60,7 @@ describe("Tweet - Unit", () => {
 
     logger.playlistEvent("error message");
 
-    expect(logger.externalLogger.log).toHaveBeenCalledWith("Playlist Event", expectedDetails, {severity: "info"});
+    expect(logger.externalLogger.log).toHaveBeenCalledWith("Playlist Event", expectedDetails, {severity: "info", eventApp: "widget-twitter"});
   });
 
   it("should log standard external message", () => {
