@@ -47,7 +47,7 @@ export default class Logger {
 
   _constructDetails(eventDetails, data) {
     return Object.assign({
-      'event_details': eventDetails,
+      'event_details': eventDetails || 'n/a',
       'display_id': this.config.displayId || 'preview',
       'company_id': this.config.companyId || 'unknown',
       'version': this.config.componentVersion || 'unknown'
