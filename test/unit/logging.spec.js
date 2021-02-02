@@ -60,7 +60,7 @@ describe("Tweet - Unit", () => {
 
     logger.playlistEvent("error message");
 
-    expect(logger.externalLogger.log).toHaveBeenCalledWith("Playlist Event", expectedDetails, {severity: "info", eventApp: "widget-twitter"});
+    expect(logger.externalLogger.log).toHaveBeenCalledWith("Playlist Event", expectedDetails, {severity: "info", eventApp: "widget-twitter", debugInfo: {event: "Playlist Event"}});
   });
 
   it("should log standard external message", () => {
