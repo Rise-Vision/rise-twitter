@@ -129,7 +129,7 @@ export default class RiseTwitter extends HTMLElement {
 
   _validateConfiguration() {
     if (!this.id) {
-      this.logger.error('Error: componnentId is missing', null, 'E000000089');
+      this.logger.error('Error: componnentId is missing', null, 'E000000086');
       this.eventHandler.emitDone();
     }
 
@@ -192,7 +192,7 @@ export default class RiseTwitter extends HTMLElement {
 
       this._startWaitingForTweetsTimer();
     } else {
-      this.logger.error('Error: component is not connected to required modules', null, 'E000000025');
+      this.logger.error('Error: component is not connected to required modules', null, 'E000000091');
       this.tweet.handleError();
     }
   }
