@@ -129,7 +129,7 @@ export default class RiseTwitter extends HTMLElement {
 
   _validateConfiguration() {
     if (!this.id) {
-      this.logger.error('Error: componnentId is missing', null, 'E000000089');
+      this.logger.error('Error: componnentId is missing', null, 'E000000086');
       this.eventHandler.emitDone();
     }
 
